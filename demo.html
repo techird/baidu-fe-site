@@ -1,0 +1,119 @@
+<html>
+<head>
+    <title>Demo</title>
+    <style>
+        * {
+            -webkit-transition: all 1s ease;
+               -moz-transition: all 1s ease;
+                -ms-transition: all 1s ease;
+                 -o-transition: all 1s ease;
+                    transition: all 1s ease;
+        }
+        body, html, div {
+            margin: 0;
+            padding: 0;
+        }
+        div.block {
+            font-size: 5em;
+            font-family: Consolas, "Microsoft Yahei";
+            position: relative;
+            height: 1200px;
+        }
+        div.block * {
+            margin: 0;
+            padding: 0;
+            position: absolute;
+        }
+        div.topic1 {
+            background-color: #FFFFFF;
+            color: black;
+        }
+        div.topic1 h1 {
+            left: 30%;
+            top: 500px;
+            z-index: 2;
+            text-shadow: 0 0 10px white;
+        }
+        div.topic1 div.img1 {
+            background: url(img1.jpg) no-repeat;
+            position: relative;
+            top: 800px;
+            height:1800px;
+        }
+        div.topic2 {
+            background-color: #EA7500;
+            color: white;
+        }
+        div.topic2 h1 {
+            right: 5%;
+            top: 15%;
+            z-index: 2;
+        }
+        div.topic2 div.img2 {
+            background: url(img2.jpg) no-repeat 500px 0;
+            position: relative;
+            right: 1200px;
+            height:1200px;
+        }
+        div.topic3 {
+            background-color: #8FB7DA;
+            color: rgb(198, 250, 190);
+        }
+        div.topic3 h1 {
+            bottom: 40%;
+            left: 15%;
+            z-index: 2;
+            text-shadow: 0 0 20px black;
+        }
+        div.topic3 div.img3 {
+            background: url(img3.jpg) no-repeat;
+            position: relative;
+            top: 1000px;
+            height:1200px;
+        }
+        div.topic4 {
+            background-color: #000;
+            color: #999;
+        }
+        div.topic4 h1 {
+            bottom: 60%;
+            right: 35%;
+        }
+    </style>
+</head>
+<body>
+    <div class="block topic1">
+        <h1>静谧</h1>
+        <div class="img1"></div>
+    </div>
+    <div class="block topic2">
+        <h1>热情</h1>
+        <div class="img2"></div>
+    </div>
+    <div class="block topic3">
+        <h1>低调</h1>
+        <div class="img3"></div>
+    </div>
+    <div class="block topic4">
+        <h1>Topic4</h1>
+    </div>
+</body>
+    <script>
+        document.onscroll = function( e ) {
+            var btop = document.body.scrollTop;
+
+            document.getElementsByClassName('img1')[0].style.top =  800 - btop * 0.8 + "px";
+            document.getElementsByClassName('topic1')[0].getElementsByTagName('h1')[0].style.top = 500 + btop * 0.4 + "px";
+
+            var r = 1000 - (btop - 1200) * 0.6;
+            var t = 1400 - btop * 0.4;
+            document.getElementsByClassName('img2')[0].style.right = Math.max( r, 500 ) + "px";
+            document.getElementsByClassName('topic2')[0].getElementsByTagName('h1')[0].style.top = Math.max( t, 150 ) + 'px';
+
+            var t = 1000 - (btop - 1200) * 0.8;
+            var t = 1400 - btop * 0.4;
+            document.getElementsByClassName('img3')[0].style.top = Math.max( t, 200 ) + "px";
+            document.getElementsByClassName('topic3')[0].getElementsByTagName('h1')[0].style.left = Math.max( t, 150 ) + 'px';
+        }
+    </script>
+</html>
