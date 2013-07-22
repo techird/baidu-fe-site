@@ -261,7 +261,8 @@ div.screen div {
     display: block;
     width: 100px;
     margin-left: -50px;
-    margin-top: 50px;
+    margin-top: 20px;
+    padding-top: 40px;
     top: 50%;
     cursor: pointer;
     font-size: 24px;
@@ -269,13 +270,13 @@ div.screen div {
     text-align: center;
 }
 #catalog p.tool {
-    left: 35%;
+    left: 25%;
 }
 #catalog p.data {
     left: 50%;
 }
 #catalog p.end {
-    left: 65%;
+    left: 75%;
 }
 #catalog p:before {
     content: ' ';
@@ -287,7 +288,7 @@ div.screen div {
     border-radius: 100%;
     background: url(topic-catalog.png) center center no-repeat;
     left: -4px;
-    top: -120px;
+    top: -80px;
     -webkit-transition: all .25s ease;
        -moz-transition: all .25s ease;
         -ms-transition: all .25s ease;
@@ -295,7 +296,12 @@ div.screen div {
             transition: all .25s ease;
 }
 #catalog p:hover:before {
-    top: -140px;
+    top: -100px;
+    -webkit-transform: rotate(-30deg);
+       -moz-transform: rotate(-30deg);
+        -ms-transform: rotate(-30deg);
+         -o-transform: rotate(-30deg);
+            transform: rotate(-30deg);
 }
 #catalog p:active:before {
     -webkit-transform: scale(.9);
