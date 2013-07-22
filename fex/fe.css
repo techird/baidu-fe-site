@@ -13,6 +13,14 @@ body, html, div {
 }
 div.screen {
     position: relative;
+    -webkit-transition: box-shadow .5s ease;
+       -moz-transition: box-shadow .5s ease;
+        -ms-transition: box-shadow .5s ease;
+         -o-transition: box-shadow .5s ease;
+            transition: box-shadow .5s ease;
+}
+div.screen.activing {
+    box-shadow: 0 -20px 80px rgba(0,0,0,.2);
 }
 div.screen div {
     margin: 0;

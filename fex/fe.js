@@ -234,15 +234,19 @@ baidu(function(){
         // 传播事件
         this.on('beforeshow', function(index) {
             fireScreenEvent(index, 'beforeshow');
+            baidu(_stage.getScreen(index).dom).addClass('activing');
         });
         this.on('aftershow', function(index) {
             fireScreenEvent(index, 'aftershow');
+            baidu(_stage.getScreen(index).dom).removeClass('activing');
         });
         this.on('beforehide', function(index) {
             fireScreenEvent(index, 'beforehide');
+            _stage.getScreen(index) && baidu(_stage.getScreen(index).dom).addClass('activing');
         });
         this.on('afterhide', function(index) {
             fireScreenEvent(index, 'afterhide');
+            _stage.getScreen(index) && baidu(_stage.getScreen(index).dom).removeClass('activing');
         });
 
         // 传播事件
@@ -493,7 +497,7 @@ baidu(function(){
             });
             
             var last_timeouts = [];
-            window.MEN_DELAY = [800, 400];
+            window.MEN_DELAY = [450, 400, 150];
             little_men.on('mouseenter', function(e){
                 var target = baidu(e.target);
                 var index = +target.attr('index');
@@ -508,12 +512,12 @@ baidu(function(){
                     function autoPrev () {
                         prev.addClass('see-right');
                         prev = prev.prev();
-                        if(prev.length) last_timeouts.push(setTimeout(autoPrev, 50));
+                        if(prev.length) last_timeouts.push(setTimeout(autoPrev, window.MEN_DELAY[2]));
                     }
                     function autoNext () {
                         next.addClass('see-left');
                         next = next.next();
-                        if(next.length) last_timeouts.push(setTimeout(autoNext, 50));
+                        if(next.length) last_timeouts.push(setTimeout(autoNext, window.MEN_DELAY[2]));
                     }
                     autoPrev();
                     autoNext();
