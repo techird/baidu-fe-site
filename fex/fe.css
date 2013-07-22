@@ -1044,6 +1044,11 @@ div.screen div {
     z-index: 301;
     background: url(drawing.png);
     opacity: .1;
+    -webkit-transition: all 3s ease;
+       -moz-transition: all 3s ease;
+        -ms-transition: all 3s ease;
+         -o-transition: all 3s ease;
+            transition: all 3s ease;
 }
 #screen3 #little-container {
     position: absolute;
@@ -1052,11 +1057,11 @@ div.screen div {
     overflow: hidden;
     white-space: nowrap;
     z-index: 302;
-    /*-webkit-transition: left 1.25s ease;
+    -webkit-transition: left 1.25s ease;
        -moz-transition: left 1.25s ease;
         -ms-transition: left 1.25s ease;
          -o-transition: left 1.25s ease;
-            transition: left 1.25s ease;*/
+            transition: left 1.25s ease;
 }
 #screen3 #dialog { 
     width: 336px;

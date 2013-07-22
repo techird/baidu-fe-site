@@ -484,15 +484,18 @@ baidu(function(){
             }
             var little_men = this.find('.little-man');
 
+            var last_cl = 0;
             baidu(_this.dom).on('mousemove', function update(e){
                 var pd = 200,
                     sw = stage.width(),
                     cw = little_container.width(),
                     pd2 = pd * sw / cw,
                     cl = (sw - cw - pd * 2) * e.x / sw + pd;
+                if(Math.abs(cl - last_cl) < 30) return;
                 little_container.css('left', cl);
+                last_cl = cl;
                 
-                moutain.css('background-position-x', -e.x * 0.4);
+                moutain.css('background-position-x', -e.x * 0.8);
                 
             });
             
