@@ -11,6 +11,10 @@ body, html, div {
     overflow: hidden;
     font-family: Arial, "Microsoft Yahei";
 }
+#stage {
+    position: absolute;
+    width: 100%;
+}
 div.screen {
     position: relative;
     -webkit-transition: box-shadow .5s ease;
@@ -69,7 +73,7 @@ div.screen div {
 }
 #screen0 .nav.down {
     cursor: pointer;
-    z-index: 100;
+    z-index: 1;
     position: absolute;
     left: 50%;
     bottom: -120px;
@@ -99,7 +103,7 @@ div.screen div {
 }
 #screen0 .nav.down:after {
     content: ' ';
-    z-index: 100;
+    z-index: 2;
     display: block;
     width: 35px;
     height: 31px;
@@ -146,7 +150,7 @@ div.screen div {
     height: 60px;
     background-color: rgba(255,255,255,.8);
     width: 100%;
-    z-index: 100;
+    z-index: 1000;
     box-shadow: 0 5px 10px rgba(0,0,0,0.018);
 }
 #top-nav #menu {
@@ -192,7 +196,7 @@ div.screen div {
 
 #screen1 {
     background-color: white;
-    z-index: 1;
+    z-index: 100;
 }
 #screen1 #topic-container {
     position: absolute;
@@ -214,7 +218,7 @@ div.screen div {
 }
 #screen1 .topic.show {
     opacity: 2;
-    z-index: 0;
+    z-index: 101;
 }
 #screen1 .topic.hide.to-left {
     /*left: -100%;*/
@@ -222,7 +226,7 @@ div.screen div {
 #screen1 .topic.hide {
     opacity: 0;
     /*left: 100%;*/
-    z-index: -100;
+    z-index: 99;
 }
 
 #screen1 .nav {
@@ -261,7 +265,7 @@ div.screen div {
 }
 
 #catalog {    
-    z-index: 1;
+    z-index: 100;
     background: white;
 }
 
@@ -859,7 +863,7 @@ div.screen div {
 
 #screen2 {
     background-color: white;
-    z-index: 2;
+    z-index: 200;
 }
 
 #screen2 h1 {
@@ -891,7 +895,7 @@ div.screen div {
     display: inline-block;
     position: absolute;
     opacity: 0;
-    z-index: 2;
+    z-index: 201;
     -webkit-transition: -webkit-transform .25s ease;
        -moz-transition: -moz-transform .25s ease;
         -ms-transition: -ms-transform .25s ease;
@@ -1017,7 +1021,7 @@ div.screen div {
 
 #screen3 {
     background: white;
-    z-index: 3;
+    z-index: 300;
 }
 #screen3 h1 {
     text-align: center;
@@ -1037,17 +1041,9 @@ div.screen div {
     right: 0;
     height: 1100px;
     bottom: 100px;
-    z-index: 2;
+    z-index: 301;
     background: url(drawing.png);
     opacity: .1;
-}
-#screen3 #ground-layer {
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 322px;
-    bottom: 0;
-    z-index: 1;
 }
 #screen3 #little-container {
     position: absolute;
@@ -1055,7 +1051,7 @@ div.screen div {
     height: 300px;
     overflow: hidden;
     white-space: nowrap;
-    z-index: 5;
+    z-index: 302;
     /*-webkit-transition: left 1.25s ease;
        -moz-transition: left 1.25s ease;
         -ms-transition: left 1.25s ease;
@@ -1068,7 +1064,7 @@ div.screen div {
     position: absolute;
     left: -1000px;
     bottom: 300px;
-    z-index: 4;
+    z-index: 303;
     margin-left: -30px;
     /*background: url(ballon.png) no-repeat;*/
 }
@@ -1107,7 +1103,7 @@ div.screen div {
 
 #screen4 {
     background: #5e5e5e;
-    z-index: 4;
+    z-index: 400;
 }
 #screen4 #github {
     position: absolute;
@@ -1142,7 +1138,7 @@ div.screen div {
 }
 #screen4 #github .cat {
     position: absolute;
-    z-index: 10;
+    z-index: 401;
     width: 260px;
     height: 260px;
     left: -130px;

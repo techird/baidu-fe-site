@@ -107,11 +107,11 @@ baidu(function(){
         }
 
         this.width = function() {
-            return document.body.clientWidth;
+            return document.documentElement.clientWidth;
         };
 
         this.height = function() {
-            return document.body.clientHeight;
+            return document.documentElement.clientHeight;
         }
 
         this.changeScreen = function( index ) {
@@ -141,7 +141,7 @@ baidu(function(){
 
             // resize event
             baidu( window ).on( 'resize', function() {
-                _stage.fire( 'resize', [document.body.clientWidth, document.body.clientHeight] );
+                _stage.fire( 'resize', [document.documentElement.clientWidth, document.documentElement.clientHeight] );
             } );
 
             baidu( 'body' ).on( 'keydown', function(e) {
@@ -178,7 +178,7 @@ baidu(function(){
                 'height' : height - offset,
                 'padding-top' : offset
             });
-            baidu('body').scrollTop(_stage.height() * _currentScreenIndex);
+            baidu('#stage').css( "top", - _stage.height() * _currentScreenIndex);
         });
 
         // 传播事件给屏幕
@@ -197,8 +197,8 @@ baidu(function(){
         this.on('change', function( newIndex, oldIndex ) {
             _stage.fire('beforehide', [oldIndex]);
             _stage.fire('beforeshow', [newIndex]);
-            baidu('body').animate({
-                scrollTop : _stage.height() * newIndex
+            baidu('#stage').animate({
+                top : -_stage.height() * newIndex
             }, {
                 duration: 800, 
                 ease : 'ease',
@@ -207,7 +207,7 @@ baidu(function(){
                         progress : progress,
                         targetScreen : newIndex, 
                         sourceScreen : oldIndex,
-                        scrollTop: e.elem.scrollTop
+                        scrollTop: -e.elem.offsetTop
                     } ]);
                 },
                 complete: function() { 
@@ -259,7 +259,7 @@ baidu(function(){
             var index = Math.min(e.sourceScreen, e.targetScreen);
             var dom = _screens[index] && _screens[index].dom;
             if(!dom) return;
-            baidu(dom).css('top', (document.body.scrollTop - _stage.height() * index) * 0.618);
+            baidu(dom).css('top', (e.scrollTop - _stage.height() * index) * 0.618);
         });
 
         this.start = function() {
