@@ -626,24 +626,21 @@ div.screen div {
 
 #screen1 .GMU .title {
 
-    width: 1011px;
-    height: 293px;
+    width: 537px;
+    height: 282px;
 
     position: absolute;
-    left: 320px;
+    left: 540px;
     top: 122px;
 
-    background: url("topic/gmu/title.png") no-repeat;
+    background: url("topic/gmu/gmu.png") no-repeat;
 
 }
 
 #screen1 .GMU .title-main {
 
-    width: 1011px;
-    height: 293px;
-
-    background: url("topic/gmu/title-main.png") no-repeat;
-
+    width: 537px;
+    height: 282px;
 
 }
 
