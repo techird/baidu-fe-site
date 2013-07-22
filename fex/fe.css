@@ -329,6 +329,12 @@ div.screen div {
     top: 220px;
     background: url("topic/hunter/title.png") no-repeat;
 }
+#screen1 .hunter .title a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-indent: -9999px;
+}
 
 #screen1 .hunter .dataMonitoring {
     height: 55px;
@@ -406,7 +412,10 @@ div.screen div {
     font-family: 'Microsoft Yahei';
     font-weight: normal;
 }
-
+#screen1 .fis h1.eng a {
+    color: white;
+    text-decoration: none;
+}
 #screen1 .fis h1.chs {
     margin: 0 0 0 250px;
     font-size: 72px;
@@ -479,6 +488,13 @@ div.screen div {
 
     background: url("topic/webspeed/title.png") no-repeat;
 
+}
+
+#screen1 .webspeed .title a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-indent: -9999px;
 }
 
 #screen1 .webspeed .title-header {
@@ -646,6 +662,13 @@ div.screen div {
 
 
 }
+#screen1 .GMU .title-main a {
+    display: block;
+    margin-top: 230px;
+    height: 58px;
+    width: 100%;
+    text-indent: -9999px;
+}
 
 #screen1 .GMU .content {
 
@@ -724,6 +747,13 @@ div.screen div {
 
     background: url("topic/ueditor/title.png") no-repeat;
 
+}
+
+#screen1 .ueditor .title a {
+    display: block;
+    height: 100%;
+    width: 100%;
+    text-indent: -9999px;
 }
 
 #screen1 .ueditor .function {

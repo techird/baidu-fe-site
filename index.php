@@ -40,7 +40,9 @@
         <div id="topic-container">
             <div class="topic">
                 <div class="hunter">                    
-                    <div class="title"></div>
+                    <div class="title">
+                        <a href="http://hunter.baidu.com" target="_blank">Hunter</a>
+                    </div>
                     <div class="content">
                         
                         <div class="dataMonitoring">日常数据监控</div>
@@ -53,7 +55,7 @@
             </div>
             <div class="topic">
                 <div class="fis">
-                    <h1 class="eng">F.I.S</h1>
+                    <h1 class="eng"><a href="http://fis.baidu.com" target="_blank">F.I.S</a></h1>
                     <h1 class="chs">前端集成解决方案</h1>
                     <h2>Front-end Integrated Solution</h2>
                     <div class="formula">
@@ -73,7 +75,9 @@
                 <div class="webspeed">        
                     <div class="title">
                         
-                        <div class="title-header"></div>
+                        <div class="title-header">
+                            <a href="http://webspeed.baidu.com" target="blank">Webspeed</a>
+                        </div>
                         <div class="title-central">新版监控更好服务！</div>
                         <div class="title-footer">真实还原用户感知耗时，综合指数评价页面性能，更多精彩等您发现！</div>
                             
@@ -107,7 +111,9 @@
         
                     <div class="title">
                         
-                        <div class="title-main"></div>
+                        <div class="title-main">
+                            <a href="http://gmu.baidu.com" target="_blank">GUM</a>
+                        </div>
                             
                     </div>
                     <div class="content">
@@ -124,7 +130,9 @@
             </div>
             <div class="topic">
                 <div class="ueditor">        
-                    <div class="title"></div>
+                    <div class="title">
+                        <a href="http://ueditor.baidu.com" target="_blank">UEditor</a>
+                    </div>
                     <div class="content">
                         
                         <div class="function">功能全面</div>
