@@ -928,6 +928,9 @@ div.screen div {
 #screen2 .team-member.m7 {
     background-position: -600px 0;
 }
+#screen2 .team-member.m8 {
+    background-position: -700px 0;
+}
 
 #screen2 #member-show {
     position: absolute;

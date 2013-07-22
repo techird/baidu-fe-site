@@ -160,6 +160,7 @@
             <div class="team-member m5"></div>
             <div class="team-member m6"></div>
             <div class="team-member m7"></div>
+            <div class="team-member m8"></div>
         </div>
         <div id="member-show">
             <img src="fex/archive/1.png" />
@@ -169,6 +170,7 @@
             <img src="fex/archive/5.png" />
             <img src="fex/archive/6.png" />
             <img src="fex/archive/7.png" />
+            <img src="fex/archive/8.png" />
         </div>
     </div>
 
