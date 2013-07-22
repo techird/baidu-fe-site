@@ -60,7 +60,12 @@ baidu(function(){
                 var max = Math.max, min = Math.min;
                 function onresize() {
                     var cw = stage.width(), ch = stage.height(),
-                        w = elem.width(), h = elem.height(), scale = Math.max(ch / h, cw/w);
+                        w = elem.width(), h = elem.height(), 
+                        scale = {
+                            all: Math.max(ch / h, cw / w),
+                            height: ch / h,
+                            width: cw / w   
+                        }[type || 'all'];
                     elem.css({
                         left: ( cw - w ) / 2,
                         '-webkit-transform': 'scale(' + scale + ')',
@@ -421,7 +426,7 @@ baidu(function(){
                 });
             }
 
-            this.shower = this.fit('#member-show');
+            this.shower = this.fit('#member-show', 'height');
             this.slideShow = new SlideShow('#member-show');
             var _this = this;
             var members = this.members
@@ -547,12 +552,5 @@ baidu(function(){
             this.github.addClass('hide');
         })
     stage.start();
-
-    // 调整 github 的位置
-    baidu(".s4").click(function(){
-
-        console.log(baidu("#weixin").scrollTop());
-
-    });
     
 });
