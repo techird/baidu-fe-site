@@ -225,7 +225,7 @@
                     <a href="https://github.com/gmuteam" target="_blank">https://github.com/gmuteam</a>
                 </div>
                 <div class="url url4">
-                    <a href="https://github.com/compaign/ueditor.git" target="_blank">https://github.com/compaign/ueditor.git</a>
+                    <a href="https://github.com/ueditor" target="_blank">https://github.com/ueditor</a>
                 </div>
             </div>
             <div id="weixin">
