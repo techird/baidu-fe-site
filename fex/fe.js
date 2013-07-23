@@ -23,12 +23,15 @@ baidu(function(){
 
 
     var ani_timeout, masked = false;
-    baidu('#logo').click(function(){
+    function animateLogo() {
         baidu('#logo').addClass('animation');
         clearTimeout(ani_timeout);
         ani_timeout = setTimeout(function(){
             baidu('#logo').removeClass('animation');
         }, 1200);
+    }
+    baidu('#logo').click(function(){
+        animateLogo();
         if(baidu('#logo').hasClass('show')) {
             masked = false;
             baidu('#logo').removeClass('show');
@@ -37,6 +40,25 @@ baidu(function(){
             masked = true;
             baidu('#logo').addClass('show');
             baidu('#about').addClass('show');
+        }
+    });
+
+    baidu('#about').click(function(e){
+        e.stopPropagation();
+        if(e.target.tagName.toLowerCase() == 'p' || e.target.tagName.toLowerCase()=='h2') return;
+        animateLogo();
+        masked = false;
+        baidu('#logo').removeClass('show');
+        baidu('#about').removeClass('show');
+    });
+
+    var cheatCode = [38,40,37,39,65,66,65,66];
+    var waiting = cheatCode.slice(0);
+    baidu('body').keydown(function(e){
+        if(waiting.shift()!=e.keyCode) waiting = cheatCode.slice(0);
+        if(waiting.length==0) {
+            baidu('#logo').click();
+            waiting = cheatCode.slice(0);
         }
     });
 
@@ -510,7 +532,7 @@ baidu(function(){
             var dialog = this.find('#dialog');
             var ly = 0, lx = 0;
             var last_index;
-            var mcount = 33;
+            var mcount = 34;
             var data;
 
             baidu.ajax({
@@ -546,7 +568,10 @@ baidu(function(){
                     xp *= 8;
                     dis = sign * Math.pow(2, xp);
                     if(!slide_timer) slide_timer = setInterval(function(){
-                        little_container.css('left', parseInt(little_container.css('left')) + dis);
+                        var ori = parseInt(little_container.css('left'));
+                        if( dis > 0 && ori > pd || 
+                            dis < 0 && ori < -cw + sw - pd) return;
+                        little_container.css('left', ori + dis);
                     }, 20);
                 } else {
                     clearInterval(slide_timer);
