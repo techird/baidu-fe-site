@@ -20,6 +20,27 @@ baidu(function(){
         return Math.pow(t, 0.7);
     }
 
+
+
+    var ani_timeout, masked = false;
+    baidu('#logo').click(function(){
+        baidu('#logo').addClass('animation');
+        clearTimeout(ani_timeout);
+        ani_timeout = setTimeout(function(){
+            baidu('#logo').removeClass('animation');
+        }, 1200);
+        if(baidu('#logo').hasClass('show')) {
+            masked = false;
+            baidu('#logo').removeClass('show');
+            baidu('#about').removeClass('show');
+        } else {
+            masked = true;
+            baidu('#logo').addClass('show');
+            baidu('#about').addClass('show');
+        }
+    });
+
+
     function Event() {
         this._event = {};
         this.on = function ( name, callback ) {            
@@ -128,11 +149,13 @@ baidu(function(){
         function buildEvents() {
             // change event by wheel
             baidu( 'body' ).on( 'mousewheel', function(e) {
+                if(masked) return;
                 _stage.changeScreen(_currentScreenIndex + (e.wheelDelta < 0 ? 1 : -1))
             });
 
             // change event by nav
             baidu('#top-nav #menu ul li').click(function(e){
+                if(masked) return;
                 var $target = baidu(e.target);
                 if( _currentScreenIndex != $target.attr('screen') ) {
                     _stage.changeScreen( +$target.attr('screen') );
@@ -145,6 +168,7 @@ baidu(function(){
             } );
 
             baidu( 'body' ).on( 'keydown', function(e) {
+                if(masked) return;
                 _stage.fire( 'navigate', [e.keyIdentifier] );
             });
 
@@ -188,9 +212,11 @@ baidu(function(){
 
         // 导航条位置适应
         this.on('resize', function( width, height ) {
+            var top = _currentScreenIndex == 0 ? height - _nav.height() : 0;
             _nav.css({
-                top: _currentScreenIndex == 0 ? height - _nav.height() : 0
+                top: top
             });
+            baidu('body > #logo').css('top', top);
         });
 
         // 屏幕滚动
@@ -220,8 +246,12 @@ baidu(function(){
 
         // 导航条位置适应
         this.on('change', function( index ) {
+            var top = index == 0 ? this.height() - _nav.height() : 0;
             _nav.animate({
-                "top" : index == 0 ? this.height() - _nav.height() : 0
+                "top" : top
+            }, 800);
+            baidu('body > #logo').animate({
+                "top" : top
             }, 800);
         });
 
@@ -267,7 +297,6 @@ baidu(function(){
             this.fire('change', [0, -1]);
         }
     }
-
     function SlideShow( container, delay ) {
         Event.apply(this);
         var container = baidu.dom(container);
@@ -432,16 +461,33 @@ baidu(function(){
 
             this.shower = this.fit('#member-show', 'height');
             this.slideShow = new SlideShow('#member-show');
-            var _this = this;
+            var _this = this, index;
             var members = this.members
                 .on('mouseenter', function(e){
                     _this.find('h1').fadeOut();
                     var target = baidu(e.target);
-                    var index = target.indexOf(members);
-                    _this.slideShow.show(index);
-                    members.filter('.current').removeClass('current');
-                    target.addClass('current');
+                    index = target.indexOf(members);
+                    active(index);
                 });
+
+            function active(index) {
+                _this.slideShow.show(index);
+                members.filter('.current').removeClass('current');
+                members.eq(index).addClass('current');
+            }
+
+            this.on('navigate', function(e) {
+                switch(e.direction) {
+                    case 'Left':
+                        if (index === undefined) index = 0;
+                        index = (index + members.length - 1) % members.length;
+                        return active(index);
+                    case 'Right':
+                        if (index === undefined) index = -1;
+                        index = (index + members.length + 1) % members.length;
+                        return active(index);
+                }
+            });
         })
         .on('resize', function(width){
             this.layout();
@@ -484,20 +530,38 @@ baidu(function(){
             }
             var little_men = this.find('.little-man');
 
-            var last_cl = 0;
+            
+            var last_cl = 0, slide_timer, dis;
             baidu(_this.dom).on('mousemove', function update(e){
                 var pd = 200,
                     sw = stage.width(),
                     cw = little_container.width(),
                     pd2 = pd * sw / cw,
-                    cl = (sw - cw - pd * 2) * e.x / sw + pd;
-                if(Math.abs(cl - last_cl) < 30) return;
-                little_container.css('left', cl);
-                last_cl = cl;
+                    cl = (sw - cw - pd * 2) * e.x / sw + pd,
+                    xp = e.x / sw;
+                if(xp < 0.25 || xp > 0.75) {
+                    var sign = 1;
+                    if(xp > 0.5) { xp = Math.abs(xp - 1); sign = -1; }
+                    xp = 0.5 - xp;
+                    xp *= 8;
+                    dis = sign * Math.pow(2, xp);
+                    if(!slide_timer) slide_timer = setInterval(function(){
+                        little_container.css('left', parseInt(little_container.css('left')) + dis);
+                    }, 20);
+                } else {
+                    clearInterval(slide_timer);
+                    slide_timer = undefined;
+                }
+
+                // if(Math.abs(cl - last_cl) < 30) return;
+                // little_container.css('left', cl);
+                // last_cl = cl;
                 
                 moutain.css('background-position-x', -e.x * 0.8);
                 
             });
+            
+           // baidu('#little-container').draggable();
             
             var last_timeouts = [];
             window.MEN_DELAY = [450, 400, 150];
@@ -508,23 +572,10 @@ baidu(function(){
                 little_men.removeClass('stand see-left see-right');                
                 dialog.fadeOut();
 
-                while(last_timeouts.length) clearTimeout(last_timeouts.pop());
+                target.prevAll().addClass('see-right');
+                target.nextAll().addClass('see-left');
 
-                last_timeouts.push(setTimeout(function(){
-                    var prev = target.prev(), next = target.next();
-                    function autoPrev () {
-                        prev.addClass('see-right');
-                        prev = prev.prev();
-                        if(prev.length) last_timeouts.push(setTimeout(autoPrev, window.MEN_DELAY[2]));
-                    }
-                    function autoNext () {
-                        next.addClass('see-left');
-                        next = next.next();
-                        if(next.length) last_timeouts.push(setTimeout(autoNext, window.MEN_DELAY[2]));
-                    }
-                    autoPrev();
-                    autoNext();
-                }, MEN_DELAY[0]));
+                while(last_timeouts.length) clearTimeout(last_timeouts.pop());
 
                 last_timeouts.push(setTimeout(function(){
                     var left = target.position().left - target.width() / 2 + target.parent().position().left - 10;

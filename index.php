@@ -9,6 +9,8 @@
     <script src="fex/fe.js"></script>
 </head> 
 <body>
+    <h1 id="logo">FEX</h1>
+    
     <div id="top-nav">
         <div id="menu">
             <ul>
@@ -17,6 +19,25 @@
                 <li screen="4" class="s3">团队</li>
                 <li screen="5" class="s4">关注</li>
             </ul>
+        </div>
+    </div>
+
+    <div id="about">
+        <div class="left">
+            <h2>The best or nothing</h2>
+        </div>
+        <div class="right">
+            <p>我们是工程师和艺术家。</p>
+            <p>技术问题在这里不是问题，</p>
+            <p>我们有大巴的时间，</p>
+            <p>华仔优化前端工程技术，</p>
+            <p>和提高产品体验上。</p>
+            <p>直到我们技术和想法，</p>
+            <p>改变了产品，提高了效率。</p>
+            <p>可能你都没有注意到，</p>
+            <p>但你总能感觉到。</p>
+            <p>这是我们的印迹。</p>
+            <p>它代表了我们的价值。</p>
         </div>
     </div>
     

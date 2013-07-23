@@ -11,6 +11,79 @@ body, html, div {
     overflow: hidden;
     font-family: Arial, "Microsoft Yahei";
 }
+#logo, #about {
+    position: fixed;
+}
+#about {
+    top: -100%;
+    left: 0;
+    right: 0;
+    height: 100%;
+    z-index: 1001;
+    -webkit-transition: all 1s ease-in-out;
+       -moz-transition: all 1s ease-in-out;
+        -ms-transition: all 1s ease-in-out;
+         -o-transition: all 1s ease-in-out;
+            transition: all 1s ease-in-out;
+}
+#about .left {
+    background: #333;
+    position: absolute;
+    left: 0;
+    width: 38.2%;
+    height: 100%;
+}
+#about .left h2 {
+    position: absolute;
+    top: 50%;
+    left: 65px;
+    margin: 0;
+    font-family: 'Microsoft Yahei';
+    font-weight: normal;
+    color: #747474;
+}
+#about .right {
+    background: #000;
+    left: 38.2%;
+    right: 0;
+    height: 100%;
+    position: absolute;
+    color: #a5a5a5;
+    padding: 80px;
+    font-size: 18px;
+}
+#about.show {
+    top: 0;
+    box-shadow: 0 20px 50px rgba(0,0,0,.3);
+}
+#logo {
+    color: #333;
+    font-family: 'Microsoft Yahei';
+    font-weight: normal;
+    left: 50px;
+    top: 0;
+    z-index: 1002;
+    margin: 0;
+    height: 60px;
+    line-height: 60px;
+    display: block;
+    cursor: pointer;
+}
+#logo.show {
+    color: white;
+    top: 50% !important;
+    margin-top: -160px;
+    font-size: 160px;
+    height: 160px;
+    line-height: 160px;
+}
+#logo.animation {
+    -webkit-transition: all 1s ease-in-out;
+       -moz-transition: all 1s ease-in-out;
+        -ms-transition: all 1s ease-in-out;
+         -o-transition: all 1s ease-in-out;
+            transition: all 1s ease-in-out;
+}
 #stage {
     position: absolute;
     width: 100%;
@@ -151,7 +224,7 @@ div.screen div {
     background-color: rgba(255,255,255,.8);
     width: 100%;
     z-index: 1000;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.018);
+    /*box-shadow: 0 5px 10px rgba(0,0,0,0.018);*/
 }
 #top-nav #menu {
     height: 60px;
@@ -873,6 +946,7 @@ div.screen div {
     margin: 0 auto;
     padding-top: 250px;
     color: #888;
+    z-index: 201;
 }
 
 #screen2 #team-container {
@@ -966,7 +1040,7 @@ div.screen div {
 #screen2 img.show {
     opacity: 1;
 }
-/*.hide.to-left {
+.hide.to-left {
     -webkit-animation: toleft .5s ease 0 1 normal;
        -moz-animation: toleft .5s ease 0 1 normal;
         -ms-animation: toleft .5s ease 0 1 normal;
@@ -993,7 +1067,7 @@ div.screen div {
         -ms-animation: fromright .5s ease 0 1 normal;
          -o-animation: fromright .5s ease 0 1 normal;
             animation: fromright .5s ease 0 1 normal;
-}*/
+}
 
 @-webkit-keyframes toleft { 0% { left: 0; } 100% { left: -100%; } }
    @-moz-keyframes toleft { 0% { left: 0; } 100% { left: -100%; } }
@@ -1057,11 +1131,12 @@ div.screen div {
     overflow: hidden;
     white-space: nowrap;
     z-index: 302;
-    -webkit-transition: left 1.25s ease;
+    left: 0;
+ /*   -webkit-transition: left 1.25s ease;
        -moz-transition: left 1.25s ease;
         -ms-transition: left 1.25s ease;
          -o-transition: left 1.25s ease;
-            transition: left 1.25s ease;
+            transition: left 1.25s ease;*/
 }
 #screen3 #dialog { 
     width: 336px;
