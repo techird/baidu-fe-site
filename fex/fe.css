@@ -205,6 +205,15 @@ div.screen div {
     top: 50%;
     margin-top: -180px;
 }
+
+#screen0 .meeting-info {
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    position: absolute;
+    width: 100%;
+    top: 57%;
+}
 /* 截图文字
 #screen0 h2 {
     font-family: 'Arial';

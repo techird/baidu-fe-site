@@ -44,6 +44,10 @@
     <div id="stage">
         <div id="screen0" class="screen">        
             <h1>FEday</h1>
+            <div class="meeting-info">
+                7月25日 14:00 - 16:00 五家尧<br/>
+                期待您的加入
+            </div>
             <div class="nav down"></div>
             <!-- <div class="circle-layer">
                 <div class="circle1"></div>
