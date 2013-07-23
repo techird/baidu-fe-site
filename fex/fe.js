@@ -52,7 +52,7 @@ baidu(function(){
         baidu('#about').removeClass('show');
     });
 
-    var cheatCode = [38,40,37,39,65,66,65,66];
+    var cheatCode = [38,38,40,40,37,39,37,39,65,66,65,66];
     var waiting = cheatCode.slice(0);
     baidu('body').keydown(function(e){
         if(waiting.shift()!=e.keyCode) waiting = cheatCode.slice(0);
