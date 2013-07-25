@@ -58,6 +58,12 @@
     var h1 = document.getElementsByTagName('h1')[0];
     names = '范俊梅,雷志兴,姚晓谊,陈励,王黎明,刘凯,杨尊程,齐伟,高洁璇,陆泰宁,肖昆,陆金谭,黄凯,韩璟,党弘扬,陈峥,宋雅儒,莫卓颖,刘帅,张灿,周美美,陈著,皮成,张楠,候迦壹,唐益龙,郭金辉,冯尚实,张袁炜,郝茹,陈浩然,樊中恺,郭斌,穆瑞强,孙鹤飞,王慧,严孙荣,龚伟,吴忧,贾铮,曹栋清,暨灿,李雪韬,郁浩,王加鹏,刘元晨,刘骥,王永青,熊正祥,李学健,桂琴琴,郭宇霆,余光灿,侯鹏,胡大民'.split(',');
     var running = false;
+    var music = new Audio();
+    music.src = 'fex/lucky.mp3';
+    music.pause();
+    var drug = new Audio();
+    drug.src = 'fex/choosen2.mp3';
+    drug.pause();
 
     function rand (min, max) {
         return min + Math.round((max - min) * Math.random());
@@ -89,6 +95,8 @@
                 h1.classList.remove('choosen');
             }, 1500);
             names = names.slice(0, index).concat(names.slice(index+1));
+            music.pause();
+            drug.play();
         } else {
             showRandom.timer = setTimeout(showRandom, 1000 / showRandom.pps);
         }
@@ -101,6 +109,7 @@
         colorInterval = setInterval(function(){
             document.body.style.backgroundColor = randomColor();
         }, 2000);
+        music.play(0);
     }
 
     function stop() {
