@@ -16,9 +16,54 @@ baidu(function(){
         }
     });
 
+    function css3Animate( properties, duration ) {
+        
+    }
+
     baidu.fx.easing.ease = function(t) {
         return Math.pow(t, 0.7);
+    };
+
+    var ani_timeout, masked = false;
+    function animateLogo() {
+        baidu('#logo').addClass('animation');
+        clearTimeout(ani_timeout);
+        ani_timeout = setTimeout(function(){
+            baidu('#logo').removeClass('animation');
+        }, 1200);
     }
+    baidu('#logo').click(function(){
+        animateLogo();
+        if(baidu('#logo').hasClass('show')) {
+            masked = false;
+            baidu('#logo').removeClass('show');
+            baidu('#about').removeClass('show');
+        } else {
+            masked = true;
+            baidu('#logo').addClass('show');
+            baidu('#about').addClass('show');
+        }
+    });
+
+    baidu('#about').click(function(e){
+        e.stopPropagation();
+        if(e.target.tagName.toLowerCase() == 'p' || e.target.tagName.toLowerCase()=='h2') return;
+        animateLogo();
+        masked = false;
+        baidu('#logo').removeClass('show');
+        baidu('#about').removeClass('show');
+    });
+
+    var cheatCode = [38,38,40,40,37,39,37,39,65,66,65,66];
+    var waiting = cheatCode.slice(0);
+    baidu('body').keydown(function(e){
+        if(waiting.shift()!=e.keyCode) waiting = cheatCode.slice(0);
+        if(waiting.length==0) {
+            baidu('#logo').click();
+            waiting = cheatCode.slice(0);
+        }
+    });
+
 
     function Event() {
         this._event = {};
@@ -60,7 +105,12 @@ baidu(function(){
                 var max = Math.max, min = Math.min;
                 function onresize() {
                     var cw = stage.width(), ch = stage.height(),
-                        w = elem.width(), h = elem.height(), scale = Math.max(ch / h, cw/w);
+                        w = elem.width(), h = elem.height(), 
+                        scale = {
+                            all: Math.max(ch / h, cw / w),
+                            height: ch / h,
+                            width: cw / w   
+                        }[type || 'all'];
                     elem.css({
                         left: ( cw - w ) / 2,
                         '-webkit-transform': 'scale(' + scale + ')',
@@ -102,11 +152,11 @@ baidu(function(){
         }
 
         this.width = function() {
-            return document.body.clientWidth;
+            return document.documentElement.clientWidth;
         };
 
         this.height = function() {
-            return document.body.clientHeight;
+            return document.documentElement.clientHeight;
         }
 
         this.changeScreen = function( index ) {
@@ -123,11 +173,13 @@ baidu(function(){
         function buildEvents() {
             // change event by wheel
             baidu( 'body' ).on( 'mousewheel', function(e) {
+                if(masked) return;
                 _stage.changeScreen(_currentScreenIndex + (e.wheelDelta < 0 ? 1 : -1))
             });
 
             // change event by nav
             baidu('#top-nav #menu ul li').click(function(e){
+                if(masked) return;
                 var $target = baidu(e.target);
                 if( _currentScreenIndex != $target.attr('screen') ) {
                     _stage.changeScreen( +$target.attr('screen') );
@@ -136,10 +188,11 @@ baidu(function(){
 
             // resize event
             baidu( window ).on( 'resize', function() {
-                _stage.fire( 'resize', [document.body.clientWidth, document.body.clientHeight] );
+                _stage.fire( 'resize', [document.documentElement.clientWidth, document.documentElement.clientHeight] );
             } );
 
             baidu( 'body' ).on( 'keydown', function(e) {
+                if(masked) return;
                 _stage.fire( 'navigate', [e.keyIdentifier] );
             });
 
@@ -173,7 +226,7 @@ baidu(function(){
                 'height' : height - offset,
                 'padding-top' : offset
             });
-            baidu('body').scrollTop(_stage.height() * _currentScreenIndex);
+            baidu('#stage').css( "top", - _stage.height() * _currentScreenIndex);
         });
 
         // 传播事件给屏幕
@@ -183,40 +236,48 @@ baidu(function(){
 
         // 导航条位置适应
         this.on('resize', function( width, height ) {
+            var top = _currentScreenIndex == 0 ? height - _nav.height() : 0;
             _nav.css({
-                top: _currentScreenIndex == 0 ? height - _nav.height() : 0
+                top: top
             });
+            baidu('body > #logo').css('top', top);
         });
 
         // 屏幕滚动
         this.on('change', function( newIndex, oldIndex ) {
             _stage.fire('beforehide', [oldIndex]);
             _stage.fire('beforeshow', [newIndex]);
-            baidu('body').animate({
-                scrollTop : _stage.height() * newIndex
-            }, {
-                duration: 800, 
-                ease : 'ease',
-                progress : function( e, progress ) {
-                    _stage.fire('changeprogress', [ {
-                        progress : progress,
-                        targetScreen : newIndex, 
-                        sourceScreen : oldIndex,
-                        scrollTop: e.elem.scrollTop
-                    } ]);
-                },
-                complete: function() { 
-                    _changing = false; 
-                    _stage.fire('afterhide', [oldIndex]);
-                    _stage.fire('aftershow', [newIndex]);
-                }
-            });
+            baidu('#stage').css('-webkit-transform', 'translateY(' + -_stage.height() * newIndex + 'px)');
+            _changing = false; 
+            // baidu('#stage').animate({
+            //     top : -_stage.height() * newIndex
+            // }, {
+            //     duration: 800, 
+            //     ease : 'ease',
+            //     progress : function( e, progress ) {
+            //         _stage.fire('changeprogress', [ {
+            //             progress : progress,
+            //             targetScreen : newIndex, 
+            //             sourceScreen : oldIndex,
+            //             scrollTop: -e.elem.offsetTop
+            //         } ]);
+            //     },
+            //     complete: function() { 
+            //         _changing = false; 
+            //         _stage.fire('afterhide', [oldIndex]);
+            //         _stage.fire('aftershow', [newIndex]);
+            //     }
+            // });
         });
 
         // 导航条位置适应
         this.on('change', function( index ) {
+            var top = index == 0 ? this.height() - _nav.height() : 0;
             _nav.animate({
-                "top" : index == 0 ? this.height() - _nav.height() : 0
+                "top" : top
+            }, 800);
+            baidu('body > #logo').animate({
+                "top" : top
             }, 800);
         });
 
@@ -229,15 +290,19 @@ baidu(function(){
         // 传播事件
         this.on('beforeshow', function(index) {
             fireScreenEvent(index, 'beforeshow');
+            baidu(_stage.getScreen(index).dom).addClass('activing');
         });
         this.on('aftershow', function(index) {
             fireScreenEvent(index, 'aftershow');
+            baidu(_stage.getScreen(index).dom).removeClass('activing');
         });
         this.on('beforehide', function(index) {
             fireScreenEvent(index, 'beforehide');
+            _stage.getScreen(index) && baidu(_stage.getScreen(index).dom).addClass('activing');
         });
         this.on('afterhide', function(index) {
             fireScreenEvent(index, 'afterhide');
+            _stage.getScreen(index) && baidu(_stage.getScreen(index).dom).removeClass('activing');
         });
 
         // 传播事件
@@ -250,7 +315,7 @@ baidu(function(){
             var index = Math.min(e.sourceScreen, e.targetScreen);
             var dom = _screens[index] && _screens[index].dom;
             if(!dom) return;
-            baidu(dom).css('top', (document.body.scrollTop - _stage.height() * index) * 0.618);
+            baidu(dom).css('top', (e.scrollTop - _stage.height() * index) * 0.618);
         });
 
         this.start = function() {
@@ -258,7 +323,6 @@ baidu(function(){
             this.fire('change', [0, -1]);
         }
     }
-
     function SlideShow( container, delay ) {
         Event.apply(this);
         var container = baidu.dom(container);
@@ -421,18 +485,35 @@ baidu(function(){
                 });
             }
 
-            this.shower = this.fit('#member-show');
+            this.shower = this.fit('#member-show', 'height');
             this.slideShow = new SlideShow('#member-show');
-            var _this = this;
+            var _this = this, index;
             var members = this.members
                 .on('mouseenter', function(e){
                     _this.find('h1').fadeOut();
                     var target = baidu(e.target);
-                    var index = target.indexOf(members);
-                    _this.slideShow.show(index);
-                    members.filter('.current').removeClass('current');
-                    target.addClass('current');
+                    index = target.indexOf(members);
+                    active(index);
                 });
+
+            function active(index) {
+                _this.slideShow.show(index);
+                members.filter('.current').removeClass('current');
+                members.eq(index).addClass('current');
+            }
+
+            this.on('navigate', function(e) {
+                switch(e.direction) {
+                    case 'Left':
+                        if (index === undefined) index = 0;
+                        index = (index + members.length - 1) % members.length;
+                        return active(index);
+                    case 'Right':
+                        if (index === undefined) index = -1;
+                        index = (index + members.length + 1) % members.length;
+                        return active(index);
+                }
+            });
         })
         .on('resize', function(width){
             this.layout();
@@ -455,7 +536,7 @@ baidu(function(){
             var dialog = this.find('#dialog');
             var ly = 0, lx = 0;
             var last_index;
-            var mcount = 33;
+            var mcount = 34;
             var data;
 
             baidu.ajax({
@@ -475,20 +556,44 @@ baidu(function(){
             }
             var little_men = this.find('.little-man');
 
+            
+            var last_cl = 0, slide_timer, dis;
             baidu(_this.dom).on('mousemove', function update(e){
                 var pd = 200,
                     sw = stage.width(),
                     cw = little_container.width(),
                     pd2 = pd * sw / cw,
-                    cl = (sw - cw - pd * 2) * e.x / sw + pd;
-                little_container.css('left', cl);
+                    cl = (sw - cw - pd * 2) * e.x / sw + pd,
+                    xp = e.x / sw;
+                if(xp < 0.25 || xp > 0.75) {
+                    var sign = 1;
+                    if(xp > 0.5) { xp = Math.abs(xp - 1); sign = -1; }
+                    xp = 0.5 - xp;
+                    xp *= 8;
+                    dis = sign * Math.pow(2, xp);
+                    if(!slide_timer) slide_timer = setInterval(function(){
+                        var ori = parseInt(little_container.css('left'));
+                        if( dis > 0 && ori > pd || 
+                            dis < 0 && ori < -cw + sw - pd) return;
+                        little_container.css('left', ori + dis);
+                    }, 20);
+                } else {
+                    clearInterval(slide_timer);
+                    slide_timer = undefined;
+                }
+
+                // if(Math.abs(cl - last_cl) < 30) return;
+                // little_container.css('left', cl);
+                // last_cl = cl;
                 
-                moutain.css('background-position-x', -e.x * 0.4);
+                moutain.css('background-position-x', -e.x * 0.8);
                 
             });
             
+           // baidu('#little-container').draggable();
+            
             var last_timeouts = [];
-            window.MEN_DELAY = [800, 400];
+            window.MEN_DELAY = [450, 400, 150];
             little_men.on('mouseenter', function(e){
                 var target = baidu(e.target);
                 var index = +target.attr('index');
@@ -496,23 +601,10 @@ baidu(function(){
                 little_men.removeClass('stand see-left see-right');                
                 dialog.fadeOut();
 
-                while(last_timeouts.length) clearTimeout(last_timeouts.pop());
+                target.prevAll().addClass('see-right');
+                target.nextAll().addClass('see-left');
 
-                last_timeouts.push(setTimeout(function(){
-                    var prev = target.prev(), next = target.next();
-                    function autoPrev () {
-                        prev.addClass('see-right');
-                        prev = prev.prev();
-                        if(prev.length) last_timeouts.push(setTimeout(autoPrev, 50));
-                    }
-                    function autoNext () {
-                        next.addClass('see-left');
-                        next = next.next();
-                        if(next.length) last_timeouts.push(setTimeout(autoNext, 50));
-                    }
-                    autoPrev();
-                    autoNext();
-                }, MEN_DELAY[0]));
+                while(last_timeouts.length) clearTimeout(last_timeouts.pop());
 
                 last_timeouts.push(setTimeout(function(){
                     var left = target.position().left - target.width() / 2 + target.parent().position().left - 10;
@@ -547,12 +639,5 @@ baidu(function(){
             this.github.addClass('hide');
         })
     stage.start();
-
-    // 调整 github 的位置
-    baidu(".s4").click(function(){
-
-        console.log(baidu("#weixin").scrollTop());
-
-    });
     
 });

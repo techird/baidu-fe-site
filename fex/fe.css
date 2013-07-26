@@ -11,8 +11,103 @@ body, html, div {
     overflow: hidden;
     font-family: Arial, "Microsoft Yahei";
 }
+#logo, #about {
+    position: fixed;
+}
+#about {
+    top: -100%;
+    left: 0;
+    right: 0;
+    height: 100%;
+    z-index: 1001;
+    -webkit-transition: all 1s ease-in-out;
+       -moz-transition: all 1s ease-in-out;
+        -ms-transition: all 1s ease-in-out;
+         -o-transition: all 1s ease-in-out;
+            transition: all 1s ease-in-out;
+}
+#about .left {
+    background: #000;
+    position: absolute;
+    left: 0;
+    width: 38.2%;
+    height: 100%;
+}
+#about .left h2 {
+    position: absolute;
+    top: 50%;
+    left: 65px;
+    margin: 0;
+    font-family: 'Helvetica Neue', 'Microsoft Yahei';
+    font-weight: normal;
+    color: #747474;
+}
+#about .right {
+    background: #333;
+    left: 38.2%;
+    right: 0;
+    height: 100%;
+    position: absolute;
+    color: #a5a5a5;
+    padding: 80px;
+    font-size: 18px;
+}
+#about .right p{
+    width: 250px;
+    margin: 0;
+    padding: 10px;
+}
+#about.show {
+    top: 0;
+    box-shadow: 0 20px 50px rgba(0,0,0,.3);
+}
+#logo {
+    color: #333;
+    font-family: 'Helvetica Neue','Microsoft Yahei';
+    font-weight: normal;
+    left: 50px;
+    top: 0;
+    z-index: 1002;
+    margin: 0;
+    height: 60px;
+    line-height: 60px;
+    display: block;
+    cursor: pointer;
+}
+#logo.show {
+    color: white;
+    top: 50% !important;
+    margin-top: -160px;
+    font-size: 160px;
+    height: 160px;
+    line-height: 160px;
+}
+#logo.animation {
+    -webkit-transition: all 1s ease-in-out;
+       -moz-transition: all 1s ease-in-out;
+        -ms-transition: all 1s ease-in-out;
+         -o-transition: all 1s ease-in-out;
+            transition: all 1s ease-in-out;
+}
+#stage {
+    position: absolute;
+    width: 100%;
+    -webkit-transition: all 2s ease;
+       -moz-transition: all 2s ease;
+        -ms-transition: all 2s ease;
+         -o-transition: all 2s ease;
+            transition: all 2s ease;
+}
 div.screen {
     position: relative;
+    -webkit-transition: box-shadow .5s ease;
+       -moz-transition: box-shadow .5s ease;
+        -ms-transition: box-shadow .5s ease;
+         -o-transition: box-shadow .5s ease;
+            transition: box-shadow .5s ease;
+}
+div.screen.activing {
+    box-shadow: 0 -20px 80px rgba(0,0,0,.2);
 }
 div.screen div {
     margin: 0;
@@ -61,7 +156,7 @@ div.screen div {
 }
 #screen0 .nav.down {
     cursor: pointer;
-    z-index: 100;
+    z-index: 1;
     position: absolute;
     left: 50%;
     bottom: -120px;
@@ -91,7 +186,7 @@ div.screen div {
 }
 #screen0 .nav.down:after {
     content: ' ';
-    z-index: 100;
+    z-index: 2;
     display: block;
     width: 35px;
     height: 31px;
@@ -114,6 +209,15 @@ div.screen div {
     margin: 0;
     top: 50%;
     margin-top: -180px;
+}
+
+#screen0 .meeting-info {
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    position: absolute;
+    width: 100%;
+    top: 57%;
 }
 /* 截图文字
 #screen0 h2 {
@@ -138,8 +242,8 @@ div.screen div {
     height: 60px;
     background-color: rgba(255,255,255,.8);
     width: 100%;
-    z-index: 100;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.018);
+    z-index: 1000;
+    /*box-shadow: 0 5px 10px rgba(0,0,0,0.018);*/
 }
 #top-nav #menu {
     height: 60px;
@@ -184,7 +288,7 @@ div.screen div {
 
 #screen1 {
     background-color: white;
-    z-index: 1;
+    z-index: 100;
 }
 #screen1 #topic-container {
     position: absolute;
@@ -205,16 +309,15 @@ div.screen div {
             transition: all .5s ease;
 }
 #screen1 .topic.show {
-    opacity: 2;
-    z-index: 0;
+    opacity: 1;
+    z-index: 101;
 }
 #screen1 .topic.hide.to-left {
     /*left: -100%;*/
 }
 #screen1 .topic.hide {
-    opacity: 0;
     /*left: 100%;*/
-    z-index: -100;
+    z-index: 99;
 }
 
 #screen1 .nav {
@@ -253,7 +356,7 @@ div.screen div {
 }
 
 #catalog {    
-    z-index: 1;
+    z-index: 100;
     background: white;
 }
 
@@ -261,7 +364,8 @@ div.screen div {
     display: block;
     width: 100px;
     margin-left: -50px;
-    margin-top: 50px;
+    margin-top: 20px;
+    padding-top: 40px;
     top: 50%;
     cursor: pointer;
     font-size: 24px;
@@ -269,13 +373,13 @@ div.screen div {
     text-align: center;
 }
 #catalog p.tool {
-    left: 35%;
+    left: 25%;
 }
 #catalog p.data {
     left: 50%;
 }
 #catalog p.end {
-    left: 65%;
+    left: 75%;
 }
 #catalog p:before {
     content: ' ';
@@ -287,7 +391,7 @@ div.screen div {
     border-radius: 100%;
     background: url(topic-catalog.png) center center no-repeat;
     left: -4px;
-    top: -120px;
+    top: -80px;
     -webkit-transition: all .25s ease;
        -moz-transition: all .25s ease;
         -ms-transition: all .25s ease;
@@ -295,7 +399,12 @@ div.screen div {
             transition: all .25s ease;
 }
 #catalog p:hover:before {
-    top: -140px;
+    top: -100px;
+    -webkit-transform: rotate(-30deg);
+       -moz-transform: rotate(-30deg);
+        -ms-transform: rotate(-30deg);
+         -o-transform: rotate(-30deg);
+            transform: rotate(-30deg);
 }
 #catalog p:active:before {
     -webkit-transform: scale(.9);
@@ -328,6 +437,12 @@ div.screen div {
     left: 480px;
     top: 220px;
     background: url("topic/hunter/title.png") no-repeat;
+}
+#screen1 .hunter .title a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-indent: -9999px;
 }
 
 #screen1 .hunter .dataMonitoring {
@@ -406,7 +521,10 @@ div.screen div {
     font-family: 'Microsoft Yahei';
     font-weight: normal;
 }
-
+#screen1 .fis h1.eng a {
+    color: white;
+    text-decoration: none;
+}
 #screen1 .fis h1.chs {
     margin: 0 0 0 250px;
     font-size: 72px;
@@ -479,6 +597,13 @@ div.screen div {
 
     background: url("topic/webspeed/title.png") no-repeat;
 
+}
+
+#screen1 .webspeed .title a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-indent: -9999px;
 }
 
 #screen1 .webspeed .title-header {
@@ -626,25 +751,29 @@ div.screen div {
 
 #screen1 .GMU .title {
 
-    width: 1011px;
-    height: 293px;
+    width: 537px;
+    height: 282px;
 
     position: absolute;
-    left: 320px;
+    left: 540px;
     top: 122px;
 
-    background: url("topic/gmu/title.png") no-repeat;
+    background: url("topic/gmu/gmu.png") no-repeat;
 
 }
 
 #screen1 .GMU .title-main {
 
-    width: 1011px;
-    height: 293px;
+    width: 537px;
+    height: 282px;
 
-    background: url("topic/gmu/title-main.png") no-repeat;
-
-
+}
+#screen1 .GMU .title-main a {
+    display: block;
+    margin-top: 230px;
+    height: 58px;
+    width: 100%;
+    text-indent: -9999px;
 }
 
 #screen1 .GMU .content {
@@ -724,6 +853,13 @@ div.screen div {
 
     background: url("topic/ueditor/title.png") no-repeat;
 
+}
+
+#screen1 .ueditor .title a {
+    display: block;
+    height: 100%;
+    width: 100%;
+    text-indent: -9999px;
 }
 
 #screen1 .ueditor .function {
@@ -817,8 +953,8 @@ div.screen div {
 }
 
 #screen2 {
-    background-color: white;
-    z-index: 2;
+    background-color: #f9f9f9;
+    z-index: 200;
 }
 
 #screen2 h1 {
@@ -828,6 +964,7 @@ div.screen div {
     margin: 0 auto;
     padding-top: 250px;
     color: #888;
+    z-index: 201;
 }
 
 #screen2 #team-container {
@@ -850,7 +987,7 @@ div.screen div {
     display: inline-block;
     position: absolute;
     opacity: 0;
-    z-index: 2;
+    z-index: 201;
     -webkit-transition: -webkit-transform .25s ease;
        -moz-transition: -moz-transform .25s ease;
         -ms-transition: -ms-transform .25s ease;
@@ -892,6 +1029,9 @@ div.screen div {
 #screen2 .team-member.m7 {
     background-position: -600px 0;
 }
+#screen2 .team-member.m8 {
+    background-position: -700px 0;
+}
 
 #screen2 #member-show {
     position: absolute;
@@ -918,7 +1058,7 @@ div.screen div {
 #screen2 img.show {
     opacity: 1;
 }
-/*.hide.to-left {
+.hide.to-left {
     -webkit-animation: toleft .5s ease 0 1 normal;
        -moz-animation: toleft .5s ease 0 1 normal;
         -ms-animation: toleft .5s ease 0 1 normal;
@@ -945,7 +1085,7 @@ div.screen div {
         -ms-animation: fromright .5s ease 0 1 normal;
          -o-animation: fromright .5s ease 0 1 normal;
             animation: fromright .5s ease 0 1 normal;
-}*/
+}
 
 @-webkit-keyframes toleft { 0% { left: 0; } 100% { left: -100%; } }
    @-moz-keyframes toleft { 0% { left: 0; } 100% { left: -100%; } }
@@ -973,7 +1113,7 @@ div.screen div {
 
 #screen3 {
     background: white;
-    z-index: 3;
+    z-index: 300;
 }
 #screen3 h1 {
     text-align: center;
@@ -993,17 +1133,14 @@ div.screen div {
     right: 0;
     height: 1100px;
     bottom: 100px;
-    z-index: 2;
+    z-index: 301;
     background: url(drawing.png);
     opacity: .1;
-}
-#screen3 #ground-layer {
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 322px;
-    bottom: 0;
-    z-index: 1;
+    -webkit-transition: all 3s ease;
+       -moz-transition: all 3s ease;
+        -ms-transition: all 3s ease;
+         -o-transition: all 3s ease;
+            transition: all 3s ease;
 }
 #screen3 #little-container {
     position: absolute;
@@ -1011,8 +1148,9 @@ div.screen div {
     height: 300px;
     overflow: hidden;
     white-space: nowrap;
-    z-index: 5;
-    /*-webkit-transition: left 1.25s ease;
+    z-index: 302;
+    left: 0;
+ /*   -webkit-transition: left 1.25s ease;
        -moz-transition: left 1.25s ease;
         -ms-transition: left 1.25s ease;
          -o-transition: left 1.25s ease;
@@ -1024,7 +1162,7 @@ div.screen div {
     position: absolute;
     left: -1000px;
     bottom: 300px;
-    z-index: 4;
+    z-index: 303;
     margin-left: -30px;
     /*background: url(ballon.png) no-repeat;*/
 }
@@ -1063,7 +1201,7 @@ div.screen div {
 
 #screen4 {
     background: #5e5e5e;
-    z-index: 4;
+    z-index: 400;
 }
 #screen4 #github {
     position: absolute;
@@ -1098,7 +1236,7 @@ div.screen div {
 }
 #screen4 #github .cat {
     position: absolute;
-    z-index: 10;
+    z-index: 401;
     width: 260px;
     height: 260px;
     left: -130px;
