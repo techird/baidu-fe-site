@@ -5,22 +5,12 @@
     <meta charset="utf-8" />
     <title>Baidu FE</title>
     <link rel="stylesheet" href="fex/fe.css" />
-    <script src="fex/tangram-min.js"></script>
+    <script type="text/javascript" src="http://fe.bdimg.com/tangram/latest.js"></script>
+    <script src="fex/CSS3Animate.js"></script>
     <script src="fex/fe.js"></script>
 </head> 
 <body>
     <h1 id="logo">FEX</h1>
-    
-    <div id="top-nav">
-        <div id="menu">
-            <ul>
-                <li screen="1" class="s1">技术</li>
-                <li screen="3" class="s2">大牛</li>
-                <li screen="4" class="s3">团队</li>
-                <li screen="5" class="s4">关注</li>
-            </ul>
-        </div>
-    </div>
 
     <div id="about">
         <div class="left">
@@ -41,6 +31,17 @@
         </div>
     </div>
     
+    
+    <div id="top-nav">
+        <div id="menu">
+            <ul>
+                <li screen="1" class="s1">技术</li>
+                <li screen="3" class="s2">大牛</li>
+                <li screen="4" class="s3">团队</li>
+                <li screen="5" class="s4">关注</li>
+            </ul>
+        </div>
+    </div>
     <div id="stage">
         <div id="screen0" class="screen">        
             <h1>FEday</h1>

@@ -1,133 +1,32 @@
-baidu(function(){
-    Function.prototype.bind = function(context) {
-        var _this = this;
-        return function(){
-            return _this.apply(context);
-        }
+Function.prototype.bind = function(context) {
+    var _this = this;
+    return function() {
+        return _this.apply(context, arguments);
     }
+}
 
-    baidu.dom.extend( {
-        indexOf: function( $dom ) {
-            if(!this.length) return -1;
-            for(var i = 0; i < $dom.length; i++){
-                if(this[0] == $dom[i]) return i;
-            }
-            return -1;
-        }
-    });
-
-    function css3Animate( properties, duration ) {
-        
-    }
-
-    baidu.fx.easing.ease = function(t) {
-        return Math.pow(t, 0.7);
+function Event() {
+    this._event = {};
+    this.on = function ( name, callback ) {            
+        var callbacks = this._event[name] = this._event[name] || baidu.Callbacks();
+        callbacks.add(callback);
+        return this;
     };
-
-    var ani_timeout, masked = false;
-    function animateLogo() {
-        baidu('#logo').addClass('animation');
-        clearTimeout(ani_timeout);
-        ani_timeout = setTimeout(function(){
-            baidu('#logo').removeClass('animation');
-        }, 1200);
+    this.fire = function( name, args ) {
+        if(!this._event[name]) return;
+        //console.log(this, name, args);
+        this._event[name].fireWith( this, args );
+        return this;
+    };
+    this.fireBefore = function( name, args ) {
+        this.fire('before' + name, args);
     }
-    baidu('#logo').click(function(){
-        animateLogo();
-        if(baidu('#logo').hasClass('show')) {
-            masked = false;
-            baidu('#logo').removeClass('show');
-            baidu('#about').removeClass('show');
-        } else {
-            masked = true;
-            baidu('#logo').addClass('show');
-            baidu('#about').addClass('show');
-        }
-    });
-
-    baidu('#about').click(function(e){
-        e.stopPropagation();
-        if(e.target.tagName.toLowerCase() == 'p' || e.target.tagName.toLowerCase()=='h2') return;
-        animateLogo();
-        masked = false;
-        baidu('#logo').removeClass('show');
-        baidu('#about').removeClass('show');
-    });
-
-    var cheatCode = [38,38,40,40,37,39,37,39,65,66,65,66];
-    var waiting = cheatCode.slice(0);
-    baidu('body').keydown(function(e){
-        if(waiting.shift()!=e.keyCode) waiting = cheatCode.slice(0);
-        if(waiting.length==0) {
-            baidu('#logo').click();
-            waiting = cheatCode.slice(0);
-        }
-    });
-
-
-
-
-    var ani_timeout, masked = false;
-    function animateLogo() {
-        baidu('#logo').addClass('animation');
-        clearTimeout(ani_timeout);
-        ani_timeout = setTimeout(function(){
-            baidu('#logo').removeClass('animation');
-        }, 1200);
+    this.fireAfter = function( name, args ) {
+        this.fire('after' + name, args);
     }
-    baidu('#logo').click(function(){
-        animateLogo();
-        if(baidu('#logo').hasClass('show')) {
-            masked = false;
-            baidu('#logo').removeClass('show');
-            baidu('#about').removeClass('show');
-        } else {
-            masked = true;
-            baidu('#logo').addClass('show');
-            baidu('#about').addClass('show');
-        }
-    });
+}
 
-    baidu('#about').click(function(e){
-        e.stopPropagation();
-        if(e.target.tagName.toLowerCase() == 'p' || e.target.tagName.toLowerCase()=='h2') return;
-        animateLogo();
-        masked = false;
-        baidu('#logo').removeClass('show');
-        baidu('#about').removeClass('show');
-    });
-
-    var cheatCode = [38,38,40,40,37,39,37,39,65,66,65,66];
-    var waiting = cheatCode.slice(0);
-    baidu('body').keydown(function(e){
-        if(waiting.shift()!=e.keyCode) waiting = cheatCode.slice(0);
-        if(waiting.length==0) {
-            baidu('#logo').click();
-            waiting = cheatCode.slice(0);
-        }
-    });
-
-
-    function Event() {
-        this._event = {};
-        this.on = function ( name, callback ) {            
-            var callbacks = this._event[name] = this._event[name] || baidu.Callbacks();
-            callbacks.add(callback);
-            return this;
-        };
-        this.fire = function( name, args ) {
-            if(!this._event[name]) return;
-            //console.log(this, name, args);
-            this._event[name].fireWith( this, args );
-            return this;
-        };
-        this.fireBefore = function( name, args ) {
-            this.fire('before' + name, args);
-        }
-        this.fireAfter = function( name, args ) {
-            this.fire('after' + name, args);
-        }
-    }
+baidu(function(){    
 
     function Screen( index, stage, dom ) {
         Event.apply(this);
@@ -155,7 +54,7 @@ baidu(function(){
                             width: cw / w   
                         }[type || 'all'];
                     elem.css({
-                        left: ( cw - w ) / 2,
+                        translateX: ( cw - w ) / 2,
                         '-webkit-transform': 'scale(' + scale + ')',
                            '-moz-transform': 'scale(' + scale + ')',
                             '-ms-transform': 'scale(' + scale + ')',
@@ -216,13 +115,13 @@ baidu(function(){
         function buildEvents() {
             // change event by wheel
             baidu( 'body' ).on( 'mousewheel', function(e) {
-                if(masked) return;
+                if( splash.isVisible() ) return;
                 _stage.changeScreen(_currentScreenIndex + (e.wheelDelta < 0 ? 1 : -1))
             });
 
             // change event by nav
             baidu('#top-nav #menu ul li').click(function(e){
-                if(masked) return;
+                if( splash.isVisible() ) return;
                 var $target = baidu(e.target);
                 if( _currentScreenIndex != $target.attr('screen') ) {
                     _stage.changeScreen( +$target.attr('screen') );
@@ -235,7 +134,7 @@ baidu(function(){
             } );
 
             baidu( 'body' ).on( 'keydown', function(e) {
-                if(masked) return;
+                if( splash.isVisible() ) return;
                 _stage.fire( 'navigate', [e.keyIdentifier] );
             });
 
@@ -269,7 +168,9 @@ baidu(function(){
                 'height' : height - offset,
                 'padding-top' : offset
             });
-            baidu('#stage').css( "top", - _stage.height() * _currentScreenIndex);
+            baidu('#stage').cssAnimate( {
+                "translateY" : - _stage.height() * _currentScreenIndex
+            });
         });
 
         // 传播事件给屏幕
@@ -280,47 +181,34 @@ baidu(function(){
         // 导航条位置适应
         this.on('resize', function( width, height ) {
             var top = _currentScreenIndex == 0 ? height - _nav.height() : 0;
-            _nav.css({
-                top: top
+            _nav.css3({
+                translateY: top
             });
-            baidu('body > #logo').css('top', top);
+            baidu('body > #logo').css3('translateY', top);
         });
 
         // 屏幕滚动
         this.on('change', function( newIndex, oldIndex ) {
             _stage.fire('beforehide', [oldIndex]);
             _stage.fire('beforeshow', [newIndex]);
-            baidu('#stage').css('-webkit-transform', 'translateY(' + -_stage.height() * newIndex + 'px)');
-            _changing = false; 
-            // baidu('#stage').animate({
-            //     top : -_stage.height() * newIndex
-            // }, {
-            //     duration: 800, 
-            //     ease : 'ease',
-            //     progress : function( e, progress ) {
-            //         _stage.fire('changeprogress', [ {
-            //             progress : progress,
-            //             targetScreen : newIndex, 
-            //             sourceScreen : oldIndex,
-            //             scrollTop: -e.elem.offsetTop
-            //         } ]);
-            //     },
-            //     complete: function() { 
-            //         _changing = false; 
-            //         _stage.fire('afterhide', [oldIndex]);
-            //         _stage.fire('aftershow', [newIndex]);
-            //     }
-            // });
+            _changing = true; 
+            baidu('#stage').cssAnimate({
+                translateY : -_stage.height() * newIndex
+            }, 800, function() { 
+                _changing = false; 
+                _stage.fire('afterhide', [oldIndex]);
+                _stage.fire('aftershow', [newIndex]);
+            });
         });
 
         // 导航条位置适应
         this.on('change', function( index ) {
             var top = index == 0 ? this.height() - _nav.height() : 0;
-            _nav.animate({
-                "top" : top
+            _nav.cssAnimate({
+                "translateY" : top
             }, 800);
-            baidu('body > #logo').animate({
-                "top" : top
+            baidu('body > #logo').cssAnimate({
+                "translateY" : top
             }, 800);
         });
 
@@ -366,6 +254,7 @@ baidu(function(){
             this.fire('change', [0, -1]);
         }
     }
+
     function SlideShow( container, delay ) {
         Event.apply(this);
         var container = baidu.dom(container);
@@ -401,9 +290,64 @@ baidu(function(){
         }
     }
 
-    Stage.DEBUG = false;
+    function Splash() {
+        var visible = false, 
+            showDuration = 600, 
+            hideDuration = 600;
+            
+        function show() {
+            visible = true;
+            baidu('#about').cssAnimate({ 
+                translateY: stage.height(), 
+                'box-shadow' : '0 20px 50px rgba(0,0,0,.3)' }
+            , showDuration);
+            baidu('#logo').cssAnimate({
+                translateY: stage.height() / 2 - 10,
+                translateX: 10,
+                'font-size': '72px',
+                color: 'white'
+            }, showDuration);
+        }
+
+        function hide() {
+            visible = false;
+            baidu('#about').cssAnimate({ 
+                translateY: stage.height(), 
+                translateX: 0,
+                'box-shadow' : 'none' }
+            , hideDuration);
+            baidu('#logo').cssAnimate({
+                translateY: 0,
+                'font-size': '32px',
+                color: 'black'
+            });
+        }
+
+        baidu('#logo').click( function() {
+            visible ? hide() : show();
+        });
+
+        baidu('#about').click( function(e){
+            e.stopPropagation();
+            if(e.target.tagName.toLowerCase() == 'p' || e.target.tagName.toLowerCase()=='h2') return;
+            hide();
+        });
+
+        var cheatCode = [38,38,40,40,37,39,37,39,65,66,65,66];
+        var waiting = cheatCode.slice(0);
+        baidu('body').keydown(function(e){
+            if(waiting.shift()!=e.keyCode) waiting = cheatCode.slice(0);
+            if(waiting.length == 0) {
+                show();
+                waiting = cheatCode.slice(0);
+            }
+        });
+
+        this.isVisible = function() { return visible; }
+    }
 
     var stage = new Stage();
+    var splash = new Splash();
 
     // 首屏交互
     stage.getScreen(0)
@@ -498,13 +442,15 @@ baidu(function(){
         })
 
         .on('aftershow', function() {
-            this.prev.delay(100).animate( { 'left': 50 }, 200 );
-            this.next.delay(100).animate( { 'right': 50 }, 200 );
+            setTimeout(function(){
+                this.prev.cssAnimate( { 'translateX': 50 }, 200 );
+                this.next.cssAnimate( { 'right': 50 }, 200 );
+            }.bind(this), 100);
         })
 
         .on('beforehide', function(){     
-            this.prev.animate( { 'left': -150 }, 200 );
-            this.next.animate( { 'right': -150 }, 200 );
+            this.prev.cssAnimate( { 'translateX': -150 }, 200 );
+            this.next.cssAnimate( { 'right': -150 }, 200 );
         });
 
     // 第二屏（大牛）交互
@@ -521,8 +467,8 @@ baidu(function(){
                 var s = this;
                 s.members.each(function(index, dom){
                     var m = baidu(dom);
-                    m.stop().animate({
-                        left: s.left() + index * m.width(),
+                    m.cssAnimate({
+                        translate: s.left() + index * m.width(),
                         opacity: 1
                     }, 300);
                 });
@@ -535,7 +481,7 @@ baidu(function(){
                 .on('mouseenter', function(e){
                     _this.find('h1').fadeOut();
                     var target = baidu(e.target);
-                    index = target.indexOf(members);
+                    index = target.prevAll().length;
                     active(index);
                 });
 
@@ -566,7 +512,7 @@ baidu(function(){
             this.layout();
         })
         .on('beforehide', function(){
-            this.members.animate({opacity: 0});
+            this.members.cssAnimate({opacity: 0});
         })
     
     // 第三屏（成员）交互
@@ -652,7 +598,7 @@ baidu(function(){
                 last_timeouts.push(setTimeout(function(){
                     var left = target.position().left - target.width() / 2 + target.parent().position().left - 10;
                     target.addClass('stand');
-                    dialog.css( { 'left': left });
+                    dialog.css( { 'translateX': left });
                     dialog.fadeIn();
                     if (data) {
                         dialog.html('<h1>' + data[index][0] + '</h1><p>' + data[index][1] + '</p>');

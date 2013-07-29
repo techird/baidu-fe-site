@@ -20,11 +20,6 @@ body, html, div {
     right: 0;
     height: 100%;
     z-index: 1001;
-    -webkit-transition: all 1s ease-in-out;
-       -moz-transition: all 1s ease-in-out;
-        -ms-transition: all 1s ease-in-out;
-         -o-transition: all 1s ease-in-out;
-            transition: all 1s ease-in-out;
 }
 #about .left {
     background: #000;
@@ -57,10 +52,6 @@ body, html, div {
     margin: 0;
     padding: 10px;
 }
-#about.show {
-    top: 0;
-    box-shadow: 0 20px 50px rgba(0,0,0,.3);
-}
 #logo {
     color: #333;
     font-family: 'Helvetica Neue','Microsoft Yahei';
@@ -74,29 +65,9 @@ body, html, div {
     display: block;
     cursor: pointer;
 }
-#logo.show {
-    color: white;
-    top: 50% !important;
-    margin-top: -160px;
-    font-size: 160px;
-    height: 160px;
-    line-height: 160px;
-}
-#logo.animation {
-    -webkit-transition: all 1s ease-in-out;
-       -moz-transition: all 1s ease-in-out;
-        -ms-transition: all 1s ease-in-out;
-         -o-transition: all 1s ease-in-out;
-            transition: all 1s ease-in-out;
-}
 #stage {
     position: absolute;
     width: 100%;
-    -webkit-transition: all 2s ease;
-       -moz-transition: all 2s ease;
-        -ms-transition: all 2s ease;
-         -o-transition: all 2s ease;
-            transition: all 2s ease;
 }
 div.screen {
     position: relative;
@@ -119,6 +90,7 @@ div.screen div {
     /*background: #2f3841;*/
     z-index: 0;
 }
+/*
 #screen0 .circle1,
 #screen0 .circle2,
 #screen0 .circle3,
@@ -154,6 +126,7 @@ div.screen div {
     left: 550px;
     top: 600px;
 }
+*/
 #screen0 .nav.down {
     cursor: pointer;
     z-index: 1;
@@ -167,11 +140,6 @@ div.screen div {
     border-radius: 100%;
     background-color: rgba(255,255,255,.15);
     /*box-shadow: 0 0 25px rgba(0,0,0,.3);*/
-    -webkit-transition: all .25s ease;
-       -moz-transition: all .25s ease;
-        -ms-transition: all .25s ease;
-         -o-transition: all .25s ease;
-            transition: all .25s ease;  
 }
 #screen0 .nav.down:hover{
     background-color: rgba(255,255,255,.3);
@@ -294,19 +262,9 @@ div.screen div {
     position: absolute;
     width: 1600px;
     height: 800px;
-    -webkit-transition: -webkit-transform .25s ease;
-       -moz-transition: -moz-transform .25s ease;
-        -ms-transition: -ms-transform .25s ease;
-         -o-transition: -o-transform .25s ease;
-            transition: transform .25s ease;
 }
 #screen1 .topic {
     position: absolute;
-    -webkit-transition: all .5s ease;
-       -moz-transition: all .5s ease;
-        -ms-transition: all .5s ease;
-         -o-transition: all .5s ease;
-            transition: all .5s ease;
 }
 #screen1 .topic.show {
     opacity: 1;
