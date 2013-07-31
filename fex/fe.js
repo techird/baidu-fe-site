@@ -1,487 +1,319 @@
-baidu(function(){
-    Function.prototype.bind = function(context) {
-        var _this = this;
-        return function(){
-            return _this.apply(context);
-        }
+Function.prototype.bind = function(context) {
+    var _this = this;
+    return function() {
+        return _this.apply(context, arguments);
     }
+}
 
-    baidu.dom.extend( {
-        indexOf: function( $dom ) {
-            if(!this.length) return -1;
-            for(var i = 0; i < $dom.length; i++){
-                if(this[0] == $dom[i]) return i;
-            }
-            return -1;
-        }
-    });
-
-    function css3Animate( properties, duration ) {
-        
-    }
-
-    baidu.fx.easing.ease = function(t) {
-        return Math.pow(t, 0.7);
+function Event() {
+    this._event = {};
+    this.on = function ( name, callback ) {            
+        var callbacks = this._event[name] = this._event[name] || baidu.Callbacks();
+        callbacks.add(callback);
+        return this;
     };
+    this.fire = function( name, args ) {
+        if(!this._event[name]) return;
+        //console.log(this, name, args);
+        this._event[name].fireWith( this, args );
+        return this;
+    };
+}
 
-    var ani_timeout, masked = false;
-    function animateLogo() {
-        baidu('#logo').addClass('animation');
-        clearTimeout(ani_timeout);
-        ani_timeout = setTimeout(function(){
-            baidu('#logo').removeClass('animation');
-        }, 1200);
-    }
-    baidu('#logo').click(function(){
-        animateLogo();
-        if(baidu('#logo').hasClass('show')) {
-            masked = false;
-            baidu('#logo').removeClass('show');
-            baidu('#about').removeClass('show');
-        } else {
-            masked = true;
-            baidu('#logo').addClass('show');
-            baidu('#about').addClass('show');
+function Screen( index, stage, dom ) {
+    Event.apply(this);
+    this.index = index;
+    this.name = dom.id;
+    this.stage = stage;
+    this.dom = dom;
+    this.$ = baidu(this.dom);
+}
+Screen.prototype.fit = function( selector, type ) {
+    var elem = this.$.find(selector);
+    var stage = this.stage;
+    var max = Math.max, min = Math.min;
+    function onresize() {
+        var cw = stage.width(), ch = stage.height(),
+            w = elem.width(), h = elem.height(), 
+            scale = {
+                all: Math.max(ch / h, cw / w),
+                height: ch / h,
+                width: cw / w   
+            }[type || 'all'];
+        elem.cssAnimate({
+            scale: scale,
+        });
+    };
+    this.on('resize', onresize);
+    this.on('beforeshow', onresize);
+    onresize();
+    return elem;
+}
+function Stage() {  
+    Event.apply(this); 
+
+    var   screens
+        , disabled
+        , slider
+        , that
+        , duration;
+
+    screens = baidu('.screen').map( function ( index, dom ) {
+                return new Screen( index, this, dom );
+            }.bind(this));
+    disabled = false;
+    duration = 1000;
+    slider = new SlideShow({
+        container: '#stage',
+        direction: 'Y',
+        duration: duration,
+        effect: 'fold'
+    });
+    that = this;
+
+    takeControl();
+    function takeControl() {
+        // change event by wheel
+        baidu( 'body' ).on( 'mousewheel', function(e) {
+            if( disabled ) return;
+            e.wheelDelta < 0 ? slider.next() : slider.prev();
+        });
+
+        // change event by nav
+        baidu('#top-nav #menu ul li').click(function(e){
+            if( disabled ) return;
+            var name = baidu(e.target).attr('screens').split(' ')[0];
+            slider.slide( that.getScreen(name).index );
+        });
+
+        function navigateBy( dir ) {
+            if( disabled ) return;
+            var stoped = false;
+            var e = { direction: dir, stopPropagation: function(){ stoped = true; } };
+            that.getCurrentScreen().fire( 'navigate', [e] );
+            if( stoped ) return;
+            switch(dir) {
+                case "Up":
+                    slider.prev();
+                    break;
+                case "Down":
+                    slider.next();
+                    break;
+            }
         }
+
+        // keyboard navigate
+        baidu( 'body' ).on( 'keydown', function(e) {
+            navigateBy(e.keyIdentifier);
+        });
+
+        var tsx, tsy;
+        document.body.addEventListener( 'touchstart', function(e) {
+            if (e.touches.length !== 1 ) return;
+            tsx = e.touches[0].pageX;
+            tsy = e.touches[0].pageY;
+        });
+        document.body.addEventListener( 'touchend', function(e) {
+            if (e.changedTouches.length !== 1 ) return;
+            var dx = e.changedTouches[0].pageX - tsx, dy = e.changedTouches[0].pageY - tsy
+                dxl = Math.abs(dx), dyl = Math.abs(dy);
+            if ( dyl > dxl && dyl > 15 ) {
+                dy < 0 ? navigateBy('Down') : navigateBy('Up');
+                touching = false;
+            } else if ( dxl > 15 ) {
+                dx < 0 ? navigateBy('Right') : navigateBy('Left');
+                touching = false;
+            }
+        });
+
+        slider.on('beforeslide', function(from, to) {
+            that.fire('beforeslide', [from, to])
+            from = that.getScreen(from);
+            to = that.getScreen(to);
+            if(from) from.fire('beforehide');
+            if(to) to.fire('beforeshow');
+        });
+
+        slider.on('afterslide', function(from, to) {
+            that.fire('afterslide', [from, to])
+            from = that.getScreen(from);
+            to = that.getScreen(to);
+            if(from) from.fire('afterhide');
+            if(to) to.fire('aftershow');
+        });
+    }
+
+    this.start = function() {
+        screens.each(function(index, screen) {
+            screen.fire('init');
+        });
+        slider.showFirst();
+    }
+    this.disable = function() { disabled = true; };
+    this.enable = function() { disabled = false; };
+    this.width = function() { return document.documentElement.clientWidth; };
+    this.height = function() { return document.documentElement.clientHeight; };
+    this.getIndex = function() { return slider.index(); };
+    this.getScreen = function ( id ) { 
+        if ( typeof(id) == 'number' ) return screens[id];
+        for (var i = screens.length - 1; i >= 0; i--) {
+            if( screens[i].name == id ) return screens[i];
+        };
+    };
+    this.getCurrentScreen = function() {
+        return this.getScreen(slider.index());
+    };
+    this.slideToScreen = function( id ) { return slider.slide(that.getScreen(id).index); };
+    this.duration = duration;
+}
+function Splash( stage ) {
+    Event.apply(this);
+    var showDuration = 1600, 
+        hideDuration = 1600,
+        visible = false,
+        that = this;
+        
+    function show() {
+        visible = true;
+        baidu('#about').cssAnimate({ 
+            translateY: stage.height(), 
+            'box-shadow' : '0 20px 50px rgba(0,0,0,.3)' }
+        , showDuration);
+
+        baidu('#logo').cssAnimate({
+            'translateY': stage.height() / 2 - 70,
+            'translateX': 10,
+            'font-size': '72px',
+            'color': 'white'
+        }, showDuration);
+        that.fire('show');
+    }
+
+    function hide() {
+        visible = false;
+        baidu('#about').cssAnimate({ 
+            'translateY': 0, 
+            'box-shadow' : 'none' }
+        , hideDuration);
+
+        baidu('#logo').cssAnimate({
+            'translateY': stage.getCurrentScreen().index == 0 ? stage.height() - baidu('#top-nav').height() : 0,
+            'translateX': 0,
+            'font-size': '32px',
+            'color': 'black'
+        }, hideDuration);
+        that.fire('hide');
+    }
+
+    baidu('#logo').click( function() {
+        visible ? hide() : show();
     });
 
-    baidu('#about').click(function(e){
+    baidu('#about').click( function(e){
         e.stopPropagation();
         if(e.target.tagName.toLowerCase() == 'p' || e.target.tagName.toLowerCase()=='h2') return;
-        animateLogo();
-        masked = false;
-        baidu('#logo').removeClass('show');
-        baidu('#about').removeClass('show');
+        hide();
     });
 
     var cheatCode = [38,38,40,40,37,39,37,39,65,66,65,66];
     var waiting = cheatCode.slice(0);
     baidu('body').keydown(function(e){
         if(waiting.shift()!=e.keyCode) waiting = cheatCode.slice(0);
-        if(waiting.length==0) {
-            baidu('#logo').click();
+        if(waiting.length == 0) {
+            show();
             waiting = cheatCode.slice(0);
         }
     });
+}
 
-
-
-
-    var ani_timeout, masked = false;
-    function animateLogo() {
-        baidu('#logo').addClass('animation');
-        clearTimeout(ani_timeout);
-        ani_timeout = setTimeout(function(){
-            baidu('#logo').removeClass('animation');
-        }, 1200);
-    }
-    baidu('#logo').click(function(){
-        animateLogo();
-        if(baidu('#logo').hasClass('show')) {
-            masked = false;
-            baidu('#logo').removeClass('show');
-            baidu('#about').removeClass('show');
-        } else {
-            masked = true;
-            baidu('#logo').addClass('show');
-            baidu('#about').addClass('show');
+function Control( stage, splash ) {
+    function getNavPosition( screenIndex ) {
+        var y = 0;
+        if ( screenIndex == 0 ) {
+            y = stage.height() - baidu('#top-nav').height();
         }
+        return y;
+    }
+
+    function fitNavPosition() {
+        baidu('#top-nav, #logo').css3( { translateY: getNavPosition( stage.getCurrentScreen().index ) } )
+    }
+
+    // 导航条位置适应
+    baidu(window).on( 'resize', function( ) {            
+        fitNavPosition();
+        stage.getCurrentScreen().fire('resize');
     });
 
-    baidu('#about').click(function(e){
-        e.stopPropagation();
-        if(e.target.tagName.toLowerCase() == 'p' || e.target.tagName.toLowerCase()=='h2') return;
-        animateLogo();
-        masked = false;
-        baidu('#logo').removeClass('show');
-        baidu('#about').removeClass('show');
+    fitNavPosition();
+
+    // 导航条位置适应
+    stage.on('beforeslide', function( index_from, index_to ) {
+        baidu('#top-nav, #logo').cssAnimate( { translateY: getNavPosition( index_to ) }, stage.duration );
     });
 
-    var cheatCode = [38,38,40,40,37,39,37,39,65,66,65,66];
-    var waiting = cheatCode.slice(0);
-    baidu('body').keydown(function(e){
-        if(waiting.shift()!=e.keyCode) waiting = cheatCode.slice(0);
-        if(waiting.length==0) {
-            baidu('#logo').click();
-            waiting = cheatCode.slice(0);
-        }
+    // 更新导航当前项
+    stage.on('afterslide', function( index_from, index_to ) {
+        baidu('#top-nav #menu ul li')
+            .removeClass('current')
+            .filter(function(index, dom){
+                return ~this.getAttribute('screens').indexOf( stage.getScreen(index_to).name );
+            })
+            .addClass('current');
     });
 
+    splash.on('show', stage.disable);
+    splash.on('hide', stage.enable);
+}
 
-    function Event() {
-        this._event = {};
-        this.on = function ( name, callback ) {            
-            var callbacks = this._event[name] = this._event[name] || baidu.Callbacks();
-            callbacks.add(callback);
-            return this;
-        };
-        this.fire = function( name, args ) {
-            if(!this._event[name]) return;
-            //console.log(this, name, args);
-            this._event[name].fireWith( this, args );
-            return this;
-        };
-        this.fireBefore = function( name, args ) {
-            this.fire('before' + name, args);
-        }
-        this.fireAfter = function( name, args ) {
-            this.fire('after' + name, args);
-        }
-    }
-
-    function Screen( index, stage, dom ) {
-        Event.apply(this);
-        this.index = index;
-        this.stage = stage;
-        this.dom = dom;
-        if ( !Screen.__initialized__ ) {
-            Screen.prototype.find = function( selector ) {
-                return baidu(this.dom).find( selector );
-            }
-            Screen.prototype.init = function( fn ) {
-                fn.apply(this);
-                return this;
-            }
-            Screen.prototype.fit = function( selector, type ) {
-                var elem = this.find(selector);
-                var stage = this.stage;
-                var max = Math.max, min = Math.min;
-                function onresize() {
-                    var cw = stage.width(), ch = stage.height(),
-                        w = elem.width(), h = elem.height(), 
-                        scale = {
-                            all: Math.max(ch / h, cw / w),
-                            height: ch / h,
-                            width: cw / w   
-                        }[type || 'all'];
-                    elem.css({
-                        left: ( cw - w ) / 2,
-                        '-webkit-transform': 'scale(' + scale + ')',
-                           '-moz-transform': 'scale(' + scale + ')',
-                            '-ms-transform': 'scale(' + scale + ')',
-                             '-o-transform': 'scale(' + scale + ')',
-                                'transform': 'scale(' + scale + ')',
-                        bottom: (scale - 1) / 2 * h
-                    });
-                };
-                this.on('resize', onresize);
-                this.on('beforeshow', onresize);
-                onresize();
-                return elem;
-            }
-            Screen.__initialized__  = true;
-        }        
-    }
-
-    function Stage() {  
-        Event.apply(this); 
-
-        var _nav = baidu('#top-nav'),
-            _currentScreenIndex = 0, _maxScreenIndex = baidu('.screen').length,
-            _isChanging = false,
-            _stage = this,
-            _changing = false;
-
-        var _screens = baidu('.screen').map( function ( index, dom ) {
-            return new Screen( index, _stage, dom );
-        });
-
-        this.getScreen = function( index ) {
-            return _screens[index];
-        };        
-
-        function fireScreenEvent ( index, name, args ) {
-            if(_screens[index]) _screens[index].fire(name, args)
-        }
-
-        this.width = function() {
-            return document.documentElement.clientWidth;
-        };
-
-        this.height = function() {
-            return document.documentElement.clientHeight;
-        }
-
-        this.changeScreen = function( index ) {
-            var oldIndex = _currentScreenIndex || 0,
-                newIndex = index;
-            if ( _changing ) return;
-            if ( newIndex >= 0 && newIndex < _maxScreenIndex ) {
-                _currentScreenIndex = newIndex;
-                _changing = true;
-                _stage.fire('change', [newIndex, oldIndex]);
-            }
-        }
-
-        function buildEvents() {
-            // change event by wheel
-            baidu( 'body' ).on( 'mousewheel', function(e) {
-                if(masked) return;
-                _stage.changeScreen(_currentScreenIndex + (e.wheelDelta < 0 ? 1 : -1))
-            });
-
-            // change event by nav
-            baidu('#top-nav #menu ul li').click(function(e){
-                if(masked) return;
-                var $target = baidu(e.target);
-                if( _currentScreenIndex != $target.attr('screen') ) {
-                    _stage.changeScreen( +$target.attr('screen') );
-                }
-            });
-
-            // resize event
-            baidu( window ).on( 'resize', function() {
-                _stage.fire( 'resize', [document.documentElement.clientWidth, document.documentElement.clientHeight] );
-            } );
-
-            baidu( 'body' ).on( 'keydown', function(e) {
-                if(masked) return;
-                _stage.fire( 'navigate', [e.keyIdentifier] );
-            });
-
-            _stage.on( 'navigate', function(direction) {
-                var stoped = false;
-                var e = { direction: direction, stopPropagation: function(){ stoped = true; } };
-                fireScreenEvent( _currentScreenIndex,'navigate', [e] );
-                if(stoped) return;
-                switch(direction) {
-                    case "Up":
-                        _stage.changeScreen(_currentScreenIndex - 1);
-                        break;
-                    case "Down":
-                        _stage.changeScreen(_currentScreenIndex + 1);
-                        break;
-                }
-            });
-        }
-
-        buildEvents();
-
-        // 快捷方式
-        this.on('change', function( newIndex, oldIndex ) {
-            oldIndex = oldIndex === undefined ? _currentScreenIndex : oldIndex;
-        });
-
-        // 所有屏幕的高度适应
-        this.on('resize', function( width, height ) {
-            var offset = _nav.height();
-            baidu('.screen').css({
-                'height' : height - offset,
-                'padding-top' : offset
-            });
-            baidu('#stage').css( "top", - _stage.height() * _currentScreenIndex);
-        });
-
-        // 传播事件给屏幕
-        this.on('resize', function ( width, height ) {
-            fireScreenEvent(_currentScreenIndex, 'resize', [width, height]);
-        });
-
-        // 导航条位置适应
-        this.on('resize', function( width, height ) {
-            var top = _currentScreenIndex == 0 ? height - _nav.height() : 0;
-            _nav.css({
-                top: top
-            });
-            baidu('body > #logo').css('top', top);
-        });
-
-        // 屏幕滚动
-        this.on('change', function( newIndex, oldIndex ) {
-            _stage.fire('beforehide', [oldIndex]);
-            _stage.fire('beforeshow', [newIndex]);
-            baidu('#stage').css('-webkit-transform', 'translateY(' + -_stage.height() * newIndex + 'px)');
-            _changing = false; 
-            // baidu('#stage').animate({
-            //     top : -_stage.height() * newIndex
-            // }, {
-            //     duration: 800, 
-            //     ease : 'ease',
-            //     progress : function( e, progress ) {
-            //         _stage.fire('changeprogress', [ {
-            //             progress : progress,
-            //             targetScreen : newIndex, 
-            //             sourceScreen : oldIndex,
-            //             scrollTop: -e.elem.offsetTop
-            //         } ]);
-            //     },
-            //     complete: function() { 
-            //         _changing = false; 
-            //         _stage.fire('afterhide', [oldIndex]);
-            //         _stage.fire('aftershow', [newIndex]);
-            //     }
-            // });
-        });
-
-        // 导航条位置适应
-        this.on('change', function( index ) {
-            var top = index == 0 ? this.height() - _nav.height() : 0;
-            _nav.animate({
-                "top" : top
-            }, 800);
-            baidu('body > #logo').animate({
-                "top" : top
-            }, 800);
-        });
-
-        // 更新导航当前项
-        this.on('aftershow', function( index ) {
-            baidu('#top-nav #menu ul li.current').removeClass('current');
-            baidu('#top-nav #menu ul li[screen=' + _currentScreenIndex + ']').addClass('current');
-        });
-
-        // 传播事件
-        this.on('beforeshow', function(index) {
-            fireScreenEvent(index, 'beforeshow');
-            baidu(_stage.getScreen(index).dom).addClass('activing');
-        });
-        this.on('aftershow', function(index) {
-            fireScreenEvent(index, 'aftershow');
-            baidu(_stage.getScreen(index).dom).removeClass('activing');
-        });
-        this.on('beforehide', function(index) {
-            fireScreenEvent(index, 'beforehide');
-            _stage.getScreen(index) && baidu(_stage.getScreen(index).dom).addClass('activing');
-        });
-        this.on('afterhide', function(index) {
-            fireScreenEvent(index, 'afterhide');
-            _stage.getScreen(index) && baidu(_stage.getScreen(index).dom).removeClass('activing');
-        });
-
-        // 传播事件
-        this.on('changeprogress', function(e) {
-            fireScreenEvent(e.targetScreen, 'activing', [e.progress]);
-            fireScreenEvent(e.sourceScreen, 'deactiving', [e.progress]);
-        });
-
-        this.on('changeprogress', function(e) {
-            var index = Math.min(e.sourceScreen, e.targetScreen);
-            var dom = _screens[index] && _screens[index].dom;
-            if(!dom) return;
-            baidu(dom).css('top', (e.scrollTop - _stage.height() * index) * 0.618);
-        });
-
-        this.start = function() {
-            this.fire('resize', [this.width(), this.height()]);
-            this.fire('change', [0, -1]);
-        }
-    }
-    function SlideShow( container, delay ) {
-        Event.apply(this);
-        var container = baidu.dom(container);
-        var slides = container.children().addClass('hide');
-        var current_index = -1;
-        var delay = delay || 1000;
-        this.show = function(comming_index) {
-            this.fireBefore('show', [current_index, comming_index]);
-            var current = slides.eq(current_index),
-                comming = slides.eq(comming_index);
-
-            if ( current ) {
-                current.removeClass('show from-right from-left');
-                current.addClass(comming_index > current_index ? 'hide to-left' : 'hide to-right');
-            }
-            comming.removeClass('hide to-left to-right');
-            comming.addClass(comming_index > current_index ? 'show from-right' : 'show from-left');
-
-            current_index = comming_index;
-            this.fire('show');
-        };
-        this.next = function() {
-            if ( this.hasNext() ) this.show(current_index + 1);
-        };
-        this.prev = function() {
-            if ( this.hasPrev() ) this.show(current_index - 1);
-        };
-        this.hasNext = function() {
-            return current_index < slides.length - 1;
-        }
-        this.hasPrev = function() {
-            return current_index > 0;
-        }
-    }
-
-    Stage.DEBUG = false;
+baidu(function(){       
 
     var stage = new Stage();
+    var splash = new Splash( stage );
+    var control = new Control(stage, splash);
 
-    // 首屏交互
-    stage.getScreen(0)
+    stage.getScreen('home')
 
-        .init(function(){
+        .on( 'init', function(){
             var screen = this;
-            this.light = (function(){
-                var circles = screen.find('.circle1, .circle2, .circle3, .circle4')
-                var timeouts = [];
-                return {
-                    on: function() {
-                        if(timeouts.length) return;
-                        circles.css('display', 'block').each(function(index, dom) {
-                            var circle = baidu(dom);
-                            function update() {
-                                circle.css({
-                                    left: (200 + stage.width()) * Math.random() - 400,
-                                    top: (200 + stage.height()) * Math.random() - 400
-                                });
-                                timeouts.push(setTimeout(update, Math.random() * 10000));
-                            }
-                            update();
-                        });
-                    },
-                    off: function() {
-                        while(timeouts.length) clearTimeout(timeouts.pop());
-                        circles.css('display', 'none');
-                    }
-                }                
-            })();
-            this.light.on();
-
-            this.down = this.find('.nav.down').click(function(){
-                stage.changeScreen(1);
+            this.down = this.$.find('.nav.down').click(function(){
+                stage.slideToScreen(1);
             });
-
-        })
-
-        .on('beforeshow', function(){
-            this.light.on();
-        })
-
-        .on('afterhide', function(){
-            this.light.off();
         })
 
         .on('beforehide', function(){            
-            this.down.css('bottom', -120)
+            this.down.cssAnimate( { 'translateY': 100 } );
         })
 
         .on('aftershow', function(){            
-            this.down.css('bottom', 100);
+            this.down.cssAnimate( { 'translateY': -100 } );
         });
 
-    stage.getScreen(1)
-
-        .init( function(){
-            this.find('p').click(function(e){
-                var index = +baidu(e.target).attr('topic-index');
-                stage.getScreen(2).slideShow.show(index);
-                stage.changeScreen(2);
+    stage.getScreen('topic')
+        .on( 'init', function(){
+            this.$.find('p').click(function(e){
+                var index = +baidu(e.target).attr('product-index');
+                stage.getScreen('product').slideShow.slide(index);
+                stage.slideToScreen('product');
             });
         })
 
-    // 第一屏（产品）交互
-    stage.getScreen(2)
+    stage.getScreen('product')
 
-        .init(function(){
-            var prev = this.prev = this.find('.nav.prev'),
-                next = this.next = this.find('.nav.next');
+        .on( 'init', function(){
+            var prev = this.prev = this.$.find('.nav.prev'),
+                next = this.next = this.$.find('.nav.next');
 
-            var slideShow = this.slideShow = new SlideShow('#topic-container');
-            this.fit('#topic-container');
-            slideShow.on('show', function() {
-                this.hasPrev() ? prev.show() : prev.hide();
+            var slideShow = this.slideShow = new SlideShow({
+                container: '#product-container',
+                duration: 800
+            });
+            slideShow.on('afterslide', function() {
+                prev.css('visibility', this.hasPrev() ? 'visible' : 'hidden');
+                next.css('visibility', this.hasNext() ? 'visible' : 'hidden');
                 this.hasNext() ? next.show() : next.hide();
             });
-            slideShow.show(0);
+            slideShow.showFirst();
             function goNext(){ slideShow.next(); }
             function goPrev(){ slideShow.prev(); }
             next.click(goNext);
@@ -492,188 +324,237 @@ baidu(function(){
                     case 'Right': return goNext();
                 }
             });
-
-            var cat = this.cat = this.find('#catalog');
-            this.find('#catalog p').click();
+            this.fit('#product-container');
         })
 
         .on('aftershow', function() {
-            this.prev.delay(100).animate( { 'left': 50 }, 200 );
-            this.next.delay(100).animate( { 'right': 50 }, 200 );
+            setTimeout(function(){
+                this.prev.cssAnimate( '+show' , 200 );
+                this.next.cssAnimate( '+show' , 200 );
+            }.bind(this), 100);
         })
 
-        .on('beforehide', function(){     
-            this.prev.animate( { 'left': -150 }, 200 );
-            this.next.animate( { 'right': -150 }, 200 );
+        .on('beforehide', function(){                 
+            this.prev.cssAnimate( '-show' , 200 );
+            this.next.cssAnimate( '-show' , 200 );
         });
 
-    // 第二屏（大牛）交互
-    stage.getScreen(3)
-        .init(function(){
-            this.members = this.find('.team-member');
+    stage.getScreen('archive')
+        .on( 'init', function(){
+            this.heads = this.$.find('.archive-head');
             this.left = function() {
-                return (stage.width() - this.members.outerWidth() * this.members.length) / 2 + 20
+                return (stage.width() - this.heads.outerWidth() * this.heads.length) / 2 + 20
             }
             this.middle = function() {
-                return (stage.width() - this.members.width()) / 2;
+                return (stage.width() - this.heads.width()) / 2;
             }
             this.layout = function() {
                 var s = this;
-                s.members.each(function(index, dom){
+                s.heads.each(function(index, dom){
                     var m = baidu(dom);
-                    m.stop().animate({
+                    m.css({
                         left: s.left() + index * m.width(),
                         opacity: 1
                     }, 300);
                 });
             }
 
-            this.shower = this.fit('#member-show', 'height');
-            this.slideShow = new SlideShow('#member-show');
+            var ss = this.slideShow = new SlideShow({
+                container : '#archive-container',
+                duration: 450
+            });
             var _this = this, index;
-            var members = this.members
+            var heads = this.heads
                 .on('mouseenter', function(e){
-                    _this.find('h1').fadeOut();
+                    _this.$.find('h1').cssAnimate({opacity: 0});
                     var target = baidu(e.target);
-                    index = target.indexOf(members);
+                    index = target.prevAll().length;
                     active(index);
                 });
 
             function active(index) {
-                _this.slideShow.show(index);
-                members.filter('.current').removeClass('current');
-                members.eq(index).addClass('current');
+                _this.slideShow.slide(index);
+                heads.filter('.current').removeClass('current');
+                heads.eq(index).addClass('current');
             }
 
             this.on('navigate', function(e) {
                 switch(e.direction) {
                     case 'Left':
-                        if (index === undefined) index = 0;
-                        index = (index + members.length - 1) % members.length;
-                        return active(index);
+                        ss.hasPrev() ? active(ss.index() - 1) : active(heads.length - 1);
+                        break;
                     case 'Right':
-                        if (index === undefined) index = -1;
-                        index = (index + members.length + 1) % members.length;
-                        return active(index);
+                        ss.hasNext() ? active(ss.index() + 1) : active(0);
+                        break;
                 }
             });
+
+            this.fit('#archive-container');
         })
         .on('resize', function(width){
             this.layout();
         })
-        .on('aftershow', function(){
-            this.members.css('left', this.middle());
+        .on('beforeshow', function(){
+            this.heads.css( { 'left': this.middle() } );
             this.layout();
         })
         .on('beforehide', function(){
-            this.members.animate({opacity: 0});
+            this.heads.cssAnimate({opacity: 0});
         })
     
-    // 第三屏（成员）交互
-    stage.getScreen(4)
-        .init(function(){            
-            var _this = this;
-            var little_container = this.find('#little-container');
-            var moutain = this.find('#moutain-layer');
-            var ground = this.find('#ground-layer');
-            var dialog = this.find('#dialog');
+    stage.getScreen('team')
+        .on( 'init', function(){       
+            var container = this.$.find('#team-container');
+            var drawing = this.$.find('#drawing-layer');
+            var dialog = this.$.find('#dialog');
             var ly = 0, lx = 0;
             var last_index;
-            var mcount = 34;
-            var data;
+            var mcount = 34;     
+            var _this = this;
 
             baidu.ajax({
                 url: 'fex/member/data.json',
                 dataType: 'json',
-                success: function( json ) {
-                    data = json;
-                }
+                success: init
             });
 
-            var seq = [];
-            for(var i = 0; i < mcount; i++) seq.push(i);
-            seq.sort(function(){return Math.random() > 0.5 ? 1 : -1;});
+            function init( data ) {
+                var seq = [], mcount = data.length;
+                for(var i = 0; i < mcount; i++) seq.push(i);
+                seq.sort(function(){return Math.random() > 0.5 ? 1 : -1;});
 
-            for(var i = 0; i < mcount; i++) {
-                baidu('<div class="little-man" style="background-image: url(fex/member/' + seq[i] + '.png)" index="' + seq[i] + '"></div>').appendTo(little_container);
-            }
-            var little_men = this.find('.little-man');
-
-            
-            var last_cl = 0, slide_timer, dis;
-            baidu(_this.dom).on('mousemove', function update(e){
-                var pd = 200,
-                    sw = stage.width(),
-                    cw = little_container.width(),
-                    pd2 = pd * sw / cw,
-                    cl = (sw - cw - pd * 2) * e.x / sw + pd,
-                    xp = e.x / sw;
-                if(xp < 0.25 || xp > 0.75) {
-                    var sign = 1;
-                    if(xp > 0.5) { xp = Math.abs(xp - 1); sign = -1; }
-                    xp = 0.5 - xp;
-                    xp *= 8;
-                    dis = sign * Math.pow(2, xp);
-                    if(!slide_timer) slide_timer = setInterval(function(){
-                        var ori = parseInt(little_container.css('left'));
-                        if( dis > 0 && ori > pd || 
-                            dis < 0 && ori < -cw + sw - pd) return;
-                        little_container.css('left', ori + dis);
-                    }, 20);
-                } else {
-                    clearInterval(slide_timer);
-                    slide_timer = undefined;
+                for(var i = 0; i < mcount; i++) {
+                    baidu('<div class="team-member" style="background-image: url(fex/member/' + seq[i] + '.png)" index="' + seq[i] + '"></div>').appendTo(container);
                 }
+                var members = _this.$.find('.team-member');
+                var stand_timeout = 400, stand_timer;
 
-                // if(Math.abs(cl - last_cl) < 30) return;
-                // little_container.css('left', cl);
-                // last_cl = cl;
-                
-                moutain.css('background-position-x', -e.x * 0.8);
-                
-            });
-            
-           // baidu('#little-container').draggable();
-            
-            var last_timeouts = [];
-            window.MEN_DELAY = [450, 400, 150];
-            little_men.on('mouseenter', function(e){
-                var target = baidu(e.target);
-                var index = +target.attr('index');
+                container.delegate('.team-member', 'mouseenter', function(e){
+                    var target = baidu(e.target);
+                    var index = +target.attr('index');
 
-                little_men.removeClass('stand see-left see-right');                
-                dialog.fadeOut();
+                    members.removeClass('stand see-left see-right');
+                    target.prevAll().addClass('see-right');
+                    target.nextAll().addClass('see-left');
 
-                target.prevAll().addClass('see-right');
-                target.nextAll().addClass('see-left');
 
-                while(last_timeouts.length) clearTimeout(last_timeouts.pop());
-
-                last_timeouts.push(setTimeout(function(){
                     var left = target.position().left - target.width() / 2 + target.parent().position().left - 10;
-                    target.addClass('stand');
-                    dialog.css( { 'left': left });
-                    dialog.fadeIn();
-                    if (data) {
-                        dialog.html('<h1>' + data[index][0] + '</h1><p>' + data[index][1] + '</p>');
+
+
+                    dialog.html('<h1>' + data[index][0] + '</h1><p>' + data[index][1] + '</p>');
+                    dialog.cssAnimate( { 
+                        translateX: left,
+                        opacity: 1,
+                        translateY: 0 
+                    }, 600);
+
+                    clearTimeout(stand_timer);
+                    stand_timer = setTimeout(function(){
+                        target.addClass('stand');
+                    }, stand_timeout);
+                });
+
+                container.on('mouseleave', function(e){             
+                    members.removeClass('stand see-left see-right');
+                    dialog.cssAnimate({
+                        opacity: 0,
+                        translateY: -100
+                    });
+                    clearTimeout(stand_timer);                
+                });
+
+                var prev = _this.prev = _this.$.find('.nav.prev'),
+                    next = _this.next = _this.$.find('.nav.next');
+
+                var translateX = 0, bodyWidth = members.width();
+
+                function goNext(){ 
+                    var sw = stage.width(),
+                        cw = container.outerWidth();
+                    if ( translateX + sw >= cw ) return;
+
+                    var increase = Math.min( sw - bodyWidth, cw - sw - translateX );
+                    translateX += increase;
+                    container.cssAnimate({ translateX: -translateX }, 1600 );
+                    dialog.cssAnimate({opacity: 0, translateY: -100});
+
+                    if ( translateX + sw >= cw ) {
+                        next.hide();
                     }
-                }, MEN_DELAY[1]));
-            });
-            little_container.on('mouseleave', function(e){             
-                little_men.removeClass('stand see-left see-right');
-                dialog.fadeOut();
-                while(last_timeouts.length) clearTimeout(last_timeouts.pop());                
-            });
+                    prev.show();
+                }
+                function goPrev(){ 
+                    var sw = stage.width(),
+                        cw = container.outerWidth();
+                    if ( translateX <= 0 ) return;
+
+                    var decrease = Math.min( sw - bodyWidth, translateX );
+                    translateX -= decrease;
+                    container.cssAnimate({ translateX: -translateX }, 1600 );
+                    dialog.cssAnimate({opacity: 0, translateY: -100});
+
+                    if ( translateX <= 0 ) {
+                        prev.hide();
+                    }
+                    next.show();
+                }
+
+                next.click(goNext);
+                prev.click(goPrev);
+                _this.on('navigate', function(e){
+                    switch(e.direction) {
+                        case 'Left': return goPrev();
+                        case 'Right': return goNext();
+                    }
+                });
+            }            
+            
+            // var ori = 0, slide_timer, dis;
+            // baidu(this.dom).on('mousemove', function update(e){
+            //     var pd = 200,
+            //         sw = stage.width(),
+            //         cw = container.width(),
+            //         pd2 = pd * sw / cw,
+            //         cl = (sw - cw - pd * 2) * e.x / sw + pd,
+            //         xp = e.x / sw;
+            //     if(xp < 0.25 || xp > 0.75) {
+            //         var sign = 1;
+            //         if(xp > 0.5) { xp = Math.abs(xp - 1); sign = -1; }
+            //         xp = 0.5 - xp;
+            //         xp *= 8;
+            //         dis = sign * Math.pow(2, xp);
+            //         if(!slide_timer) slide_timer = setInterval(function(){
+            //             if( dis > 0 && ori > pd || 
+            //                 dis < 0 && ori < -cw + sw - pd) return;
+            //             container.css3( { 'translateX': ori = ori + dis});
+            //         }, 20);
+            //     } else {
+            //         clearInterval(slide_timer);
+            //         slide_timer = undefined;
+            //     }
+                
+            //     //drawing.css('background-position-x', -e.x * 0.8); 
+            // });
+
+            
+            
         })
-        .on('aftershow', function(e){
+        
+        .on('aftershow', function() {
+            setTimeout(function(){
+                this.prev.cssAnimate( '+show' , 200 );
+                this.next.cssAnimate( '+show' , 200 );
+            }.bind(this), 100);
         })
-        .on('beforehide', function(e){
+
+        .on('beforehide', function(){                 
+            this.prev.cssAnimate( '-show' , 200 );
+            this.next.cssAnimate( '-show' , 200 );
         });
 
-    // 第四屏（关注）交互
-    stage.getScreen(5)
-        .init(function(){
-            this.github = this.find('#github').addClass('hide');
+    stage.getScreen('contact')
+        .on('init', function(){
+            this.github = this.$.find('#github').addClass('hide');
         })
         .on('aftershow', function(){
             this.github.removeClass('hide');
@@ -682,5 +563,4 @@ baidu(function(){
             this.github.addClass('hide');
         })
     stage.start();
-    
 });
