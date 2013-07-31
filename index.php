@@ -7,10 +7,23 @@
     <link rel="stylesheet" href="fex/fe.css" />
     <script type="text/javascript" src="http://fe.bdimg.com/tangram/latest.js"></script>
     <script src="fex/CSS3Animate.js"></script>
+    <script src="fex/SlideShow.js"></script>
     <script src="fex/fe.js"></script>
 </head> 
 <body>
+
     <h1 id="logo">FEX</h1>
+
+    <div id="top-nav">
+        <div id="menu">
+            <ul>
+                <li screens="topic product" class="s1">技术</li>
+                <li screens="archive" class="s2">大牛</li>
+                <li screens="team" class="s3">团队</li>
+                <li screens="contact" class="s4">关注</li>
+            </ul>
+        </div>
+    </div>
 
     <div id="about">
         <div class="left">
@@ -31,42 +44,20 @@
         </div>
     </div>
     
-    
-    <div id="top-nav">
-        <div id="menu">
-            <ul>
-                <li screen="1" class="s1">技术</li>
-                <li screen="3" class="s2">大牛</li>
-                <li screen="4" class="s3">团队</li>
-                <li screen="5" class="s4">关注</li>
-            </ul>
-        </div>
-    </div>
     <div id="stage">
-        <div id="screen0" class="screen">        
+        <div class="screen" id="home" >        
             <h1>FEday</h1>
-            <div class="meeting-info">
-                7月25日 14:00 - 18:00 五家尧<br/>
-                期待您的加入
-            </div>
+            <div class="meeting-info"></div>
             <div class="nav down"></div>
-            <!-- <div class="circle-layer">
-                <div class="circle1"></div>
-                <div class="circle2"></div>
-                <div class="circle3"></div>
-                <div class="circle4"></div>
-            </div> -->
         </div>
-
-        <div id="catalog" class="screen">
-            <p class="tool" topic-index="1">平台工具</p>
-            <p class="data" topic-index="0">数据监控</p>
-            <p class="end" topic-index="4">端技术</p>
+        <div class="screen" id="topic" >
+            <p class="tool" product-index="1">平台工具</p>
+            <p class="data" product-index="0">数据监控</p>
+            <p class="end" product-index="4">端技术</p>
         </div>
-
-        <div id="screen1" class="screen">        
-            <div id="topic-container">
-                <div class="topic">
+        <div class="screen" id="product" >        
+            <div id="product-container">
+                <div class="product">
                     <div class="hunter">                    
                         <div class="title">
                             <a href="http://hunter.baidu.com" target="_blank">Hunter</a>
@@ -81,7 +72,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="topic">
+                <div class="product">
                     <div class="fis">
                         <h1 class="eng"><a href="http://fis.baidu.com" target="_blank">F.I.S</a></h1>
                         <h1 class="chs">前端集成解决方案</h1>
@@ -99,7 +90,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="topic">
+                <div class="product">
                     <div class="webspeed">        
                         <div class="title">
                             
@@ -134,7 +125,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="topic">
+                <div class="product">
                     <div class="GMU">
             
                         <div class="title">
@@ -156,7 +147,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="topic">
+                <div class="product">
                     <div class="ueditor">        
                         <div class="title">
                             <a href="http://ueditor.baidu.com" target="_blank">UEditor</a>
@@ -173,24 +164,22 @@
                     </div>
                 </div>
             </div>
-
             <div class="nav prev"></div>
             <div class="nav next"></div>
         </div>
-
-        <div id="screen2" class="screen">
+        <div class="screen" id="archive" >
             <h1>团队中有大咖，让工作本身就成为一种追求</h1>
-            <div id="team-container">
-                <div class="team-member m1"></div>
-                <div class="team-member m2"></div>
-                <div class="team-member m3"></div>
-                <div class="team-member m4"></div>
-                <div class="team-member m5"></div>
-                <div class="team-member m6"></div>
-                <div class="team-member m7"></div>
-                <div class="team-member m8"></div>
+            <div id="head-container">
+                <div class="archive-head m1"></div>
+                <div class="archive-head m2"></div>
+                <div class="archive-head m3"></div>
+                <div class="archive-head m4"></div>
+                <div class="archive-head m5"></div>
+                <div class="archive-head m6"></div>
+                <div class="archive-head m7"></div>
+                <div class="archive-head m8"></div>
             </div>
-            <div id="member-show">
+            <div id="archive-container">
                 <img src="fex/archive/1.png" />
                 <img src="fex/archive/2.png" />
                 <img src="fex/archive/3.png" />
@@ -201,18 +190,15 @@
                 <img src="fex/archive/8.png" />
             </div>
         </div>
-
-        <div id="screen3" class="screen">
+        <div class="screen" id="team" >
             <h1>你的加入，续写着“强者恒强”的真相</h1>
-            <div id="little-container">
-            </div>
+            <div id="team-container"></div>
+            <div id="drawing-layer"></div>
             <div id="dialog"></div>
-            <div id="sky-layer"></div>
-            <div id="moutain-layer"></div>
-            <div id="ground-layer"></div>
-            <div id="cloud-layer"></div>
+            <div class="nav prev"></div>
+            <div class="nav next"></div>
         </div>
-        <div id="screen4" class="screen">
+        <div class="screen" id="contact" >
             <div id="github">
                 <div class="cat"></div>
                 <div class="line"></div>

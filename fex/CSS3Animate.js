@@ -112,7 +112,7 @@ var CSS3Animate = (function (window) {
         }
     }
 
-    function addTransition( dom, styles, duration, ease, delay ) {
+    function setTransition( dom, styles, duration, ease, delay ) {
         duration = duration || '300ms';
         styles = styles || 'all';
         ease = ease || 'ease';
@@ -145,25 +145,35 @@ var CSS3Animate = (function (window) {
         }
     }
 
-
+    function clone( obj ) {
+        var copy = {};
+        for(var p in obj)
+            if( obj.hasOwnProperty(p) ) copy[p] = obj[p];
+        return copy;
+    }
     function doAnimate( dom, styles, duration, callback ) {
         if(typeof(duration) == 'function') {
             callback = duration;
             duration = 300;
         }
         duration = duration || 300;
-        addTransition( dom, 'all', duration + 'ms');
+        setTransition( dom, 'all', duration + 'ms');
         if ( typeof(styles) == 'string' ) {
             classMotify( dom, styles );
         }
         else {
+            styles = clone(styles);
             mapStyles( dom, styles );
             setStyles( dom, styles );
         }
         setTimeout( function() {
             typeof(callback) == 'function' && callback.apply(dom);
-            removeTransition( dom );
         }, duration);
+
+        clearTimeout(dom.transition_remove_timeout);
+        dom.transition_remove_timeout = setTimeout( function(){            
+            removeTransition( dom );
+        }, duration * 1.2);
     }
 
     HTMLElement.prototype.animate = function(styles, duration, callback) {
@@ -179,6 +189,7 @@ var CSS3Animate = (function (window) {
             for(var i = 0; i < length; i++) {
                 doAnimate( this[i], styles, duration, callback ? checkCall : undefined );
             }
+            return this;
         }
     };
     if ( window.baidu ) {
@@ -186,9 +197,11 @@ var CSS3Animate = (function (window) {
         baidu.dom.extend({
             css3: function ( styles ) {
                 for(var i = 0; i < this.length; ++i) {
-                    mapStyles(this[i], styles);
-                    baidu(this[i]).css( styles );
+                    var copy = clone(styles);
+                    mapStyles(this[i], copy);
+                    baidu(this[i]).css( copy );
                 }
+                return this;
             }
         });
     }
