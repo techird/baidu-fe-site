@@ -976,12 +976,44 @@ body, html, div {
     }
 }
 @media only screen and (max-height: 768px) {
-    #contract #github,
-    #contract #weixin {
-        .transform( scale(.75) );
+    #contact #github {
+        left: 30px;
+        top: 90px;
+        width: 100%;
+        padding-top: 30px;
+        .cat, .url {
+            position: static;
+            display: block;
+            text-align: left;
+            float: left;
+        }
+        .line, .icons {
+            display: none;
+        }
+        .cat {
+            .animation(none);
+            .transform(scale(.5) translateX(-130px) translateY(-160px));
+            margin-right: -100px;
+            margin-bottom: -100px;
+        }
+        .url {
+            font-family: 'Microsoft Yahei';
+            font-weight: normal;
+            margin-bottom: 15px;
+            width: 250px;
+            list-style-type: disc;
+            list-style-position: inside;
+            display: list-item;
+            color: rgb(138, 138, 138);
+            a {
+                font-size: 16px;
+            }
+        }
     }
-    #contract #weixin { 
-        bottom: 0;
+    #contact #weixin {
+        .transform( scale(.75) );
+        right: 10px;
+        left: auto;
     }
 }
 @-webkit-keyframes plus {

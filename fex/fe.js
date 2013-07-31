@@ -110,11 +110,13 @@ function Stage() {
         var tsx, tsy;
         document.body.addEventListener( 'touchstart', function(e) {
             if (e.touches.length !== 1 ) return;
+            e.preventDefault();
             tsx = e.touches[0].pageX;
             tsy = e.touches[0].pageY;
         });
         document.body.addEventListener( 'touchend', function(e) {
             if (e.changedTouches.length !== 1 ) return;
+            e.preventDefault();
             var dx = e.changedTouches[0].pageX - tsx, dy = e.changedTouches[0].pageY - tsy
                 dxl = Math.abs(dx), dyl = Math.abs(dy);
             if ( dyl > dxl && dyl > 15 ) {
