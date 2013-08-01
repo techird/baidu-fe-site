@@ -107,16 +107,24 @@ function Stage() {
             navigateBy(e.keyIdentifier);
         });
 
+        // document.body.style.height = '1000px';
+        // document.body.addEventListener( 'scroll', function(e) {
+        //     if(this.scrollTop == 0) this.scrollTop = 1;
+        // });
+        // document.body.scrollTop = 1;
+
         var tsx, tsy;
+
+        document.body.addEventListener( 'touchmove', function(e) {
+            e.preventDefault();
+        });
         document.body.addEventListener( 'touchstart', function(e) {
             if (e.touches.length !== 1 ) return;
-            e.preventDefault();
             tsx = e.touches[0].pageX;
             tsy = e.touches[0].pageY;
         });
         document.body.addEventListener( 'touchend', function(e) {
             if (e.changedTouches.length !== 1 ) return;
-            e.preventDefault();
             var dx = e.changedTouches[0].pageX - tsx, dy = e.changedTouches[0].pageY - tsy
                 dxl = Math.abs(dx), dyl = Math.abs(dy);
             if ( dyl > dxl && dyl > 15 ) {
