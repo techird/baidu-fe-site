@@ -68,7 +68,7 @@ var CSS3Animate = (function (window) {
         addUnit(p, 'px');
         for(i = 0; i < alixs.length; i++) {
             t[i] && parts.push('translate' + alixs[i] + '(' + t[i] + ')');
-            i == 2 && !t[i] && parts.push('translateZ(0)'); // gpu speed up
+            // i == 2 && !t[i] && parts.push('translateZ(0)'); // gpu speed up
             r[i] && parts.push('rotate' + alixs[i] + '(' + r[i] + ')');
             k[i] && parts.push('skew' + alixs[i] + '(' + k[i] + ')');
             s[i] !== undefined && s[i] !== 1 && parts.push('scale' + alixs[i] + '(' + s[i] + ')');
@@ -152,7 +152,11 @@ var CSS3Animate = (function (window) {
             if( obj.hasOwnProperty(p) ) copy[p] = obj[p];
         return copy;
     }
+
+    var animateId = 0;
     function doAnimate( dom, styles, duration, callback ) {
+        var id = ++animateId;
+        clearTimeout(dom.transition_remove_timeout);
         if(typeof(duration) == 'function') {
             callback = duration;
             duration = 300;
@@ -167,10 +171,14 @@ var CSS3Animate = (function (window) {
             mapStyles( dom, styles );
             setStyles( dom, styles );
         }
+
         setTimeout( function() {
             typeof(callback) == 'function' && callback.apply(dom);
-            removeTransition( dom );
         }, duration);
+
+        dom.transition_remove_timeout = setTimeout( function(){            
+            removeTransition( dom );
+        }, duration + 500);
     }
 
     HTMLElement.prototype.animate = function(styles, duration, callback) {

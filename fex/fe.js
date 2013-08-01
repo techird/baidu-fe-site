@@ -363,7 +363,9 @@ baidu(function(){
 
             var ss = this.slideShow = new SlideShow({
                 container : '#archive-container',
-                duration: 450
+                duration: 1000,
+                allowFold: true,
+                effect: ['fold', 'fade']
             });
             var _this = this, index;
             var heads = this.heads
@@ -465,11 +467,11 @@ baidu(function(){
                     clearTimeout(stand_timer);                
                 });
 
-                var prev = _this.prev = _this.$.find('.nav.prev'),
+                var prev = _this.prev = _this.$.find('.nav.prev').hide(),
                     next = _this.next = _this.$.find('.nav.next');
 
                 var translateX = 0, bodyWidth = members.width();
-
+                var farRatio = 0.5;
                 function goNext(){ 
                     var sw = stage.width(),
                         cw = container.outerWidth();
@@ -479,6 +481,9 @@ baidu(function(){
                     translateX += increase;
                     container.cssAnimate({ translateX: -translateX }, 1600 );
                     dialog.cssAnimate({opacity: 0, translateY: -100});
+                    drawing.cssAnimate({
+                        translateX: -translateX * farRatio
+                    }, 1600);
 
                     if ( translateX + sw >= cw ) {
                         next.hide();
@@ -494,6 +499,9 @@ baidu(function(){
                     translateX -= decrease;
                     container.cssAnimate({ translateX: -translateX }, 1600 );
                     dialog.cssAnimate({opacity: 0, translateY: -100});
+                    drawing.cssAnimate({
+                        translateX: -translateX * farRatio
+                    }, 1600);
 
                     if ( translateX <= 0 ) {
                         prev.hide();
@@ -509,36 +517,7 @@ baidu(function(){
                         case 'Right': return goNext();
                     }
                 });
-            }            
-            
-            // var ori = 0, slide_timer, dis;
-            // baidu(this.dom).on('mousemove', function update(e){
-            //     var pd = 200,
-            //         sw = stage.width(),
-            //         cw = container.width(),
-            //         pd2 = pd * sw / cw,
-            //         cl = (sw - cw - pd * 2) * e.x / sw + pd,
-            //         xp = e.x / sw;
-            //     if(xp < 0.25 || xp > 0.75) {
-            //         var sign = 1;
-            //         if(xp > 0.5) { xp = Math.abs(xp - 1); sign = -1; }
-            //         xp = 0.5 - xp;
-            //         xp *= 8;
-            //         dis = sign * Math.pow(2, xp);
-            //         if(!slide_timer) slide_timer = setInterval(function(){
-            //             if( dis > 0 && ori > pd || 
-            //                 dis < 0 && ori < -cw + sw - pd) return;
-            //             container.css3( { 'translateX': ori = ori + dis});
-            //         }, 20);
-            //     } else {
-            //         clearInterval(slide_timer);
-            //         slide_timer = undefined;
-            //     }
-                
-            //     //drawing.css('background-position-x', -e.x * 0.8); 
-            // });
-
-            
+            }                      
             
         })
         
@@ -546,7 +525,10 @@ baidu(function(){
             setTimeout(function(){
                 this.prev.cssAnimate( '+show' , 200 );
                 this.next.cssAnimate( '+show' , 200 );
-            }.bind(this), 100);
+            }.bind(this), 100);                    
+            var sw = stage.width(),
+                cw = baidu('#team-container').outerWidth();
+            baidu('#drawing-layer').css('width', sw + cw);
         })
 
         .on('beforehide', function(){                 

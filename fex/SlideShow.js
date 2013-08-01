@@ -66,7 +66,8 @@ function SlideShow( config ) {
     var container
       , direction
       , duration
-      , effect;
+      , effect
+      , allowFold;
 
     // vars
     var index
@@ -91,12 +92,14 @@ function SlideShow( config ) {
         }
         config = merge( {
             direction: 'x',
-            duration: 300
+            duration: 300,
+            allowFold: false
         }, config );
 
         container = baidu.dom( config.container );
         direction = config.direction.toUpperCase();
         duration = config.duration;
+        allowFold = config.allowFold;
         effect = {};
         switch( Object.prototype.toString.call(config.effect) ) {
             case '[object Array]':
@@ -157,7 +160,7 @@ function SlideShow( config ) {
     }
 
     function slide (index_to) {
-        if(sliding) return;
+        if(sliding && !allowFold) return;
         if(index_to == index) return;
         sliding = true;
 
@@ -169,8 +172,9 @@ function SlideShow( config ) {
             to = sliders.eq(index_to);
 
         if ( from ) {
+            var old_index = index;
             from.cssAnimate( getState('hide', dir), duration, function(){
-                from.css3( getState('afterhide') );
+                if(index != old_index) from.css3( getState('afterhide') );
             });
         }
         if ( to ) {

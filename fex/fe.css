@@ -1,5 +1,5 @@
 body,html,div{overflow:hidden;margin:0;padding:0;font-family:Arial,'Helvetica Neue','Microsoft Yahei'}
-#logo{position:fixed;top:0;left:50px;z-index:1002;display:block;margin:0;height:60px;color:#333;font-weight:normal;line-height:60px;cursor:pointer}
+#logo{position:fixed;top:0;left:50px;z-index:1002;display:block;margin:0;height:60px;color:#333;font-weight:normal;line-height:60px;cursor:pointer;-webkit-font-smoothing:antialiased}
 #about{position:fixed;top:-100%;left:0;right:0;height:100%;z-index:1001}#about .left{background:#000;position:absolute;left:0;width:38.2%;height:100%}#about .left h2{position:absolute;top:50%;left:65px;margin:0;font-weight:normal;color:#747474}
 #about .right{background:#333;left:38.2%;right:0;height:100%;position:absolute;color:#a5a5a5;padding:80px;font-size:18px}#about .right p{width:250px;margin:0;padding:10px}
 #top-nav{position:fixed;top:0;height:60px;background-color:rgba(255,255,255,0.8);width:100%;z-index:1000}#top-nav #menu{height:60px;width:400px;margin:0 auto}#top-nav #menu ul{height:60px;margin:0;padding:0}#top-nav #menu ul li{margin:0;padding:0;width:100px;height:55px;border-bottom:5px solid;line-height:50px;cursor:pointer;font-size:20px;color:#818181;display:block;text-align:center;float:left}#top-nav #menu ul li.current{color:#1d1d1d;font-weight:bold}
@@ -7,7 +7,7 @@ body,html,div{overflow:hidden;margin:0;padding:0;font-family:Arial,'Helvetica Ne
 #top-nav #menu ul li.s2{border-bottom-color:#ffe08b}
 #top-nav #menu ul li.s3{border-bottom-color:#beedc8}
 #top-nav #menu ul li.s4{border-bottom-color:#79c6da}
-#stage{position:absolute;top:0;left:0;bottom:0;right:0}#stage .screen{position:absolute;top:0;bottom:0;display:none;width:100%}
+#stage{position:absolute;top:0;left:0;bottom:0;right:0}#stage .screen{position:absolute;top:0;bottom:0;width:100%}
 #home{z-index:0;background:url(bg.jpg) center center no-repeat}#home h1{position:absolute;background:url(feday.png) center no-repeat;text-indent:-10000px;height:166px;margin:0;top:50%;width:100%;margin-top:-180px}
 #home .meeting-info{position:absolute;text-align:center;color:#fff;font-size:18px;width:100%;top:57%}
 #home .nav.down{position:absolute;bottom:0;left:50%;z-index:1;margin-left:-50px;width:100px;height:100px;border:3px solid rgba(255,255,255,0.8);border-radius:100%;background-color:rgba(255,255,255,0.15);cursor:pointer}#home .nav.down:hover{background-color:rgba(255,255,255,0.3)}
