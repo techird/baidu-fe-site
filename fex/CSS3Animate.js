@@ -68,6 +68,7 @@ var CSS3Animate = (function (window) {
         addUnit(p, 'px');
         for(i = 0; i < alixs.length; i++) {
             t[i] && parts.push('translate' + alixs[i] + '(' + t[i] + ')');
+            i == 2 && !t[i] && parts.push('translateZ(0)'); // gpu speed up
             r[i] && parts.push('rotate' + alixs[i] + '(' + r[i] + ')');
             k[i] && parts.push('skew' + alixs[i] + '(' + k[i] + ')');
             s[i] !== undefined && s[i] !== 1 && parts.push('scale' + alixs[i] + '(' + s[i] + ')');
@@ -112,7 +113,7 @@ var CSS3Animate = (function (window) {
         }
     }
 
-    function setTransition( dom, styles, duration, ease, delay ) {
+    function addTransition( dom, styles, duration, ease, delay ) {
         duration = duration || '300ms';
         styles = styles || 'all';
         ease = ease || 'ease';
@@ -157,7 +158,7 @@ var CSS3Animate = (function (window) {
             duration = 300;
         }
         duration = duration || 300;
-        setTransition( dom, 'all', duration + 'ms');
+        addTransition( dom, 'all', duration + 'ms');
         if ( typeof(styles) == 'string' ) {
             classMotify( dom, styles );
         }
@@ -168,12 +169,8 @@ var CSS3Animate = (function (window) {
         }
         setTimeout( function() {
             typeof(callback) == 'function' && callback.apply(dom);
-        }, duration);
-
-        clearTimeout(dom.transition_remove_timeout);
-        dom.transition_remove_timeout = setTimeout( function(){            
             removeTransition( dom );
-        }, duration * 1.2);
+        }, duration);
     }
 
     HTMLElement.prototype.animate = function(styles, duration, callback) {
