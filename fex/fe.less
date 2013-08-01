@@ -975,7 +975,12 @@ body, html, div {
         }
     }
 }
-@media only screen and (max-height: 768px) {
+@media only screen and (max-height: 768px) and (min-height: 640px) {
+    #contact #github {
+        .transform(scale(.8));
+    }
+}
+@media only screen and (max-height: 640px) {
     #contact #github {
         left: 30px;
         top: 90px;
