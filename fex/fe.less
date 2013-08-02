@@ -19,6 +19,15 @@
          -o-animation: @value;
             animation: @value;
 }
+.tap-highlight (@value) {
+    -webkit-tap-highlight-color: @value;
+       -moz-tap-highlight-color: @value;
+        -ms-tap-highlight-color: @value;
+         -o-tap-highlight-color: @value;
+}
+.no-tap-hl {
+    .tap-highlight(rgba(0,0,0,0));
+}
 
 body, html, div {
     overflow: hidden;
@@ -115,15 +124,19 @@ body, html, div {
                 }
                 &.s1 {
                     border-bottom-color: #e89387;
+                    .tap-highlight(rgba(232, 147, 135, .5));
                 }
                 &.s2 {
-                    border-bottom-color: #ffe08b;
+                    border-bottom-color: #ffe08b;                    
+                    .tap-highlight(rgba(255, 224, 139, .5));
                 }
                 &.s3 {
                     border-bottom-color: #beedc8;
+                    .tap-highlight(rgba(190, 237, 200, .5));
                 }
                 &.s4 {
                     border-bottom-color: #79c6da;
+                    .tap-highlight(rgba(121, 198, 218, .5));
                 }
             }
         }
@@ -141,6 +154,7 @@ body, html, div {
         top: 0;
         bottom: 0;
         width: 100%;
+        box-shadow: 0 0 50px rgba(0,0,0,.5);
     }
 }
 
@@ -177,6 +191,7 @@ body, html, div {
         border-radius: 100%;
         background-color: rgba(255,255,255,.15);
         cursor: pointer;
+        .no-tap-hl;
         &:hover {
             background-color: rgba(255,255,255,.3);
         }
@@ -199,7 +214,6 @@ body, html, div {
     }
 }
 
-
 #topic {    
     z-index: 100;
     background: white;
@@ -214,6 +228,7 @@ body, html, div {
         font-size: 24px;
         position: absolute;
         text-align: center;
+        .no-tap-hl;
         &:before {
             content: ' ';
             display: block;
@@ -253,11 +268,10 @@ body, html, div {
         }        
     }
 }
-
 #product {
-    background-color: white;
+    //background-color: white;
     z-index: 100;
-    -webkit-backface-visibility: hidden;
+        -webkit-perspective: 1000;
     #product-container {
         position: absolute;
         width: 1600px;
@@ -265,10 +279,17 @@ body, html, div {
         top: 50%;
         margin-top: -400px;
         left: 50%;
-        margin-left: -800px;
+        margin-left: -800px;        
+        -webkit-backface-visibility: hidden;
+        * {
+            -webkit-backface-visibility: hidden;
+        }
     }
     .product {
         position: absolute;
+        width: 1600px;
+        height: 800px;
+        box-shadow: 0 0 50px rgba(0,0,0,.5);
     }
     .nav {
         width: 100px;
@@ -279,6 +300,8 @@ body, html, div {
         background: url(button.png) no-repeat;
         opacity: .3;
         cursor: pointer;
+        z-index: 150;
+        .no-tap-hl;
         .transition( all .25s ease );
         &:hover {
             opacity: 1;
@@ -305,7 +328,8 @@ body, html, div {
         width: 1600px;
         height: 800px;
         background: url("topic/hunter/hunterbg.jpg") no-repeat;
-        position: relative;
+        position: absolute;
+        z-index: 101;
         .title {
             width: 700px;
             height: 150px;
@@ -362,9 +386,10 @@ body, html, div {
         }
     }
     .fis {
+        z-index: 102;
         width: 1600px;
         height: 800px;
-        position: relative;
+        position: absolute;
         background: url(topic/fis/bg.png);
         font-family: 'Microsoft Yahei';
         font-weight: normal;
@@ -427,10 +452,11 @@ body, html, div {
         }
     }
     .webspeed {
+        z-index: 103;
         width: 1600px;
         height: 800px;
         background: url("topic/webspeed/webspeedbg.png") no-repeat;
-        position: relative;
+        position: absolute;
         .title {
             width: 728px;
             height: 316px;
@@ -529,10 +555,11 @@ body, html, div {
         }
     }
     .GMU {
+        z-index: 104;
         height: 800px;
         width: 1600px;
         background: url("topic/gmu/GMUbg.png") no-repeat;
-        position: relative;
+        position: absolute;
         .title {
             width: 537px;
             height: 282px;
@@ -589,10 +616,11 @@ body, html, div {
         }
     }
     .ueditor {
+        z-index: 10;
         width: 1600px;
         height: 800px;
         background: url("topic/ueditor/ueditorbg.png") no-repeat;
-        position: relative;
+        position: absolute;
         .title {
             width: 613px;
             height: 130px;
@@ -691,13 +719,26 @@ body, html, div {
             height: 100px;
             background: url(archive/heads.png);
             border: solid 3px white;
-            box-shadow: 0 5px 10px #999;
-            border-radius: 100%;
+            //box-shadow: 0 5px 10px #999;
+            border-radius: 100px;
             display: inline-block;
             position: absolute;
             opacity: 0;
             z-index: 201;
             left: 0;
+            .tap-highlight(rgba(0,0,0,0));
+            overflow: visible;
+            &:after {
+                content: ' ';
+                display: block;
+                width: 106px;
+                height: 106px;
+                border-radius: 106px;
+                border: 6px solid rgba(0, 0, 0, 0.4);
+                position: absolute;
+                left: -9px;
+                top: -9px;
+            };
             .transition( all .25s ease );
             .transform( scale(0.5) );
             &.current {
@@ -763,11 +804,13 @@ body, html, div {
         white-space: nowrap;
         z-index: 302;
         left: 0;
+        -webkit-backface-visibility: hidden;
         .team-member {
             width: 100px;
             height: 300px;
             display: inline-block;
             background-repeat: no-repeat;
+            -webkit-backface-visibility: hidden;
             &.see-left {
                 background-position: -100px 0;
             }
@@ -825,6 +868,7 @@ body, html, div {
         position: absolute;
         z-index: 305;
         cursor: pointer;
+        .no-tap-hl;
         &.prev {
             background-position: 0 0;
             left: 0;
@@ -864,7 +908,7 @@ body, html, div {
         position: absolute;
         width: 0;
         height: 0;
-        bottom: 60%;
+        bottom: 63%;
         left: 50%;
         overflow: visible;
         .cat, .line, .icons, .url {

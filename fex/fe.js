@@ -316,12 +316,12 @@ baidu(function(){
 
             var slideShow = this.slideShow = new SlideShow({
                 container: '#product-container',
-                duration: 800
+                duration: 1000,
+                effect: 'fold'
             });
             slideShow.on('afterslide', function() {
                 prev.css('visibility', this.hasPrev() ? 'visible' : 'hidden');
                 next.css('visibility', this.hasNext() ? 'visible' : 'hidden');
-                this.hasNext() ? next.show() : next.hide();
             });
             slideShow.showFirst();
             function goNext(){ slideShow.next(); }
@@ -489,9 +489,9 @@ baidu(function(){
                     translateX += increase;
                     container.cssAnimate({ translateX: -translateX }, 1600 );
                     dialog.cssAnimate({opacity: 0, translateY: -100});
-                    drawing.cssAnimate({
-                        translateX: -translateX * farRatio
-                    }, 1600);
+                    // drawing.cssAnimate({
+                    //     translateX: -translateX * farRatio
+                    // }, 1600);
 
                     if ( translateX + sw >= cw ) {
                         next.hide();
@@ -507,9 +507,9 @@ baidu(function(){
                     translateX -= decrease;
                     container.cssAnimate({ translateX: -translateX }, 1600 );
                     dialog.cssAnimate({opacity: 0, translateY: -100});
-                    drawing.cssAnimate({
-                        translateX: -translateX * farRatio
-                    }, 1600);
+                    // drawing.cssAnimate({
+                    //     translateX: -translateX * farRatio
+                    // }, 1600);
 
                     if ( translateX <= 0 ) {
                         prev.hide();
