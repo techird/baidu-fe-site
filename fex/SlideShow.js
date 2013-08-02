@@ -179,10 +179,12 @@ function SlideShow( config ) {
         }
         if ( to ) {
             to.css3( getState('beforeshow', dir) );
-            to.cssAnimate( getState('show'), duration, function(){
-                fire('afterslide', e);
-                sliding = false;
-            });
+            setTimeout(function(){                
+                to.cssAnimate( getState('show'), duration, function(){
+                    fire('afterslide', e);
+                    sliding = false;
+                });
+            }, 10);
         }
         index = index_to;
     }
