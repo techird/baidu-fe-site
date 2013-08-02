@@ -40,11 +40,11 @@ Screen.prototype.fit = function( selector, type ) {
                 height: ch / h,
                 width: cw / w   
             }[type || 'all'];
-        elem.cssAnimate({
+        elem.stop().cssAnimate({
             scale: scale,
         });
     };
-    this.on('resize', onresize);
+    baidu(window).on('resize', onresize);
     this.on('beforeshow', onresize);
     onresize();
     return elem;
@@ -454,7 +454,7 @@ baidu(function(){
 
 
                     dialog.html('<h1>' + data[index][0] + '</h1><p>' + data[index][1] + '</p>');
-                    dialog.cssAnimate( { 
+                    dialog[0].stop().animate( { 
                         translateX: left,
                         opacity: 1,
                         translateY: 0 
@@ -487,7 +487,7 @@ baidu(function(){
 
                     var increase = Math.min( sw - bodyWidth, cw - sw - translateX );
                     translateX += increase;
-                    container.cssAnimate({ translateX: -translateX }, 1600 );
+                    container.stop().cssAnimate({ translateX: -translateX }, 1600 );
                     dialog.cssAnimate({opacity: 0, translateY: -100});
                     // drawing.cssAnimate({
                     //     translateX: -translateX * farRatio
@@ -505,7 +505,7 @@ baidu(function(){
 
                     var decrease = Math.min( sw - bodyWidth, translateX );
                     translateX -= decrease;
-                    container.cssAnimate({ translateX: -translateX }, 1600 );
+                    container.stop().cssAnimate({ translateX: -translateX }, 1600 );
                     dialog.cssAnimate({opacity: 0, translateY: -100});
                     // drawing.cssAnimate({
                     //     translateX: -translateX * farRatio

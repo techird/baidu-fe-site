@@ -113,7 +113,7 @@ var CSS3Animate = (function (window) {
         }
     }
 
-    function addTransition( dom, styles, duration, ease, delay ) {
+    function setTransition( dom, styles, duration, ease, delay ) {
         duration = duration || '300ms';
         styles = styles || 'all';
         ease = ease || 'ease';
@@ -122,9 +122,7 @@ var CSS3Animate = (function (window) {
     }
 
     function removeTransition( dom ) {
-        setTimeout(function(){
-            dom.style.removeProperty( perfix + 'transition' );
-        }, 50);
+        dom.style.removeProperty( perfix + 'transition' );
     }
 
     function classMotify( dom, rules ) {
@@ -147,43 +145,73 @@ var CSS3Animate = (function (window) {
     }
 
     function clone( obj ) {
+        if(typeof(obj) == 'string') {
+            return obj;
+        }
         var copy = {};
         for(var p in obj)
             if( obj.hasOwnProperty(p) ) copy[p] = obj[p];
         return copy;
     }
 
-    var animateId = 0;
     function doAnimate( dom, styles, duration, callback ) {
-        var id = ++animateId;
-        clearTimeout(dom.transition_remove_timeout);
+        styles = clone(styles);
+
+        dom.queue = dom.queue || [];
+        dom.queue.push( [doAnimate, [dom, styles, duration, callback ]] );
+        if(dom.queue.length > 1) return;
+
         if(typeof(duration) == 'function') {
             callback = duration;
             duration = 300;
         }
         duration = duration || 300;
-        addTransition( dom, 'all', duration + 'ms');
+        setTransition( dom, 'all', duration + 'ms');
         if ( typeof(styles) == 'string' ) {
             classMotify( dom, styles );
         }
         else {
-            styles = clone(styles);
             mapStyles( dom, styles );
             setStyles( dom, styles );
         }
 
-        setTimeout( function() {
+        dom.next_id = setTimeout( function() {
             typeof(callback) == 'function' && callback.apply(dom);
+            dom.queue.shift();
+            if(!dom.queue.length)
+                removeTransition( dom );
+            else {
+                var next = dom.queue.shift();
+                next[0].apply(next[0][0], next[1]);
+            }
         }, duration);
-
-        dom.transition_remove_timeout = setTimeout( function(){            
-            removeTransition( dom );
-        }, duration + 500);
     }
 
     HTMLElement.prototype.animate = function(styles, duration, callback) {
         doAnimate(this, styles, duration, callback);
         return this;
+    }
+    HTMLElement.prototype.stop = function() {
+        if(!this.queue) return this;
+        clearTimeout(this.next_id);
+        if(!this.queue || !this.queue.length) return this;
+        var last = this.queue.pop();
+        var styles = last[0];
+        removeTransition( this );
+        mapStyles( this, styles );
+        setStyles( this, styles );
+        this.queue = [];
+        return this;
+    }
+    HTMLElement.prototype.delay = function( time ) {
+        this.queue = this.queue || [];
+        this.queue.push([function( dom, time ){
+            dom.queue.shift();
+            if(dom.queue.length) dom.next_id = setTimeout( function(){                
+                var next = dom.queue.shift();
+                next[0].apply(next[1][0], next[1]);
+            }, time);
+        }, [this, time]]);
     }
     var extend = {
         cssAnimate: function ( styles, duration, callback ) {
@@ -192,7 +220,15 @@ var CSS3Animate = (function (window) {
                 if( ++called == length ) callback.apply( that );
             }
             for(var i = 0; i < length; i++) {
-                doAnimate( this[i], styles, duration, callback ? checkCall : undefined );
+                var dom = this[i];
+                doAnimate( dom, styles, duration, callback ? checkCall : undefined );
+            }
+            return this;
+        },
+        stop: function() {
+            for(var i = 0; i < length; i++) {
+                var dom = this[i];
+                dom.stop();
             }
             return this;
         }
@@ -203,8 +239,9 @@ var CSS3Animate = (function (window) {
             css3: function ( styles ) {
                 for(var i = 0; i < this.length; ++i) {
                     var copy = clone(styles);
+                    this[i].stop();
                     mapStyles(this[i], copy);
-                    baidu(this[i]).css( copy );
+                    setStyles(this[i], copy);
                 }
                 return this;
             }

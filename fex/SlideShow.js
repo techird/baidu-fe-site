@@ -178,7 +178,8 @@ function SlideShow( config ) {
             });
         }
         if ( to ) {
-            to.css3( getState('beforeshow', dir) ).cssAnimate( getState('show'), duration, function(){
+            to.css3( getState('beforeshow', dir) );
+            to.cssAnimate( getState('show'), duration, function(){
                 fire('afterslide', e);
                 sliding = false;
             });
