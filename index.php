@@ -179,6 +179,16 @@
                 <div class="archive-head m7"></div>
                 <div class="archive-head m8"></div>
             </div>
+            <div id="word-container">
+                <img src="fex/archive/1_word.png" />
+                <img src="fex/archive/2_word.png" />
+                <img src="fex/archive/3_word.png" />
+                <img src="fex/archive/4_word.png" />
+                <img src="fex/archive/5_word.png" />
+                <img src="fex/archive/6_word.png" />
+                <img src="fex/archive/7_word.png" />
+                <img src="fex/archive/8_word.png" />                
+            </div>
             <div id="archive-container">
                 <img src="fex/archive/1.png" />
                 <img src="fex/archive/2.png" />
