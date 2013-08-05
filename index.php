@@ -17,10 +17,10 @@
     <div id="top-nav">
         <div id="menu">
             <ul>
-                <li screens="topic product" class="s1">技术</li>
-                <li screens="archive" class="s2">大牛</li>
-                <li screens="team" class="s3">团队</li>
-                <li screens="contact" class="s4">关注</li>
+                <li screens="topic product" class="s1"><a href="#topic">技术</a></li>
+                <li screens="archive" class="s2"><a href="#archive">大牛</a></li>
+                <li screens="team" class="s3"><a href="#team">团队</a></li>
+                <li screens="contact" class="s4"><a href="#contact">关注</a></li>
             </ul>
         </div>
     </div>

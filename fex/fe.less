@@ -114,11 +114,17 @@ body, html, div {
                 line-height: 50px;
                 cursor: pointer;
                 font-size: 20px;
-                color: #818181;
                 display: block;
                 text-align: center;
                 float: left;
-                &.current {
+                a {
+                    text-decoration: none;
+                    display: block;
+                    width: 100px;
+                    height: 55px;
+                    color: #818181;
+                }
+                &.current a{
                     color: #1d1d1d;
                     font-weight: bold;
                 }
@@ -1001,18 +1007,16 @@ body, html, div {
         }
     }
     #weixin {
-        background: #333;
-        width: 260px;
-        height: 260px;
+        background: rgb(68, 68, 68);
+        width: 250px;
+        height: 250px;
         bottom: 20px;
-        color: white;
-        border: 1px solid #686868;
-        box-shadow: inset 0px 1px #252525, inset 0 -1px #979797, inset 1px 0 #333333, inset -1px 0 #333333;
+        color: rgb(255, 255, 255);
+        border: 10px solid rgb(104, 104, 104);
         text-align: center;
         position: absolute;
         left: 50%;
-        margin-left: -130px;
-        border-radius: 50px;
+        margin-left: -135px;                                                                        
         h1 {
             font-weight: normal;
             font-size: 24px;

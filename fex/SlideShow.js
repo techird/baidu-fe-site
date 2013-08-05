@@ -128,10 +128,11 @@ function SlideShow( config ) {
         sliders = container.children().css('display', 'none');
     }
 
-    function showFirst() {
-        fire('beforeslide', [undefined, 0]);
-        sliders.first().css('display', 'block');
-        fire('afterslide', [undefined, 0]);
+    function showFirst( first_index ) {
+        index = first_index || 0;
+        fire('beforeslide', [undefined, index]);
+        sliders.eq(index).css('display', 'block');
+        fire('afterslide', [undefined, index]);
     }
 
     function getState( name, dir ) {
