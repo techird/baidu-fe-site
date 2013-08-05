@@ -88,10 +88,10 @@ function Stage() {
         }
         window.addEventListener('hashchange', hashChange);
 
-        function navigateBy( dir ) {
+        function navigateBy( dir, source ) {
             if( disabled ) return;
             var stoped = false;
-            var e = { direction: dir, stopPropagation: function(){ stoped = true; } };
+            var e = { direction: dir, stopPropagation: function(){ stoped = true; }, source: source };
             that.getCurrentScreen().fire( 'navigate', [e] );
             if( stoped ) return;
             switch(dir) {
@@ -106,7 +106,7 @@ function Stage() {
 
         // keyboard navigate
         baidu( 'body' ).on( 'keydown', function(e) {
-            navigateBy(e.keyIdentifier);
+            navigateBy(e.keyIdentifier, 'keyboard');
         });
 
         // document.body.style.height = '1000px';
@@ -130,10 +130,10 @@ function Stage() {
             var dx = e.changedTouches[0].pageX - tsx, dy = e.changedTouches[0].pageY - tsy
                 dxl = Math.abs(dx), dyl = Math.abs(dy);
             if ( dyl > dxl && dyl > 15 ) {
-                dy < 0 ? navigateBy('Down') : navigateBy('Up');
+                dy < 0 ? navigateBy('Down', 'touch') : navigateBy('Up', 'touch');
                 touching = false;
             } else if ( dxl > 15 ) {
-                dx < 0 ? navigateBy('Right') : navigateBy('Left');
+                dx < 0 ? navigateBy('Right', 'touch') : navigateBy('Left', 'touch');
                 touching = false;
             }
         });
@@ -430,6 +430,8 @@ baidu(function(){
             var last_index;
             var mcount = 34;     
             var _this = this;
+            var prev = _this.prev = _this.$.find('.nav.prev').hide();
+            var next = _this.next = _this.$.find('.nav.next');
 
             baidu.ajax({
                 url: 'fex/member/data.json',
@@ -482,56 +484,112 @@ baidu(function(){
                     clearTimeout(stand_timer);                
                 });
 
-                var prev = _this.prev = _this.$.find('.nav.prev').hide(),
-                    next = _this.next = _this.$.find('.nav.next');
 
                 var translateX = 0, bodyWidth = members.width();
-                var farRatio = 0.5;
+                var farRatio = 0.2;
+
+                function hasNext(sw, cw) {
+                    sw = sw || stage.width();
+                    cw = cw || container.outerWidth();
+                    return translateX + sw < cw;
+                }
+                function hasPrev() {
+                    return translateX > 0;
+                }
+                function go ( sw, cw ) {
+                    sw = sw || stage.width();
+                    cw = cw || container.outerWidth();
+                    container.stop().cssAnimate({ translateX: -translateX }, 1600 );
+                    dialog.cssAnimate({opacity: 0, translateY: -100});
+                    drawing.cssAnimate({
+                        translateX: -translateX * farRatio
+                    }, 1600);
+                    hasNext(sw, cw) ? next.show() : next.hide();
+                    hasPrev() ? prev.show() : prev.hide();
+                }
                 function goNext(){ 
                     var sw = stage.width(),
                         cw = container.outerWidth();
-                    if ( translateX + sw >= cw ) return;
-
+                    if ( !hasNext(sw, cw) ) return;
                     var increase = Math.min( sw - bodyWidth, cw - sw - translateX );
-                    translateX += increase;
-                    container.stop().cssAnimate({ translateX: -translateX }, 1600 );
-                    dialog.cssAnimate({opacity: 0, translateY: -100});
-                    // drawing.cssAnimate({
-                    //     translateX: -translateX * farRatio
-                    // }, 1600);
-
-                    if ( translateX + sw >= cw ) {
-                        next.hide();
-                    }
-                    prev.show();
+                    translateX += increase;                    
+                    go( sw, cw );
                 }
                 function goPrev(){ 
                     var sw = stage.width(),
                         cw = container.outerWidth();
-                    if ( translateX <= 0 ) return;
-
+                    if ( !hasPrev() ) return;
                     var decrease = Math.min( sw - bodyWidth, translateX );
                     translateX -= decrease;
-                    container.stop().cssAnimate({ translateX: -translateX }, 1600 );
-                    dialog.cssAnimate({opacity: 0, translateY: -100});
-                    // drawing.cssAnimate({
-                    //     translateX: -translateX * farRatio
-                    // }, 1600);
-
-                    if ( translateX <= 0 ) {
-                        prev.hide();
-                    }
-                    next.show();
+                    go( sw, cw );
                 }
 
                 next.click(goNext);
                 prev.click(goPrev);
                 _this.on('navigate', function(e){
+                    if ( e.source != 'keyboard' ) return;
                     switch(e.direction) {
-                        case 'Left': return goPrev();
-                        case 'Right': return goNext();
+                         case 'Left': return goPrev();
+                         case 'Right': return goNext();
                     }
                 });
+
+                var dscx = 0, dstx;
+                function drag(e) {
+                    e.preventDefault();
+                    if(e.touches) {
+                        if(e.touches.length !== 1) return;
+                        e = e.touches[0];
+                    }
+                    var dx = e.clientX - dscx;
+                    if ( hasNext() ) {
+                        next.show();
+                    } else {
+                        next.hide();
+                        if ( dx < -1 ) return;
+                    }
+                    if ( hasPrev() ) {
+                        prev.show();
+                    } else {
+                        prev.hide();
+                        if ( dx > 1 ) return;
+                    }
+                    translateX = dstx - dx;
+                    container.css3( { translateX: -translateX } );
+                    drawing.css3( { translateX: -translateX * farRatio } );
+                }
+                container.on('dragstart', function(e) { e.preventDefault(); } );
+                _this.$.on( 'dragstart', function(e) { e.preventDefault(); } );
+
+                if(window.ontouchstart === undefined) {
+                    _this.$.on( 'mousedown', function(e) {
+                        dstx = translateX;
+                        dscx = e.clientX;
+                        _this.$.on('mousemove', drag);
+                    } );
+
+                    _this.$.on( 'mouseup', function(e) {
+                        _this.$.off('mousemove', drag);
+                    } );
+                } else { 
+                    var ts;
+                    _this.$[0].addEventListener('touchstart', function(e) {
+                        if ( e.touches.length !== 1 ) return;
+                        ts = +new Date();
+                        dstx = translateX;
+                        dscx = e.touches[0].clientX;
+                        _this.$[0].addEventListener('touchmove', drag);
+                    });
+                    _this.$[0].addEventListener('touchend', function(e) {
+                        _this.$[0].removeEventListener('touchmove', drag);
+                        if((+new Date()) - ts < 500) {
+                            var dx = e.changedTouches[0].clientX - dscx;
+                            if(dx < -20 && hasNext()) goNext();
+                            if(dx > 20 && hasPrev()) goPrev();
+                        }
+                    });
+                }
+                
             }                      
             
         })
