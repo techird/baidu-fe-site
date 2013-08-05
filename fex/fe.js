@@ -71,7 +71,6 @@ function Stage() {
     });
     that = this;
 
-    takeControl();
     function takeControl() {
         // change event by wheel
         baidu( 'body' ).on( 'mousewheel', function(e) {
@@ -79,12 +78,15 @@ function Stage() {
             e.wheelDelta < 0 ? slider.next() : slider.prev();
         });
 
-        // change event by nav
-        baidu('#top-nav #menu ul li').click(function(e){
+        function hashChange() {
             if( disabled ) return;
-            var name = baidu(e.target).attr('screens').split(' ')[0];
-            slider.slide( that.getScreen(name).index );
-        });
+            var hash = window.location.hash.substr(1);
+            var screen = that.getScreen(hash);
+            if ( screen ) {
+                slider.slide( screen.index );
+            }
+        }
+        window.addEventListener('hashchange', hashChange);
 
         function navigateBy( dir ) {
             if( disabled ) return;
@@ -157,7 +159,9 @@ function Stage() {
         screens.each(function(index, screen) {
             screen.fire('init');
         });
-        slider.showFirst();
+        var hash = window.location.hash.substr(1);
+        var screen = that.getScreen(hash);
+        screen ? slider.showFirst( screen.index ) : slider.showFirst();
     }
     this.disable = function() { disabled = true; };
     this.enable = function() { disabled = false; };
@@ -175,6 +179,7 @@ function Stage() {
     };
     this.slideToScreen = function( id ) { return slider.slide(that.getScreen(id).index); };
     this.duration = duration;
+    takeControl();
 }
 function Splash( stage ) {
     Event.apply(this);
@@ -255,7 +260,7 @@ function Control( stage, splash ) {
         stage.getCurrentScreen().fire('resize');
     });
 
-    fitNavPosition();
+    this.fitNavPosition = fitNavPosition;
 
     // 导航条位置适应
     stage.on('beforeslide', function( index_from, index_to ) {
@@ -264,12 +269,14 @@ function Control( stage, splash ) {
 
     // 更新导航当前项
     stage.on('afterslide', function( index_from, index_to ) {
+        var name = stage.getScreen(index_to).name;
         baidu('#top-nav #menu ul li')
             .removeClass('current')
             .filter(function(index, dom){
-                return ~this.getAttribute('screens').indexOf( stage.getScreen(index_to).name );
+                return ~this.getAttribute('screens').indexOf( name );
             })
             .addClass('current');
+        window.location.hash = name;
     });
 
     splash.on('show', stage.disable);
@@ -555,4 +562,5 @@ baidu(function(){
             this.github.addClass('hide');
         })
     stage.start();
+    control.fitNavPosition();
 });
