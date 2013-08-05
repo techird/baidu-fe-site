@@ -380,8 +380,15 @@ baidu(function(){
                 container : '#archive-container',
                 duration: 1000,
                 allowFold: true,
-                effect: ['fold', 'fade']
+                effect: ['fade']
             });
+            var ws = this.slideShow2 = new SlideShow({
+                container : '#word-container',
+                duration: 1500,
+                direction: 'Y',
+                allowFold: true,
+                effect: ['fold', 'fade']
+            })
             var _this = this, index;
             var heads = this.heads
                 .on('mouseenter', function(e){
@@ -392,7 +399,8 @@ baidu(function(){
                 });
 
             function active(index) {
-                _this.slideShow.slide(index);
+                ss.slide(index);
+                ws.slide(index);
                 heads.filter('.current').removeClass('current');
                 heads.eq(index).addClass('current');
             }
@@ -409,6 +417,7 @@ baidu(function(){
             });
 
             this.fit('#archive-container');
+            this.fit('#word-container');
         })
         .on('resize', function(width){
             this.layout();
