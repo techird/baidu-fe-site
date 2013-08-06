@@ -72,9 +72,15 @@ function Stage() {
     that = this;
 
     function takeControl() {
+        var last_wheel_event = 0; // Mac 下一次滚动触发多个滚动事件
         // change event by wheel
         baidu( 'body' ).on( 'mousewheel', function(e) {
             if( disabled ) return;
+            if ( e.timeStamp - last_wheel_event < 200 ) {
+                last_wheel_event = e.timeStamp;
+                return;
+            }
+            last_wheel_event = e.timeStamp;
             e.wheelDelta < 0 ? slider.next() : slider.prev();
         });
 
