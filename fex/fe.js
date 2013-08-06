@@ -39,10 +39,8 @@ Screen.prototype.fit = function( selector, type ) {
                 all: Math.max(ch / h, cw / w),
                 height: ch / h,
                 width: cw / w   
-            }[type || 'all'];
-        elem.cssAnimate({
-            scale: scale,
-        });
+            }[type || 'all']; 
+        elem.cssAnimate({scale: scale});
     };
     var last_timer;
     baidu(window).on('resize', function(){
@@ -388,18 +386,26 @@ baidu(function(){
 
             var ss = this.slideShow = new SlideShow({
                 container : '#archive-container',
-                duration: 1500,
+                duration: 500,
                 allowFold: true,
+                showDelay: 350,
                 foldDelay: 350,
-                effect: ['fold', 'fade']
+                effect: {
+                    fold: { ratio: 0.03, both: true },
+                    fade: true
+                }
             });
             var ws = this.slideShow2 = new SlideShow({
                 container : '#word-container',
-                duration: 500,
-                direction: 'X',
+                duration: 1000,
+                direction: '-X',
                 allowFold: true,
+                showDelay: 350,
                 foldDelay: 350,
-                effect: ['fade']
+                effect: {
+                    fold: { ratio: 0.03, both: true },
+                    fade: true
+                }
             })
             var _this = this, index;
             var heads = this.heads

@@ -65,9 +65,11 @@ function SlideShow( config ) {
     // config
     var container
       , direction
+      , revert
       , duration
       , effect
       , allowFold
+      , showDelay
       , foldDelay;
 
     // vars
@@ -99,8 +101,23 @@ function SlideShow( config ) {
         }, config );
 
         container = baidu.dom( config.container );
-        direction = config.direction.toUpperCase();
+
+        switch( config.direction.toLowerCase() ) {
+            case '-x':
+                revert = true;
+            case 'x':
+                direction = 'X';
+                break;
+            case '-y':
+                revert = true;
+            case 'y':
+                direction = 'Y';
+                break;
+            default:
+                direction = 'X';
+        }
         duration = config.duration;
+        showDelay = config.showDelay;
         allowFold = config.allowFold;
         foldDelay = config.foldDelay;
         effect = {};
@@ -141,10 +158,12 @@ function SlideShow( config ) {
         var offset = direction == 'X' ? container.width() : container.height();
         var translate = 'translate' + direction;
         var state = {};
-        var ratio = effect.fold && effect.fold.ratio || 1;
+        var ratioNext = effect.fold && effect.fold.ratio || 1;
+        var ratioPrev = effect.fold && effect.fold.both ? ratioNext : 1;
+        dir = revert ? -dir : dir;
         switch(name) {
             case 'hide':
-                state[translate] = dir > 0 ? -offset * ratio : offset;
+                state[translate] = dir > 0 ? -offset * ratioNext : offset * ratioPrev;
                 if( effect.fade ) state['opacity'] = 0;
                 return state;
             case 'afterhide':
@@ -152,7 +171,7 @@ function SlideShow( config ) {
                 return state;
             case 'beforeshow':
                 state['display'] = 'block';
-                state[translate] = dir > 0 ? offset : -offset * ratio;
+                state[translate] = dir > 0 ? offset * ratioPrev : -offset * ratioNext;
                 if( effect.fade ) state['opacity'] = 0;
                 return state;
             case 'show':
@@ -197,7 +216,7 @@ function SlideShow( config ) {
                     fire('afterslide', e);
                     sliding = false;
                 });
-            }, 10);
+            }, showDelay || 10);
         }     
         index = index_to;
     }
