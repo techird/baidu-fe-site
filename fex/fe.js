@@ -40,11 +40,15 @@ Screen.prototype.fit = function( selector, type ) {
                 height: ch / h,
                 width: cw / w   
             }[type || 'all'];
-        elem.css3({
+        elem.cssAnimate({
             scale: scale,
         });
     };
-    baidu(window).on('resize', onresize);
+    var last_timer;
+    baidu(window).on('resize', function(){
+        clearTimeout(last_timer);
+        last_timer = setTimeout(onresize, 300);
+    });
     this.on('beforeshow', onresize);
     onresize();
     return elem;
