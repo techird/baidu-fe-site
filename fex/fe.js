@@ -378,16 +378,18 @@ baidu(function(){
 
             var ss = this.slideShow = new SlideShow({
                 container : '#archive-container',
-                duration: 1000,
+                duration: 1500,
                 allowFold: true,
-                effect: ['fade']
+                foldDelay: 350,
+                effect: ['fold', 'fade']
             });
             var ws = this.slideShow2 = new SlideShow({
                 container : '#word-container',
-                duration: 1500,
-                direction: 'Y',
+                duration: 500,
+                direction: 'X',
                 allowFold: true,
-                effect: ['fold', 'fade']
+                foldDelay: 350,
+                effect: ['fade']
             })
             var _this = this, index;
             var heads = this.heads
@@ -398,20 +400,25 @@ baidu(function(){
                     active(index);
                 });
 
+            var currentIndex = undefined;
             function active(index) {
                 ss.slide(index);
                 ws.slide(index);
                 heads.filter('.current').removeClass('current');
                 heads.eq(index).addClass('current');
+                currentIndex = index;
             }
 
             this.on('navigate', function(e) {
+                var index = currentIndex;
                 switch(e.direction) {
                     case 'Left':
-                        ss.hasPrev() ? active(ss.index() - 1) : active(heads.length - 1);
+                        if ( index === undefined || index == 0) active(heads.length - 1);
+                        else active( index - 1 );
                         break;
                     case 'Right':
-                        ss.hasNext() ? active(ss.index() + 1) : active(0);
+                        if ( index === undefined || index == heads.length - 1 ) active(0);
+                        else active( index + 1 );
                         break;
                 }
             });

@@ -46,8 +46,8 @@
     
     <div id="stage">
         <div class="screen" id="home" >        
-            <h1>FEday</h1>
-            <div class="meeting-info"></div>
+            <h1>FIS 2.0<span>发布会</span></h1>
+            <div class="meeting-info">8月14日 15:00 奎科-F3B-西湖月</div>
             <div class="nav down"></div>
         </div>
         <div class="screen" id="topic" >

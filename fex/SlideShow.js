@@ -67,12 +67,14 @@ function SlideShow( config ) {
       , direction
       , duration
       , effect
-      , allowFold;
+      , allowFold
+      , foldDelay;
 
     // vars
     var index
       , sliding
-      , sliders;
+      , sliders
+      , foldTimer;
 
     // save this
     var that = this;
@@ -100,6 +102,7 @@ function SlideShow( config ) {
         direction = config.direction.toUpperCase();
         duration = config.duration;
         allowFold = config.allowFold;
+        foldDelay = config.foldDelay;
         effect = {};
         switch( Object.prototype.toString.call(config.effect) ) {
             case '[object Array]':
@@ -123,7 +126,6 @@ function SlideShow( config ) {
     }
 
     function initVars() {
-        index = 0;
         sliding = false;
         sliders = container.children().css('display', 'none');
     }
@@ -161,16 +163,26 @@ function SlideShow( config ) {
     }
 
     function slide (index_to) {
-        if(sliding && !allowFold) return;
-        if(index_to == index) return;
-        sliding = true;
+        if( sliding && !allowFold ) return;
+        if( index_to == index ) return;
+        if( allowFold ) {
+            clearTimeout( foldTimer );
+            foldTimer = setTimeout( function(){
+                doSlide(index_to);
+            }, foldDelay);
+            return;
+        }
+        doSlide( index_to );   
+    }
 
+    function doSlide(index_to) {
+        sliding = true;
         var e = [index, index_to];
         fire('beforeslide', e);
 
         var dir = index_to > index ? 1 : -1,
-            from = sliders.eq(index),
-            to = sliders.eq(index_to);
+            from = index !== undefined && sliders.eq(index),
+            to = index_to !== undefined && sliders.eq(index_to);
 
         if ( from ) {
             var old_index = index;
@@ -186,7 +198,7 @@ function SlideShow( config ) {
                     sliding = false;
                 });
             }, 10);
-        }
+        }     
         index = index_to;
     }
 
