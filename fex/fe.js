@@ -40,7 +40,7 @@ Screen.prototype.fit = function( selector, type ) {
                 height: ch / h,
                 width: cw / w   
             }[type || 'all'];
-        elem.stop().cssAnimate({
+        elem.css3({
             scale: scale,
         });
     };
