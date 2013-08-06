@@ -28,12 +28,15 @@
 .no-tap-hl {
     .tap-highlight(rgba(0,0,0,0));
 }
-
+@font-face {
+    font-family: Helvetica;
+    src: url(Helvetica.ttf) format('truetype');
+}
 body, html, div {
     overflow: hidden;
     margin: 0;
     padding: 0;
-    font-family: Arial, 'Helvetica Neue', 'Microsoft Yahei';
+    font-family: Arial, 'Microsoft Yahei';
 }
 
 #logo {
@@ -49,6 +52,7 @@ body, html, div {
     line-height: 60px;
     cursor: pointer;
     -webkit-font-smoothing: antialiased;
+    font-family: Helvetica;
 }
 
 #about {
@@ -70,7 +74,8 @@ body, html, div {
             left: 65px;
             margin: 0;
             font-weight: normal;
-            color: #747474;
+            color: #888;
+            font-family: Helvetica;
         }
     }
     .right {
@@ -169,6 +174,7 @@ body, html, div {
     background: url(bg.jpg) center center no-repeat;
     h1 {
         position: absolute;
+        font-family: Helvetica, 'Microsoft Yahei';
         //background: url(feday.png) center no-repeat;
         //text-indent: -10000px;
         height: 166px;
@@ -178,14 +184,15 @@ body, html, div {
         margin-top: -180px;
         text-align: center;
         color: white;
-        font-size: 120px;
+        font-size: 160px;
         line-height: 135px;
         font-weight: normal;
         vertical-align: bottom;
         span {
             display: block;
-            font-size: 36px;
-            line-height: 36px;
+            font-size: 30px;
+            line-height: 67px;
+            text-indent: 12.5em;
         }
     }
     .meeting-info {
@@ -259,8 +266,26 @@ body, html, div {
             top: -80px;
             .transition( all .25s ease );
         }
-        &:hover:before {
-            .transform( translateY(-10px) );
+        &:hover{
+            &:before {
+                .transform( translateY(-10px) );
+            }
+            &:after {
+                content: ' ';
+                width: 20px;
+                height: 20px;
+                display: block;
+                border: solid #444;
+                border-width: 1px 0 0 1px;
+                .transform( rotate(45deg) translate(45px, -10px) );
+                &:after {
+                    content: ' ';
+                    display: block;
+                    width: 600px;
+                    height: 300px;
+                    border: 5px solid rgba(0,0,0,.5);
+                }
+            }
         }
         &:active:before {
             .transform( scale(.9) );
