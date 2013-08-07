@@ -317,52 +317,9 @@ baidu(function(){
     stage.getScreen('topic')
         .on( 'init', function(){
             this.$.find('p').click(function(e){
-                var index = +baidu(e.target).attr('product-index');
-                stage.getScreen('product').slideShow.slide(index);
-                stage.slideToScreen('product');
+                
             });
         })
-
-    stage.getScreen('product')
-
-        .on( 'init', function(){
-            var prev = this.prev = this.$.find('.nav.prev'),
-                next = this.next = this.$.find('.nav.next');
-
-            var slideShow = this.slideShow = new SlideShow({
-                container: '#product-container',
-                duration: 1000,
-                effect: 'fold'
-            });
-            slideShow.on('afterslide', function() {
-                prev.css('visibility', this.hasPrev() ? 'visible' : 'hidden');
-                next.css('visibility', this.hasNext() ? 'visible' : 'hidden');
-            });
-            slideShow.showFirst();
-            function goNext(){ slideShow.next(); }
-            function goPrev(){ slideShow.prev(); }
-            next.click(goNext);
-            prev.click(goPrev);
-            this.on('navigate', function(e){
-                switch(e.direction) {
-                    case 'Left': return goPrev();
-                    case 'Right': return goNext();
-                }
-            });
-            this.fit('#product-container');
-        })
-
-        .on('aftershow', function() {
-            setTimeout(function(){
-                this.prev.cssAnimate( '+show' , 200 );
-                this.next.cssAnimate( '+show' , 200 );
-            }.bind(this), 100);
-        })
-
-        .on('beforehide', function(){                 
-            this.prev.cssAnimate( '-show' , 200 );
-            this.next.cssAnimate( '-show' , 200 );
-        });
 
     stage.getScreen('archive')
         .on( 'init', function(){

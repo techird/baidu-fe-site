@@ -17,7 +17,7 @@
     <div id="top-nav">
         <div id="menu">
             <ul>
-                <li screens="topic product" class="s1"><a href="#topic">技术</a></li>
+                <li screens="topic" class="s1"><a href="#topic">技术</a></li>
                 <li screens="archive" class="s2"><a href="#archive">大牛</a></li>
                 <li screens="team" class="s3"><a href="#team">团队</a></li>
                 <li screens="contact" class="s4"><a href="#contact">关注</a></li>
@@ -51,121 +51,9 @@
             <div class="nav down"></div>
         </div>
         <div class="screen" id="topic" >
-            <p class="tool" product-index="1">平台工具</p>
-            <p class="data" product-index="0">数据监控</p>
-            <p class="end" product-index="4">端技术</p>
-        </div>
-        <div class="screen" id="product" >        
-            <div id="product-container">
-                <div class="product">
-                    <div class="hunter">                    
-                        <div class="title">
-                            <a href="http://hunter.baidu.com" target="_blank">Hunter</a>
-                        </div>
-                        <div class="content">
-                            
-                            <div class="dataMonitoring">日常数据监控</div>
-                            <div class="dataVisualization">数据可视化呈现</div>
-                            <div class="combination">多维度组合筛选</div>
-                            <div class="test">A/B 测试对比</div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="product">
-                    <div class="fis">
-                        <h1 class="eng"><a href="http://fis.baidu.com" target="_blank">F.I.S</a></h1>
-                        <h1 class="chs">前端集成解决方案</h1>
-                        <h2>Front-end Integrated Solution</h2>
-                        <div class="formula">
-                            <div class="circle">前端<br/>框架</div>
-                            <div class="op">+</div>
-                            <div class="circle">模块<br/>框架</div>
-                            <div class="op">+</div>
-                            <div class="circle">自动化<br/>工具</div>
-                            <div class="op">+</div>
-                            <div class="circle">辅助开<br/>发工具</div>
-                            <div class="op">=</div>
-                            <div class="circle">前端集成<br/>解决方案</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="product">
-                    <div class="webspeed">        
-                        <div class="title">
-                            
-                            <div class="title-header">
-                                <a href="http://webspeed.baidu.com" target="blank">Webspeed</a>
-                            </div>
-                            <div class="title-central">新版监控更好服务！</div>
-                            <div class="title-footer">真实还原用户感知耗时，综合指数评价页面性能，更多精彩等您发现！</div>
-                                
-                        </div>
-                        <div class="content">
-                            
-                            <div class="PC">
-                                    
-                                <div class="PC-header">新版PC端监控</div>
-                                <div class="PC-footer">指标均包含自屏时间，真实还原用户体验</div>
-
-                            </div>
-                            <div class="mobile">
-                                
-                                <div class="mobile-header">新版移动端监控</div>
-                                <div class="mobile-footer">指标均包含自屏时间，真实还原用户体验</div>
-
-                            </div>
-                            <div class="contrast">
-                                
-                                <div class="contrast-header">产品线性能对比</div>
-                                <div class="contrast-footer">直观对比产品线页面性能、复杂度、竞品情况</div>
-
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="product">
-                    <div class="GMU">
-            
-                        <div class="title">
-                            
-                            <div class="title-main">
-                                <a href="http://gmu.baidu.com" target="_blank">GUM</a>
-                            </div>
-                                
-                        </div>
-                        <div class="content">
-                                    
-                            <div class="use">简单易用</div> 
-                            <div class="lightweight">轻量级</div>
-                            <div class="download">自定义下载</div>       
-                            <div class="stable">专业稳定</div>
-                            <div class="plugin">组件丰富</div>
-                            <div class="free">开源免费</div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="product">
-                    <div class="ueditor">        
-                        <div class="title">
-                            <a href="http://ueditor.baidu.com" target="_blank">UEditor</a>
-                        </div>
-                        <div class="content">
-                            
-                            <div class="function">功能全面</div>
-                            <div class="experience">用户体验</div>
-                            <div class="openSource">开源免费</div>
-                            <div class="download">定制下载</div>
-                            <div class="specialty">专业稳定</div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="nav prev"></div>
-            <div class="nav next"></div>
+            <p class="tool">平台工具</p>
+            <p class="data">数据监控</p>
+            <p class="end">端技术</p>
         </div>
         <div class="screen" id="archive" >
             <h1>团队中有大咖，让工作本身就成为一种追求</h1>
