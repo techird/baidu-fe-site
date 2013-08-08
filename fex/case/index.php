@@ -35,7 +35,7 @@
         <?if(isset($demos) && count($demos) > 0){?>
         <div class="demoWrapper">
             <?foreach($demos as $demo){?>
-            <a href="/Fex-Sample/<?= $demo?>">Demo 演示</a>
+            <a href="../demo/<?= $demo?>">Demo 演示</a>
             <?}?>
         </div>
         <?}?>
