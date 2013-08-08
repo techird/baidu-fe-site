@@ -1,0 +1,79 @@
+html, body{
+	min-height: 100%;
+	height: 100%;
+	width: 100%;
+	padding: 0;
+	position: relative;
+	margin: 0;
+	overflow: hidden;
+}
+.page {
+	position: absolute;
+	display: block;
+	/*overflow: hidden;*/
+	width: 100%;
+	height: 100%;
+	-webkit-transition: opacity .5s linear;
+	-webkit-perspective: 1000px;
+	background-color: #000;
+}
+#background {
+	position: absolute;
+	display: block;
+	-webkit-transition: .4s ease-out;
+	-webkit-transition-property: -webkit-transform;
+	width: 1280px;
+	height: 1024px;
+	background-color: #000;
+	z-index:1;
+}
+#foreground{
+	position: absolute;
+	width: 1280px;
+	height: 1024px;
+	z-index:2;
+}
+
+#background.landscape {
+	width: 1280px;
+	height: 1024px;
+}
+
+#background.portrait {
+	width: 1024px;
+	height: 1280px;
+}
+
+#background div {
+	position: absolute;
+	left: 0;
+	top: 0;
+	-webkit-transition: opacity .5s ease;
+}
+
+#background.landscape .a, #background.portrait .b {
+	opacity: 1;
+}
+
+#background.landscape .b, #background.portrait .a {
+	opacity: 0;
+}
+
+#background .a {
+	width: 1280px;
+	height: 1024px;
+}
+
+#background .b {
+	width: 1024px;
+	height: 1280px;
+}
+
+#background.dragStart {
+	-webkit-transition: none;
+}
+
+#background.dragEnd {
+	-webkit-transition: .2s ease-out;
+	-webkit-transition-property: -webkit-transform;
+}

@@ -1,0 +1,132 @@
+*{
+	margin:0;
+	padding:0;
+}
+body {
+  font-family: Arial, 'Helvetica Neue', 'Microsoft Yahei';
+}
+h2 {
+  margin: 0;
+  padding-bottom: 30px;
+  font-size: 33px;
+  font-weight: normal;
+}
+p {
+  line-height: 30px;
+  font-size: 16px;
+  margin: 0;
+}
+.title {
+  padding: 30px 0 0 35px;
+  margin-bottom: 30px;
+}
+.title h1 {
+  font-size: 40px;
+  font-weight: normal;
+}
+.item {
+  overflow:hidden;
+  padding: 0 50px 75px 50px;
+  background: url("../images/bgbottom.jpg") no-repeat bottom;
+}
+.item .text {
+  width: 45%;
+  padding: 30px 0 0 0;
+}
+.item .pic {
+  width: 50%;
+  padding: 20px 0 0 0;
+}
+.pic img{
+  max-width: 100%;
+}
+.item:nth-child(even) .text, .item:nth-child(odd) .pic{
+	float: left;
+}
+
+.item:nth-child(odd) .text, .item:nth-child(even) .pic{
+	float: right;
+}
+
+.item:nth-child(even) .pic{
+	text-align: right;
+}
+
+ul {
+  padding-left: 2em;
+  line-height: 20px;
+}
+
+ul li{
+	padding-bottom:5px;
+}
+
+.textPic {
+  padding: 25px 75px 25px 0;
+  background: url("../img/bgbottom.jpg") no-repeat bottom;
+}
+
+.footer {
+  padding: 50px 0 80px 0;
+}
+.footer h2 {
+  text-align: center;
+}
+.footer .footer-main {
+  padding-top: 45px;
+  text-align: center;
+}
+.footer .footer-main p {
+  text-align: center;
+  font-size: 31px;
+  margin: 30px 0 80px 0;
+}
+.footer .footer-main .footer-item {
+	display: inline-block;
+	margin: 0 20px;
+}
+@media (min-width: 767px) and (max-width: 979px) {
+  .pic img { width: 350px;}
+  .item { padding: 0 0 75px 0;}
+  .title { padding: 30px 0 0 0;}
+  .footer .footer-main img {
+    width: 180px;
+    height: 180px;
+  }
+  .footer .footer-main p{ font-size: 28px;}
+}
+@media (min-width: 980px) and (max-width: 1025px) {
+  .pic img { width: 450px;}
+  .item { padding: 0 0 75px 0;}
+}
+
+.title .subTitle {
+	margin-top: 20px;
+	font-weight: normal;
+}
+.title h1 {
+	position: relative;
+}
+.title h1 .anotation {
+	background-color: rgb(218, 221, 221);
+	border-radius: 5px;
+	font-size: 15px;
+	color: rgb(211, 131, 131);
+	position: absolute;
+	top: 8px;
+	left: 130px;
+	padding: 0 4px;
+}
+
+.demoWrapper{
+	text-align: center;
+	padding: 50px;
+}
+.demoWrapper a{
+	display: inline-block;
+	text-decoration: none;
+	background:#369;
+	padding:30px;
+	color:#fff;
+	margin:0 20px;
+}
