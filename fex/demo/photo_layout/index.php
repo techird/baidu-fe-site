@@ -25,7 +25,7 @@
     function getListData($param){
         $perPage = 30;
         $i = 0;
-        $factor = 5;
+        $factor = 1;
         $page = (int)$param['page'];
         preg_match_all("/^.*\//", $_SERVER['SCRIPT_FILENAME'], $cacheFile);
         $cacheFile = $cacheFile[0][0] . $param['user_id'] . '_sets.cache';
@@ -101,7 +101,7 @@
         exit;       
     }
 
-    $user_name = isset($_GET['u']) && !empty($_GET['u']) ? $_GET['u'] : 'pengzhan.lee';
+    $user_name = isset($_GET['u']) && !empty($_GET['u']) ? $_GET['u'] : 'Colourful Life (Teresa) travelling';
     $user_id = callFlickrAPI(array(
         method => 'flickr.people.findByUsername',
         username => $user_name

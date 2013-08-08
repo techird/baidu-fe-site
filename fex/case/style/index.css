@@ -48,6 +48,10 @@ p {
 	float: right;
 }
 
+.item:nth-child(even) .pic{
+	text-align: right;
+}
+
 ul {
   padding-left: 2em;
   line-height: 20px;
