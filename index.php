@@ -9,6 +9,10 @@
     <script src="fex/CSS3Animate.js"></script>
     <script src="fex/SlideShow.js"></script>
     <script src="fex/fe.js"></script>
+    <script>
+    var pageId = 'fexhomepage';
+    </script>
+    <script type="text/javascript" src="http://img.baidu.com/hunter/femonk.js"></script>
 </head> 
 <body>
 
