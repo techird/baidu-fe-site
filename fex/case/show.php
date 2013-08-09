@@ -7,9 +7,10 @@
         $domDocument->loadHTMLFile("./cases/$caseName/index.html");
         $xml = simplexml_import_dom($domDocument);    
         include "./cases/$caseName/conf.php";
-        $demos = $conf["demos"];
-        $qrImages = $conf["qrImages"];
-                
+        if(isset($conf)){
+            $demos = $conf["demos"];
+            $qrImages = $conf["qrImages"];
+        }
         $title = $xml->head->title;
         $body = $xml->body;
         $content = $body->asXML();
