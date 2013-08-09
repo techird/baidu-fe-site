@@ -20,6 +20,17 @@ function Event() {
     };
 }
 
+function plan( fn, delay, args, context ) {
+    var timer = setTimeout(function(){
+        fn.apply(context, args);
+    }, delay);
+    return {
+        cancel: function() { 
+            clearTimeout(timer);
+        }
+    }
+}
+
 function Screen( index, stage, dom ) {
     Event.apply(this);
     this.index = index;
@@ -321,30 +332,81 @@ baidu(function(){
             var ccontainer = this.$.find('.case-container');
             var screen = this.$;
             var scroll = 0;
+            baidu('.case-control .return-button').click(leaveCaseMode);
             function handleScroll( e ) {
                 scroll += e.wheelDelta;
-                if ( scroll > 0 ) scroll = 0;
-                screen.cssAnimate({translateY: scroll}, 800);
+                clearTimeout(handleScroll.lastCall);
+                setTimeout(function(){           
+                    if ( scroll > 0 ) scroll = 0;
+                    if ( scroll > -210 && e.wheelDelta > 0) scroll = 0;
+                    scroll = Math.max( scroll, -300 - baidu('.case-content').height() + stage.height());
+                    if ( scroll > -210 && e.wheelDelta < 0) scroll = -210;         
+                    if ( scroll < -210 ) {
+                        baidu('.case-control').cssAnimate({translateY: -210 - scroll }, 800);
+                    } else {
+                        baidu('.case-control').cssAnimate({translateY: 0 }, 800);
+                    }
+                    screen.cssAnimate({translateY: scroll}, 800);
+                }, 100);
+            }
+            function showCases(caseMap) {
+                baidu('.loading').css('display', 'none');
+                var article = baidu('<article class="section-list"></article>').appendTo(baidu('.case-content').empty());
+                var delay = 0;
+                for(var name in caseMap) {
+                    if(caseMap.hasOwnProperty(name)) {
+                        var thecase = caseMap[name];
+                        var section = baidu(
+                            '<section>' 
+                          + '  <img class="preview" src="fex/case/cases/' + name + '/preview.png" />'
+                          + '  <h1 class="title">' + thecase.title + '</h1>'
+                          + '  <p class="desc">' + thecase.desc + '</p>'
+                          + '  <div class="tags">' + thecase.tags + '</div>'
+                          + '</section>');
+                        section.css3({ opacity: 0, translateY: 30 }).appendTo(article);
+                        plan(function(section){
+                            section.cssAnimate({ opacity:1, translateY: 0 });
+                        }, delay += 100, [section]);
+                    }
+                }
+            }
+            function loadCases() {                
+                baidu('.loading').css('display', 'block');
+                baidu.ajax({
+                    type: 'get',
+                    url: 'fex/case/list.php',
+                    success: showCases
+                })
+            }
+            function removeCases() {
+                baidu('.case-content').empty();
             }
             function enterCaseMode() {
+                var duration = 2000;
                 stage.disable();
-                baidu('#top-nav, #logo').cssAnimate({opacity: 0, translateY: '-100%'}, 2000);
-                tcontainer.cssAnimate( { translateY: 1 }, 2400 );
-                ccontainer.cssAnimate( { opacity: 1, translateY: 200 }, 2000 );
-                screen.cssAnimate({translateY: scroll = -205}, 2400 );
+                baidu('#top-nav, #logo').cssAnimate({opacity: 0, translateY: '-100%'}, duration / 5);
+                tcontainer.cssAnimate( { translateY: 1 }, duration );
+                ccontainer.cssAnimate( { opacity: 1, translateY: 200 }, duration );
+                screen.cssAnimate({translateY: scroll = -210}, duration );
+                screen.css('overflow', 'visible');
                 baidu('body').on('mousewheel', handleScroll);
+                plan(loadCases, duration);
+                inCaseMode = true;
             }
             function leaveCaseMode() {
+                var duration = 2000;
                 stage.enable();
-                tcontainer.cssAnimate( { translateY: 0 }, 2000 );
-                ccontainer.cssAnimate( { opacity: 0, translateY: 800 }, 2400 );
-                screen.cssAnimate({translateY: scroll = 0}, 1000);
-                baidu('#top-nav, #logo').cssAnimate({opacity: 1, translateY: 0}, 2000);
+                tcontainer.cssAnimate( { translateY: 0 }, duration, removeCases );
+                ccontainer.cssAnimate( { opacity: 0, translateY: 800 }, duration );
+                screen.cssAnimate({translateY: scroll = 0}, duration, function() {
+                    screen.css('overflow', 'hidden');
+                });
+                baidu('#top-nav, #logo').cssAnimate({opacity: 1, translateY: 0}, duration);
                 baidu('body').off('mousewheel', handleScroll);
+                inCaseMode = false;
             }
             this.$.find('p').click(function(e) {
                 inCaseMode ? leaveCaseMode() : enterCaseMode();
-                inCaseMode = !inCaseMode;
             });
         })
 
