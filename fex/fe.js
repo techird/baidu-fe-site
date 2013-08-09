@@ -316,8 +316,35 @@ baidu(function(){
 
     stage.getScreen('topic')
         .on( 'init', function(){
-            this.$.find('p').click(function(e){
-                
+            var inCaseMode = false;
+            var tcontainer = this.$.find('.topic-container');
+            var ccontainer = this.$.find('.case-container');
+            var screen = this.$;
+            var scroll = 0;
+            function handleScroll( e ) {
+                scroll += e.wheelDelta;
+                if ( scroll > 0 ) scroll = 0;
+                screen.cssAnimate({translateY: scroll}, 800);
+            }
+            function enterCaseMode() {
+                stage.disable();
+                baidu('#top-nav, #logo').cssAnimate({opacity: 0, translateY: '-100%'}, 2000);
+                tcontainer.cssAnimate( { translateY: 1 }, 2400 );
+                ccontainer.cssAnimate( { opacity: 1, translateY: 200 }, 2000 );
+                screen.cssAnimate({translateY: scroll = -205}, 2400 );
+                baidu('body').on('mousewheel', handleScroll);
+            }
+            function leaveCaseMode() {
+                stage.enable();
+                tcontainer.cssAnimate( { translateY: 0 }, 2000 );
+                ccontainer.cssAnimate( { opacity: 0, translateY: 800 }, 2400 );
+                screen.cssAnimate({translateY: scroll = 0}, 1000);
+                baidu('#top-nav, #logo').cssAnimate({opacity: 1, translateY: 0}, 2000);
+                baidu('body').off('mousewheel', handleScroll);
+            }
+            this.$.find('p').click(function(e) {
+                inCaseMode ? leaveCaseMode() : enterCaseMode();
+                inCaseMode = !inCaseMode;
             });
         })
 

@@ -49,7 +49,7 @@ var CSS3Animate = (function (window) {
 
     function addUnit( arr, unit ) {
         for( var i = 0; i < arr.length; i++ )
-            if( arr[i] ) arr[i] += unit;
+            if( arr[i] && !/px|pt|em|%/.exec(arr[i]) ) arr[i] += unit;
         return arr;
     }
 
@@ -157,9 +157,9 @@ var CSS3Animate = (function (window) {
     function doAnimate( dom, styles, duration, callback ) {
         styles = clone(styles);
 
-        dom.queue = dom.queue || [];
-        dom.queue.push( [doAnimate, [dom, styles, duration, callback ]] );
-        if(dom.queue.length > 1) return;
+        // dom.queue = dom.queue || [];
+        // dom.queue.push( [doAnimate, [dom, styles, duration, callback ]] );
+        // if(dom.queue.length > 1) return;
 
         if(typeof(duration) == 'function') {
             callback = duration;
@@ -175,16 +175,12 @@ var CSS3Animate = (function (window) {
             setStyles( dom, styles );
         }
 
-        dom.next_id = setTimeout( function() {
+        setTimeout( function(){            
             typeof(callback) == 'function' && callback.apply(dom);
-            dom.queue.shift();
-            if(!dom.queue.length)
-                removeTransition( dom );
-            else {
-                var next = dom.queue.shift();
-                next[0].apply(next[0][0], next[1]);
-            }
         }, duration);
+
+        clearTimeout(dom.transition_timer);
+        dom.transition_timer = setTimeout( function() { removeTransition( dom ); }, duration);
     }
 
     HTMLElement.prototype.animate = function(styles, duration, callback) {
@@ -192,16 +188,16 @@ var CSS3Animate = (function (window) {
         return this;
     }
     HTMLElement.prototype.stop = function() {
-        if(!this.queue) return this;
-        clearTimeout(this.next_id);
-        if(!this.queue || !this.queue.length) return this;
-        var last = this.queue.pop();
-        var styles = last[0];
-        removeTransition( this );
-        mapStyles( this, styles );
-        setStyles( this, styles );
-        this.queue = [];
-        return this;
+        // if(!this.queue) return this;
+        // clearTimeout(this.next_id);
+        // if(!this.queue || !this.queue.length) return this;
+        // var last = this.queue.pop();
+        // var styles = last[0];
+        // removeTransition( this );
+        // mapStyles( this, styles );
+        // setStyles( this, styles );
+        // this.queue = [];
+        // return this;
     }
     HTMLElement.prototype.delay = function( time ) {
         this.queue = this.queue || [];

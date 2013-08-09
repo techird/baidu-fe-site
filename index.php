@@ -51,9 +51,17 @@
             <div class="nav down"></div>
         </div>
         <div class="screen" id="topic" >
-            <p class="tool">平台工具</p>
-            <p class="data">数据监控</p>
-            <p class="end">端技术</p>
+            <div class="topic-container">                
+                <p class="tool">平台工具</p>
+                <p class="data">数据监控</p>
+                <p class="end">端技术</p>
+            </div>
+            <div class="case-container">
+                <div class="control">
+                    <a class="return-button">返回</a>
+                    <h1>数据监控</h1>
+                </div>
+            </div>
         </div>
         <div class="screen" id="archive" >
             <h1>团队中有大咖，让工作本身就成为一种追求</h1>
