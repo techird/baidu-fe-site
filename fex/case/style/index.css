@@ -11,6 +11,10 @@ h2 {
   font-size: 33px;
   font-weight: normal;
 }
+.item h3{
+	padding-top: 30px;
+	padding-bottom:10px;
+}
 p {
   line-height: 30px;
   font-size: 16px;
@@ -28,6 +32,9 @@ p {
   overflow:hidden;
   padding: 0 50px 75px 50px;
   background: url("../images/bgbottom.jpg") no-repeat bottom;
+}
+.item p{
+	margin-top:10px;
 }
 .item .text {
   width: 45%;
@@ -58,7 +65,8 @@ ul {
 }
 
 ul li{
-	padding-bottom:5px;
+	padding-bottom:10px;
+	line-height: 1.7em;
 }
 
 .textPic {
@@ -129,4 +137,9 @@ ul li{
 	padding:30px;
 	color:#fff;
 	margin:0 20px;
+}
+.highlight{
+	background: yellow;
+	color: red;
+	font-weight: bold;
 }
