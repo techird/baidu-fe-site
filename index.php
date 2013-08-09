@@ -12,6 +12,15 @@
 </head> 
 <body>
 
+    <ul class="loading">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+
     <h1 id="logo">FEX</h1>
 
     <div id="top-nav">
@@ -56,10 +65,13 @@
                 <p class="data">数据监控</p>
                 <p class="end">端技术</p>
             </div>
-            <div class="case-container">
-                <div class="control">
+            <div class="case-container">         
+                <div class="case-control">
                     <a class="return-button">返回</a>
                     <h1>数据监控</h1>
+                </div>
+                <div class="case-content">
+                    
                 </div>
             </div>
         </div>
