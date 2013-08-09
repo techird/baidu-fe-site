@@ -1,0 +1,110 @@
+body{
+	background-color: #e9ecec;
+}
+
+#album-list-container{
+	overflow: hidden;
+}
+
+.album-content {
+    width: 100%;
+    padding: 10px 0;
+    position:relative;
+}
+
+.album-statusTip{
+    text-align:center;
+    border-top: 1px solid #999;
+    box-shadow: 0px -1px 0px 0px #ccc;
+    padding: 1em;
+    -webkit-transform: translate(0, 45px);
+    -webkit-transition: -webkit-transform .2s ease-out;
+}
+
+.album-statusTip.loading{
+    -webkit-transform: translate(0, 0);
+}   
+
+.pin{
+    margin: 10px 0;
+    position:absolute;
+    left:0;
+    top:0;
+    box-shadow:0px 1px 3px 0px rgb(194,194,194);
+    border-radius: 0 0 3px 3px;
+    background: #f6f6f6;
+    width:220px;
+    overflow:hidden;
+    opacity: 0;
+    -webkit-transition: opacity .2s ease-out;
+}
+
+.pin.show{
+    opacity: 1;
+}
+
+
+.pin.active .pin-img img{
+	-webkit-transform: scale(1.2, 1.2);
+}
+
+.pin img{
+	-webkit-transition: opacity 1s;
+	image-rendering: -webkit-optimize-contrast;
+	-webkit-transform: scale(1, 1);
+	opacity: 0;
+	-webkit-transition: -webkit-transform .2s ease, opacity .4s;
+}
+
+.pin img.show{
+	opacity: 1;
+}
+
+.pin .pin-img{
+    position:relative;
+    overflow: hidden;
+}
+
+.pin .pin-img span{
+    position: absolute;
+    right:0;
+    bottom:0;
+    background:rgba(0,0,0,.5);
+    padding:.5em .7em;
+    color:#fff;
+    line-height:.5em;
+}
+
+.pin .pin-desc{
+    padding:.7em .5em;
+}
+
+.pin .pin-title{
+    padding-bottom:1em;
+    color:#333;
+    line-height:1.4em;
+}
+
+.pin .pin-info{
+    font-size:.8em;
+    display:-webkit-box;
+    padding-bottom: .5em;
+    line-height: 16px;
+}
+
+.pin .pin-user{
+    display: block;
+    -webkit-box-flex: 1;
+    background:url(../images/owner.png) no-repeat left center;
+    background-size: contain;
+    padding-left:20px;
+    color:#999;
+    
+}
+
+.pin .pin-counter{
+    background:url(../images/comment.png) no-repeat left center;
+    color:#8b9db4;
+    background-size: contain;
+    padding-left:20px;
+}
