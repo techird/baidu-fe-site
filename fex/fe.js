@@ -351,7 +351,7 @@ baidu(function(){
             }
             function showCases(caseMap) {
                 baidu('.loading').css('display', 'none');
-                var article = baidu('<article class="section-list"></article>').appendTo(baidu('.case-content').empty());
+                var article = baidu('<article class="case-list"></article>').appendTo(baidu('.case-content').empty());
                 var delay = 0;
                 for(var name in caseMap) {
                     if(caseMap.hasOwnProperty(name)) {
@@ -362,11 +362,14 @@ baidu(function(){
                           + '  <h1 class="title">' + thecase.title + '</h1>'
                           + '  <p class="desc">' + thecase.desc + '</p>'
                           + '  <div class="tags">' + thecase.tags + '</div>'
+                          + '  <a class="open-case" href="fex/case/show.php?name=' + name + '" target="_blank">打开</a>'
                           + '</section>');
-                        section.css3({ opacity: 0, translateY: 30 }).appendTo(article);
-                        plan(function(section){
-                            section.cssAnimate({ opacity:1, translateY: 0 });
-                        }, delay += 100, [section]);
+                        plan(function(section) {
+                            section.css3({ opacity: 0, translateY: 30 }).appendTo(article);
+                            plan( function() {
+                                section.cssAnimate({ opacity:1, translateY: 0 });
+                            }, 10);
+                        }, delay += 150, [section]);
                     }
                 }
             }

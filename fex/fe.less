@@ -402,16 +402,17 @@ ul.loading {
         .transform(translateY(600px));
         overflow: visible;
         opacity: 0;
+        @base-color: rgb(34, 137, 177);
         .case-control {
             position: absolute;
             top: 0;
-            @base-color: rgb(34, 137, 177);
             width: 100%;
             height: 40px;
             background-color: @base-color;
             border-top: 10px solid lighten(@base-color, 50%);
             color: white;
             overflow: visible;
+            z-index: 250;
             &:before {
                 content: ' ';
                 display: block;
@@ -460,6 +461,62 @@ ul.loading {
                     background-color: lighten(@base-color, 15%);
                     &:before {
                         border-right-color: lighten(@base-color, 15%);
+                    }
+                }
+            }
+        }
+        .case-content {
+            padding: 30px;
+            .case-list {
+                section {
+                    clear: left;
+                    margin-bottom: 15px;
+                    overflow: hidden;
+                    position: relative;
+                    z-index: 230;
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid @base-color;
+                }
+                .preview {
+                    float: left;
+                    margin-right: 20px;
+                }
+                .title {
+                    margin: 0;
+                    font-size: 24px;
+                    font-size: 27px;
+                    font-weight: normal;
+                }
+                .open-case {
+                    position: absolute;
+                    display: block;
+                    bottom: 15px;
+                    right: 33px;
+                    background: @base-color;
+                    width: 60px;
+                    height: 30px;
+                    line-height: 30px;
+                    text-align: center;
+                    color: rgb(255, 255, 255);
+                    text-decoration: none;
+                    &:active {
+                        background: lighten(@base-color, 10%);
+                        &:after {
+                            border-left-color: lighten(@base-color, 10%);
+                        }
+                    }
+                    &:after {
+                        content: ' ';
+                        display: block;
+                        position: absolute;
+                        width: 0;
+                        height: 0;
+                        border: solid;
+                        border-color: transparent;
+                        border-width: 15px;
+                        border-left-color: @base-color;
+                        top: 0;
+                        right: -30px;
                     }
                 }
             }
