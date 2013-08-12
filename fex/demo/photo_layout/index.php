@@ -161,9 +161,9 @@
                 <script src="js/photo_layout.js"></script>
                 <script>
                 var data = <?= json_encode($listData) ?>,
-                    userName = "<?= $user_name ?>",
+                    userName = "<?= explode(" ", $user_name)[0];  ?>",
                     userId = "<?= $user_id ?>";
-                
+
                 // case begin
                 var albumList = new AlbumList();
                 albumList.init({

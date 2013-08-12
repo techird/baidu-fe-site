@@ -22,17 +22,30 @@ p {
   margin: 0;
 }
 .title {
-  padding: 100px 0 0 120px;
+  padding: 100px 20px 0 120px;
   margin-bottom: 30px;
-  display: inline-block;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-box;
+  display: -o-box;
+  display: box;
 }
 .title h1 {
   font-size: 54px;
   font-weight: normal;
-  float: left;
 }
 .item {
   overflow:hidden;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-box;
+  display: -o-box;
+  display: box;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -ms-box-align: center;
+  -o-box-align: center;
+  box-align: center;
   padding: 0 115px 50px 115px;
   margin: 0 21px 22px 21px;
   border-radius: 4px;
@@ -53,11 +66,11 @@ p {
   max-width: 100%;
 }
 .item:nth-child(even) .text, .item:nth-child(odd) .pic{
-	float: left;
+  v
 }
 
 .item:nth-child(odd) .text, .item:nth-child(even) .pic{
-	float: right;
+  margin-left: 5%;
 }
 
 .item:nth-child(even) .pic{
@@ -100,7 +113,7 @@ ul li{
 }
 @media screen and (max-device-width: 768px) and (orientation: portrait) {
   .item { padding: 0 30px 75px 30px;}
-  .title { padding: 30px 0 0 20px;}
+  .title { padding: 30px 20px 0 20px;}
   .footer .footer-main img {
     width: 180px;
     height: 180px;
@@ -114,9 +127,13 @@ ul li{
 }
 
 .title .subTitle {
-  float: left;
   margin: 8px 0 0 20px;
 	font-weight: normal;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-box-flex: 1;
+  -o-box-flex: 1;
+  box-flex: 1;
 }
 .title .subTitle h4{
   font-size: 17px;
