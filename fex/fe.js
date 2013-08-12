@@ -351,7 +351,12 @@ baidu(function(){
                         leaveCaseMode();
                         break;
                     case 3:
-                        showTopic(topicName);
+                        baidu('.case-content').cssAnimate({
+                            translateX: '100%',
+                            opacity: 0
+                        }, 500, function() {
+                            showTopic(topicName);
+                        });
                         break;
                 }
             });
@@ -372,11 +377,15 @@ baidu(function(){
                         translateX: '100%'
                     });
                     baidu('.loading').css('display', 'block');
+                    var loading = true;
                     var checkLoad = setInterval( function(){
+                        if(!iframe[0].contentWindow) {                            
+                            return clearInterval(checkLoad);
+                        }
                         var height = getComputedStyle(iframe[0].contentWindow.document.documentElement).height;
-                        if( parseFloat(height) > 200 ) {
-                            iframe.css('height', height);
-                            clearInterval(checkLoad);
+                        iframe.css('height', height);
+                        if( loading && parseFloat(height) > 200 ) {
+                            loading = false;
                             baidu('.loading').css('display', 'none');
                             baidu('.case-content').cssAnimate({
                                 translateX: '0',
@@ -407,6 +416,8 @@ baidu(function(){
                 baidu('.loading').css('display', 'none');
                 var article = baidu('<article class="case-list"></article>').appendTo(baidu('.case-content').empty());
                 var delay = 0;
+
+                baidu('.case-content').css3({ opacity: 1, translateX: 0 });
                 for(var name in caseMap) {
                     if(caseMap.hasOwnProperty(name)) {
                         var thecase = caseMap[name];
@@ -441,7 +452,7 @@ baidu(function(){
             function enterCaseMode() {
                 var duration = that.enterDutaion;
                 stage.disable();
-                baidu('#top-nav, #logo').cssAnimate({opacity: 0, translateY: '-100%'}, duration / 5);
+                baidu('#top-nav, #logo').cssAnimate({opacity: 0, translateY: '-100%', translateX: 0}, duration / 5);
                 tcontainer.cssAnimate( { translateY: 1 }, duration );
                 ccontainer.cssAnimate( { opacity: 1, translateY: 200 }, duration );
                 screen.cssAnimate({translateY: scroll = -210}, duration );
