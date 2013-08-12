@@ -51,6 +51,9 @@ p {
   border-radius: 4px;
   background: #fff;
 }
+.item_vertical_layout{
+	display: block;
+}
 .item p{
 	margin-top:10px;
 }
