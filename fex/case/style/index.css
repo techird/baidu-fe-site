@@ -120,6 +120,7 @@ ul li{
   }
   p {font-size: 14px;}
   h2 {font-size: 25px;}
+  .title h1 { font-size: 35px;}
   .footer .footer-main p{ font-size: 22px;}
 }
 @media screen and (max-device-width: 1024px) and (orientation: landscape) {
