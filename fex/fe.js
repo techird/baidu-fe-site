@@ -69,7 +69,8 @@ function Stage() {
         , disabled
         , slider
         , that
-        , duration;
+        , duration
+        , hashPart;
 
     screens = baidu('.screen').map( function ( index, dom ) {
                 return new Screen( index, this, dom );
@@ -84,6 +85,12 @@ function Stage() {
     });
     that = this;
 
+    function updateHash() {
+        if( disabled ) return;
+        var hash = window.location.hash.substr(1);
+        hashPart = hash.split('-');
+    }
+
     function takeControl() {
         var last_wheel_event = 0; // Mac 下一次滚动触发多个滚动事件
         // change event by wheel
@@ -96,16 +103,13 @@ function Stage() {
             last_wheel_event = e.timeStamp;
             e.wheelDelta < 0 ? slider.next() : slider.prev();
         });
-
-        function hashChange() {
-            if( disabled ) return;
-            var hash = window.location.hash.substr(1);
-            var screen = that.getScreen(hash);
+        window.addEventListener('hashchange', function(){
+            updateHash();
+            var screen = that.getScreen(hashPart[0]);
             if ( screen ) {
                 slider.slide( screen.index );
             }
-        }
-        window.addEventListener('hashchange', hashChange);
+        });
 
         function navigateBy( dir, source ) {
             if( disabled ) return;
@@ -170,7 +174,7 @@ function Stage() {
             from = that.getScreen(from);
             to = that.getScreen(to);
             if(from) from.fire('afterhide');
-            if(to) to.fire('aftershow');
+            if(to) to.fire('aftershow', [hashPart.slice(1)]);
         });
     }
 
@@ -178,8 +182,8 @@ function Stage() {
         screens.each(function(index, screen) {
             screen.fire('init');
         });
-        var hash = window.location.hash.substr(1);
-        var screen = that.getScreen(hash);
+        updateHash();
+        var screen = that.getScreen( hashPart[0] );
         screen ? slider.showFirst( screen.index ) : slider.showFirst();
     }
     this.disable = function() { disabled = true; };
@@ -332,7 +336,9 @@ baidu(function(){
             var ccontainer = this.$.find('.case-container');
             var screen = this.$;
             var scroll = 0;
+            var topicName;
             baidu('.case-control .return-button').click(leaveCaseMode);
+
             function handleScroll( e ) {
                 scroll += e.wheelDelta;
                 clearTimeout(handleScroll.lastCall);
@@ -377,7 +383,7 @@ baidu(function(){
                 baidu('.loading').css('display', 'block');
                 baidu.ajax({
                     type: 'get',
-                    url: 'fex/case/list.php',
+                    url: 'fex/case/list.php?topic=' + topicName,
                     success: showCases
                 })
             }
@@ -408,10 +414,22 @@ baidu(function(){
                 baidu('body').off('mousewheel', handleScroll);
                 inCaseMode = false;
             }
-            this.$.find('p').click(function(e) {
-                inCaseMode ? leaveCaseMode() : enterCaseMode();
+
+            var showTopic = this.showTopic = function( name ) {
+                var p = screen.find('p.' + name);
+                if( p.length ) {
+                    topicName = name;
+                    baidu('.case-control h1').html(p.html());
+                    enterCaseMode();
+                }
+            }
+            screen.find('p').click(function(e) {
+                showTopic(e.target.className);
             });
         })
+        .on( 'aftershow', function(hashPart) {
+            if(hashPart[0]) this.showTopic(hashPart[0]);
+        });
 
     stage.getScreen('archive')
         .on( 'init', function(){
@@ -513,6 +531,7 @@ baidu(function(){
             var _this = this;
             var prev = _this.prev = _this.$.find('.nav.prev').hide();
             var next = _this.next = _this.$.find('.nav.next');
+            var farRatio = this.farRatio = 0.2;
 
             baidu.ajax({
                 url: 'fex/member/data.json',
@@ -527,7 +546,12 @@ baidu(function(){
 
                 for(var i = 0; i < mcount; i++) {
                     baidu('<div class="team-member" style="background-image: url(fex/member/' + seq[i] + '.png)" index="' + seq[i] + '"></div>').appendTo(container);
-                }
+                }                    
+                plan(function(){
+                    var sw = stage.width(),
+                        cw = baidu('#team-container').outerWidth();
+                    baidu('#drawing-layer').css('width', sw + cw * farRatio);
+                }, 10);
                 var members = _this.$.find('.team-member');
                 var stand_timeout = 400, stand_timer;
 
@@ -544,7 +568,7 @@ baidu(function(){
 
 
                     dialog.html('<h1>' + data[index][0] + '</h1><p>' + data[index][1] + '</p>');
-                    dialog[0].stop().animate( { 
+                    dialog.cssAnimate( { 
                         translateX: left,
                         opacity: 1,
                         translateY: 0 
@@ -567,7 +591,6 @@ baidu(function(){
 
 
                 var translateX = 0, bodyWidth = members.width();
-                var farRatio = 0.2;
 
                 function hasNext(sw, cw) {
                     sw = sw || stage.width();
@@ -679,10 +702,7 @@ baidu(function(){
             setTimeout(function(){
                 this.prev.cssAnimate( '+show' , 200 );
                 this.next.cssAnimate( '+show' , 200 );
-            }.bind(this), 100);                    
-            var sw = stage.width(),
-                cw = baidu('#team-container').outerWidth();
-            baidu('#drawing-layer').css('width', sw + cw);
+            }.bind(this), 100);
         })
 
         .on('beforehide', function(){                 
