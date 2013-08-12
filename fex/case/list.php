@@ -6,7 +6,7 @@
   $list = array();
   while($child = $dir -> read()) {
     if($child != '.' && $child != '..')
-      $list[$child] = getCase( $case_path.'\\'.$child );
+      $list[$child] = getCase( $case_path.'/'.$child );
   }
 
   if($_REQUEST['topic']) {
@@ -21,7 +21,7 @@
   }
 
   function getCase($path) {
-    $file = $path.'\\index.html';
+    $file = $path.'/index.html';
     $content = file_get_contents($file);
     $result = array();
 
