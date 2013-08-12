@@ -3,7 +3,8 @@
 	padding:0;
 }
 body {
-  font-family: Arial, 'Helvetica Neue', 'Microsoft Yahei';
+  font-family: 'Myriad Pro', Arial, 'Microsoft Yahei';
+  background: url("../images/bg_03.png");
 }
 h2 {
   margin: 0;
@@ -21,17 +22,21 @@ p {
   margin: 0;
 }
 .title {
-  padding: 30px 0 0 35px;
+  padding: 100px 0 0 120px;
   margin-bottom: 30px;
+  display: inline-block;
 }
 .title h1 {
-  font-size: 40px;
+  font-size: 54px;
   font-weight: normal;
+  float: left;
 }
 .item {
   overflow:hidden;
-  padding: 0 50px 75px 50px;
-  background: url("../images/bgbottom.jpg") no-repeat bottom;
+  padding: 0 115px 50px 115px;
+  margin: 0 21px 22px 21px;
+  border-radius: 4px;
+  background: #fff;
 }
 .item p{
 	margin-top:10px;
@@ -42,7 +47,7 @@ p {
 }
 .item .pic {
   width: 50%;
-  padding: 20px 0 0 0;
+  padding: 50px 0 0 0;
 }
 .pic img{
   max-width: 100%;
@@ -93,24 +98,44 @@ ul li{
 	display: inline-block;
 	margin: 0 20px;
 }
-@media (min-width: 767px) and (max-width: 979px) {
-  .pic img { width: 350px;}
-  .item { padding: 0 0 75px 0;}
-  .title { padding: 30px 0 0 0;}
+@media screen and (max-device-width: 768px) and (orientation: portrait) {
+  .item { padding: 0 30px 75px 30px;}
+  .title { padding: 30px 0 0 20px;}
   .footer .footer-main img {
     width: 180px;
     height: 180px;
   }
-  .footer .footer-main p{ font-size: 28px;}
+  p {font-size: 14px;}
+  h2 {font-size: 25px;}
+  .footer .footer-main p{ font-size: 22px;}
 }
-@media (min-width: 980px) and (max-width: 1025px) {
-  .pic img { width: 450px;}
-  .item { padding: 0 0 75px 0;}
+@media screen and (max-device-width: 1024px) and (orientation: landscape) {
+  .item { padding: 0 50px 75px 50px;}
 }
 
 .title .subTitle {
-	margin-top: 20px;
+  float: left;
+  margin: 8px 0 0 20px;
 	font-weight: normal;
+}
+.title .subTitle h4{
+  font-size: 17px;
+}
+.title .subTitle p{
+  font-size: 10px;
+}
+.look-more {
+  width: 84px;
+  height: 36px;
+  margin-top: 4px;
+  display: block;
+  background-color: #0099f2;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 36px;
+  text-align: center;
+  color: #f5f9fe;
+  text-decoration: none;
 }
 .title h1 {
 	position: relative;
@@ -121,8 +146,8 @@ ul li{
 	font-size: 15px;
 	color: rgb(211, 131, 131);
 	position: absolute;
-	top: 8px;
-	left: 130px;
+	top: 35px;
+	left: 145px;
 	padding: 0 4px;
 }
 
@@ -142,4 +167,11 @@ ul li{
 	background: yellow;
 	color: red;
 	font-weight: bold;
+}
+
+.pic-sm {max-width: 300px;}
+
+.pic-sm img{
+    max-width: 70px;
+    margin: 9% 0 0 9%;
 }
