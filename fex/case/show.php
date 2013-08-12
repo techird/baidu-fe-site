@@ -1,5 +1,6 @@
 <?  
     $caseName = $_GET['name'];
+    $iframe = $_GET['iframe'];
     // $demos = array();
     if(is_dir("cases/".$caseName) && is_file("cases/".$caseName."/index.html")){
         $casesBasePath = "cases/";
@@ -32,7 +33,11 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	</head>
-	<body>
+<? if($iframe == 'true') { ?>
+	<body class="iframe">
+<? } else { ?>
+    <body>
+<? } ?>
 		<?=$content;?>
 		
         <?if(isset($demos) && count($demos) > 0){?>

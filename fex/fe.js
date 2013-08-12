@@ -299,7 +299,9 @@ function Control( stage, splash ) {
                 return ~this.getAttribute('screens').indexOf( name );
             })
             .addClass('current');
-        window.location.hash = name;
+        var origin = window.location.hash.substr(1);
+        if(origin.split('-')[0] != name)
+            window.location.hash = name;
     });
 
     splash.on('show', stage.disable);
@@ -337,12 +339,58 @@ baidu(function(){
             var screen = this.$;
             var scroll = 0;
             var topicName;
-            baidu('.case-control .return-button').click(leaveCaseMode);
+            var that = this;
+
+            this.enterDutaion = 2000,
+            this.leaveDuration = 1500;
+            baidu('.case-control .return-button').click(function(){
+                var hash = window.location.hash.substr(1);
+                var part = hash.split('-');
+                switch(part.length) {
+                    case 2:
+                        leaveCaseMode();
+                        break;
+                    case 3:
+                        showTopic(topicName);
+                        break;
+                }
+            });
+
+            baidu('.case-content').delegate('a.show-case', 'click', function(e){
+                var path = baidu(e.target).attr('case-path');
+                var title = baidu(e.target).attr('case-title');
+                var name = baidu(e.target).attr('case-name');
+                window.location.hash = ['topic', topicName, name].join('-');
+                baidu('.case-control h1').html(title);
+                baidu('.case-content').cssAnimate({
+                    translateX: '-100%',
+                    opacity: 0
+                }, 500, function loadCase() {
+                    var iframe = baidu('<iframe style="border:none; width: 100%;" src="' + path + '&iframe=true"></iframe>');
+                    baidu('.case-content').empty().append(iframe);
+                    baidu('.case-content').css3({
+                        translateX: '100%'
+                    });
+                    baidu('.loading').css('display', 'block');
+                    var checkLoad = setInterval( function(){
+                        var height = getComputedStyle(iframe[0].contentWindow.document.documentElement).height;
+                        if( parseFloat(height) > 200 ) {
+                            iframe.css('height', height);
+                            clearInterval(checkLoad);
+                            baidu('.loading').css('display', 'none');
+                            baidu('.case-content').cssAnimate({
+                                translateX: '0',
+                                opacity: 1
+                            }, 500);
+                        }
+                    }, 100);
+                });
+            });
 
             function handleScroll( e ) {
                 scroll += e.wheelDelta;
                 clearTimeout(handleScroll.lastCall);
-                setTimeout(function(){           
+                handleScroll.lastCall = setTimeout(function(){           
                     if ( scroll > 0 ) scroll = 0;
                     if ( scroll > -210 && e.wheelDelta > 0) scroll = 0;
                     scroll = Math.max( scroll, -300 - baidu('.case-content').height() + stage.height());
@@ -368,7 +416,7 @@ baidu(function(){
                           + '  <h1 class="title">' + thecase.title + '</h1>'
                           + '  <p class="desc">' + thecase.desc + '</p>'
                           + '  <div class="tags">' + thecase.tags + '</div>'
-                          + '  <a class="open-case" href="fex/case/show.php?name=' + name + '" target="_blank">打开</a>'
+                          + '  <a class="show-case" case-name="' + name + '" case-title="' +thecase.title + '" case-path="fex/case/show.php?name=' + name + '">显示</a>'
                           + '</section>');
                         plan(function(section) {
                             section.css3({ opacity: 0, translateY: 30 }).appendTo(article);
@@ -391,7 +439,7 @@ baidu(function(){
                 baidu('.case-content').empty();
             }
             function enterCaseMode() {
-                var duration = 2000;
+                var duration = that.enterDutaion;
                 stage.disable();
                 baidu('#top-nav, #logo').cssAnimate({opacity: 0, translateY: '-100%'}, duration / 5);
                 tcontainer.cssAnimate( { translateY: 1 }, duration );
@@ -399,11 +447,10 @@ baidu(function(){
                 screen.cssAnimate({translateY: scroll = -210}, duration );
                 screen.css('overflow', 'visible');
                 baidu('body').on('mousewheel', handleScroll);
-                plan(loadCases, duration);
                 inCaseMode = true;
             }
             function leaveCaseMode() {
-                var duration = 2000;
+                var duration = that.leaveDuration;
                 stage.enable();
                 tcontainer.cssAnimate( { translateY: 0 }, duration, removeCases );
                 ccontainer.cssAnimate( { opacity: 0, translateY: 800 }, duration );
@@ -413,6 +460,7 @@ baidu(function(){
                 baidu('#top-nav, #logo').cssAnimate({opacity: 1, translateY: 0}, duration);
                 baidu('body').off('mousewheel', handleScroll);
                 inCaseMode = false;
+                window.location.hash = 'topic';
             }
 
             var showTopic = this.showTopic = function( name ) {
@@ -420,15 +468,33 @@ baidu(function(){
                 if( p.length ) {
                     topicName = name;
                     baidu('.case-control h1').html(p.html());
-                    enterCaseMode();
+                    baidu('.case-control').removeClass('point-tool point-data point-end').addClass('point-' + name);
+                    if(!inCaseMode) {
+                        enterCaseMode();
+                        plan(loadCases, that.enterDutaion);
+                    } else {
+                        plan(loadCases);
+                    }
+                    window.location.hash = 'topic-' + name;
                 }
             }
             screen.find('p').click(function(e) {
                 showTopic(e.target.className);
+                e.stopPropagation();
+            });
+            screen.click(function(e){
+                ~e.target.className.indexOf('topic-container') && inCaseMode && leaveCaseMode();
             });
         })
         .on( 'aftershow', function(hashPart) {
-            if(hashPart[0]) this.showTopic(hashPart[0]);
+            if(hashPart[0]) plan(function() {
+                var restored = this.enterDutaion;
+                this.enterDutaion = 0;
+                this.showTopic(hashPart[0]);
+                plan(function(){
+                    this.enterDutaion = restored;                    
+                }.bind(this), 500);
+            }.bind(this), 10);
         });
 
     stage.getScreen('archive')
