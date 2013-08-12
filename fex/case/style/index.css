@@ -6,6 +6,9 @@ body {
   font-family: 'Myriad Pro', Arial, 'Microsoft Yahei';
   background: url("../images/bg_03.png");
 }
+body.iframe {
+  overflow: hidden !important;
+}
 h2 {
   margin: 0;
   padding-bottom: 30px;
@@ -29,6 +32,9 @@ p {
   display: -ms-box;
   display: -o-box;
   display: box;
+}
+body.iframe .title {
+  padding-top: 60px;
 }
 .title h1 {
   font-size: 54px;
