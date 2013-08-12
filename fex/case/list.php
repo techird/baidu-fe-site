@@ -1,7 +1,7 @@
 <?php
   error_reporting(E_ERROR);
   $path = getcwd();
-  $case_path = $path.'\\cases';
+  $case_path = $path.'/cases';
   $dir = dir($case_path);
   $list = array();
   while($child = $dir -> read()) {
