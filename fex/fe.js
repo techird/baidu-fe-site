@@ -354,7 +354,8 @@ baidu(function(){
                         baidu('.case-content').cssAnimate({
                             translateX: '100%',
                             opacity: 0
-                        }, 500, function() {
+                        }, 500, function() {                            
+                            doScroll(scroll = -210);
                             showTopic(topicName);
                         });
                         break;
@@ -362,6 +363,7 @@ baidu(function(){
             });
 
             baidu('.case-content').delegate('a.show-case', 'click', function(e){
+                return; // 先在新窗口打开，细节交互再调节
                 var path = baidu(e.target).attr('case-path');
                 var title = baidu(e.target).attr('case-title');
                 var name = baidu(e.target).attr('case-name');
@@ -398,19 +400,22 @@ baidu(function(){
 
             function handleScroll( e ) {
                 scroll += e.wheelDelta;
-                clearTimeout(handleScroll.lastCall);
-                handleScroll.lastCall = setTimeout(function(){           
-                    if ( scroll > 0 ) scroll = 0;
-                    if ( scroll > -210 && e.wheelDelta > 0) scroll = 0;
-                    scroll = Math.max( scroll, -300 - baidu('.case-content').height() + stage.height());
-                    if ( scroll > -210 && e.wheelDelta < 0) scroll = -210;         
-                    if ( scroll < -210 ) {
-                        baidu('.case-control').cssAnimate({translateY: -210 - scroll }, 800);
-                    } else {
-                        baidu('.case-control').cssAnimate({translateY: 0 }, 800);
-                    }
-                    screen.cssAnimate({translateY: scroll}, 800);
-                }, 100);
+                //clearTimeout(handleScroll.lastCall);
+                //handleScroll.lastCall = setTimeout(function() {
+                    doScroll(e.wheelDelta);
+                //}, 100);
+            }
+            function doScroll(delta) {
+                if ( scroll > 0 ) scroll = 0;
+                if ( scroll > -210 && delta > 0) scroll = 0;
+                scroll = Math.max( scroll, -300 - baidu('.case-content').height() + stage.height());
+                if ( scroll > -210 && delta < 0) scroll = -210;         
+                if ( scroll < -210 ) {
+                    baidu('.case-control').cssAnimate({translateY: -210 - scroll }, 800);
+                } else {
+                    baidu('.case-control').cssAnimate({translateY: 0 }, 800);
+                }
+                screen.cssAnimate({translateY: scroll}, 800);
             }
             function showCases(caseMap) {
                 baidu('.loading').css('display', 'none');
@@ -427,7 +432,7 @@ baidu(function(){
                           + '  <h1 class="title">' + thecase.title + '</h1>'
                           + '  <p class="desc">' + thecase.desc + '</p>'
                           + '  <div class="tags">' + thecase.tags + '</div>'
-                          + '  <a class="show-case" case-name="' + name + '" case-title="' +thecase.title + '" case-path="fex/case/show.php?name=' + name + '">显示</a>'
+                          + '  <a class="show-case" case-name="' + name + '" case-title="' +thecase.title + '" href="fex/case/show.php?name=' + name + '" target="_blank">显示</a>'
                           + '</section>');
                         plan(function(section) {
                             section.css3({ opacity: 0, translateY: 30 }).appendTo(article);
