@@ -397,8 +397,8 @@ ul.loading {
     .case-container {        
         -webkit-backface-visibility: hidden;
         position: absolute;
-        height: auto;
-        min-height: 1200px;
+        top: -10px;
+        bottom: 0;
         width: 100%;
         padding: 50px 0;
         background: url(case-bg.png) repeat;
@@ -480,6 +480,27 @@ ul.loading {
             }
         }
         .case-content {
+            &::-webkit-scrollbar {
+                width: 5px;
+            }
+            &::-webkit-scrollbar-button {
+                display: none;
+            }
+            &::-webkit-scrollbar-track {
+                display: none;
+            }
+            &::-webkit-scrollbar-thumb {
+                background-color: rgba(0,0,0,.3);
+                padding: 3px;
+                border-radius: 10px;
+            }
+            -webkit-overflow-scrolling: touch;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            position: absolute;
+            top: 50px;
+            bottom: 0;
+            width: 100%;
             -webkit-backface-visibility: hidden;
             .case-list {
                 padding: 30px;

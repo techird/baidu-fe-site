@@ -145,7 +145,7 @@ function Stage() {
         var tsx, tsy;
 
         document.body.addEventListener( 'touchmove', function(e) {
-            e.preventDefault();
+            if(!disabled) e.preventDefault();
         });
         document.body.addEventListener( 'touchstart', function(e) {
             if (e.touches.length !== 1 ) return;
@@ -337,28 +337,28 @@ baidu(function(){
 
     stage.getScreen('topic')
         .on( 'init', function(){
-            var inCaseMode = false;
+            var inCaseMode = 0;
             var tcontainer = this.$.find('.topic-container');
             var ccontainer = this.$.find('.case-container');
             var screen = this.$;
             var topicName;
             var that = this;
 
-            this.enterDutaion = 2000,
-            this.leaveDuration = 1500;
+            this.enterDutaion = 1000,
+            this.leaveDuration = 1200;
             baidu('.case-control .return-button').click(function(){
                 var hash = window.location.hash.substr(1);
                 var part = hash.split('-');
                 switch(part.length) {
                     case 2:
-                        leaveCaseMode();
+                        if(inCaseMode == 1) leaveCaseMode();
+                        if(inCaseMode == 2) showTopicMenu();
                         break;
                     case 3:
                         baidu('.case-content').cssAnimate({
                             translateX: '100%',
                             opacity: 0
-                        }, 500, function() {                            
-                            doScroll( -scroll-210 );
+                        }, 500, function() {
                             showTopic(topicName);
                         });
                         break;
@@ -404,76 +404,12 @@ baidu(function(){
                 });
             });
             
-            function enableScroll() {                
-                baidu('body').on('mousewheel', handleScroll);
-                that.on('navigate', handleNavigate);
-                baidu('body')
-                    .on('touchstart', handleTouchStart);
+            function showTopicMenu() {
+                tcontainer.cssAnimate( { translateY: 0 } );
+                ccontainer.cssAnimate( { translateY: 200 } );
+                inCaseMode = 1;
+            }
 
-            }
-            function disableScroll() {                
-                baidu('body').off('mousewheel', handleScroll);
-                that.off('navigate', handleNavigate);
-                baidu('body').off('touchstart', handleTouchStart);
-            }
-            function handleTouchStart(e) {
-                if(e.touches.length !== 1) return;
-                baidu('body')
-                    .on('touchmove', handleTouchMove)
-                    .on('touchend', handleTouchEnd);
-                handleTouchStart.SY = e.touches[0].clientY;
-            }
-            function handleTouchMove(e) {
-                var touch = e.touches[0];
-                var dy = touch.clientY - handleTouchStart.SY;
-                doScroll(dy * 1.5);
-                handleTouchStart.SY = touch.clientY;
-            }
-            function handleTouchEnd() {                
-                baidu('body')
-                    .off('touchmove', handleTouchMove)
-                    .off('touchend', handleTouchEnd);
-            }
-            function handleNavigate( e ) {
-                if(e.source == 'keyboard') {
-                    switch(e.direction) {
-                        case 'Up':
-                            doScroll( stage.height() * 0.8);
-                            break;
-                        case 'Down':
-                            doScroll( -stage.height() * 0.8);
-                    }
-                }
-            }
-            function handleScroll( e ) {
-                //clearTimeout(handleScroll.lastCall);
-                //handleScroll.lastCall = setTimeout(function() {
-                doScroll(e.wheelDelta);
-                //}, 100);
-            }
-            var scroll = 0, meunTop = -210;
-            function doScroll(delta) {
-
-                if ( scroll == 0 && delta < 0 ) {
-                    scroll = meunTop;
-                }
-                else if ( scroll == meunTop && delta > 0 ) {
-                    scroll = 0;
-                }
-                else if( scroll + delta > meunTop) {
-                    scroll = scroll == 0 ? 0 : meunTop;
-                }
-                else {
-                    scroll += delta;
-                }
-
-                if ( scroll > 0 ) scroll = 0;  
-                scroll = Math.max( scroll, Math.min(meunTop, meunTop - baidu('.case-content').height() + stage.height()));
-                var ctrlScroll = Math.max( meunTop - scroll, 0 );
-
-                baidu('.case-control').cssAnimate({translateY: ctrlScroll }, 800);
-                screen.cssAnimate({translateY: scroll}, 800);
-            }
             function showCases(caseMap) {
                 baidu('.loading').css('display', 'none');
                 var article = baidu('<article class="case-list"></article>').appendTo(baidu('.case-content').empty());
@@ -514,31 +450,26 @@ baidu(function(){
             function enterCaseMode() {
                 var duration = that.enterDutaion;
                 stage.disable();
-                baidu('#top-nav, #logo').cssAnimate({opacity: 0, translateY: '-100%', translateX: 0}, duration / 5);
-                tcontainer.cssAnimate( { translateY: 1 }, duration );
-                ccontainer.cssAnimate( { opacity: 1, translateY: 200 }, duration );
-                screen.cssAnimate({translateY: scroll = -210}, duration );
-                screen.css('overflow', 'visible');
-                enableScroll();
-                inCaseMode = true;
+                baidu('#top-nav, #logo').cssAnimate({opacity: 0, translateY: -100, translateX: 0}, duration / 5);
+                tcontainer.cssAnimate( { translateY: -200 }, duration );
+                ccontainer.cssAnimate( { opacity: 1, translateY: 0 }, duration );
+                inCaseMode = 2;
             }
             function leaveCaseMode() {
                 var duration = that.leaveDuration;
                 stage.enable();
-                tcontainer.cssAnimate( { translateY: 0 }, duration, removeCases );
+                tcontainer.cssAnimate( { translateY: '40%' }, duration, removeCases );
                 ccontainer.cssAnimate( { opacity: 0, translateY: 800 }, duration );
-                screen.cssAnimate({translateY: scroll = 0}, duration, function() {
-                    screen.css('overflow', 'hidden');
-                });
                 baidu('#top-nav, #logo').cssAnimate({opacity: 1, translateY: 0}, duration);
-                disableScroll();
-                inCaseMode = false;
+                inCaseMode = 0;
                 window.location.hash = 'topic';
             }
 
             var showTopic = this.showTopic = function( name ) {
                 var p = screen.find('p.' + name);
                 if( p.length ) {
+                    tcontainer.cssAnimate( { translateY: -200 }, 800 );
+                    ccontainer.cssAnimate( { opacity: 1, translateY: 0 }, 800 );
                     topicName = name;
                     baidu('.case-control h1').html(p.html());
                     baidu('.case-control').removeClass('point-tool point-data point-end').addClass('point-' + name);
@@ -548,6 +479,7 @@ baidu(function(){
                     } else {
                         plan(loadCases);
                     }
+                    inCaseMode = 2;
                     window.location.hash = 'topic-' + name;
                 }
             }
@@ -561,12 +493,7 @@ baidu(function(){
         })
         .on( 'aftershow', function(hashPart) {
             if(hashPart[0]) plan(function() {
-                var restored = this.enterDutaion;
-                this.enterDutaion = 0;
                 this.showTopic(hashPart[0]);
-                plan(function(){
-                    this.enterDutaion = restored;                    
-                }.bind(this), 500);
             }.bind(this), 10);
         });
 
