@@ -9,11 +9,11 @@ var CSS3Animate = (function (window) {
 
     function decodeTransform( str ) {
         var transform = {
-            translate: [0,0,0],
-            rotate: [0,0,0],
-            scale: [1,1,1],
-            skew: [0,0],
-            perspective: 0
+            translate: [],
+            rotate: [],
+            scale: [],
+            skew: [],
+            perspective: undefined
         };
         if(!str) return transform;
         var match, patten, i;
@@ -48,6 +48,7 @@ var CSS3Animate = (function (window) {
     }
 
     function addUnit( arr, unit ) {
+        if(!arr)return;
         for( var i = 0; i < arr.length; i++ )
             if( arr[i] && !/px|pt|em|%/.exec(arr[i]) ) arr[i] += unit;
         return arr;
@@ -67,10 +68,10 @@ var CSS3Animate = (function (window) {
         addUnit(k, 'px');
         addUnit(p, 'px');
         for(i = 0; i < alixs.length; i++) {
-            t[i] && parts.push('translate' + alixs[i] + '(' + t[i] + ')');
+            t[i] !== undefined && parts.push('translate' + alixs[i] + '(' + t[i] + ')');
             // i == 2 && !t[i] && parts.push('translateZ(0)'); // gpu speed up
-            r[i] && parts.push('rotate' + alixs[i] + '(' + r[i] + ')');
-            k[i] && parts.push('skew' + alixs[i] + '(' + k[i] + ')');
+            r[i] !== undefined && parts.push('rotate' + alixs[i] + '(' + r[i] + ')');
+            k[i] !== undefined && parts.push('skew' + alixs[i] + '(' + k[i] + ')');
             s[i] !== undefined && s[i] !== 1 && parts.push('scale' + alixs[i] + '(' + s[i] + ')');
         }
         if( s instanceof Array == false ) {

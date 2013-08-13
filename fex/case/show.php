@@ -39,9 +39,10 @@
 <? } else { ?>
     <body>
 <? } ?>
-
+<? if($iframe != 'true') { ?>
         <div class="scroller">
             <div class="scrollContent">
+<? } ?>
         		<?=$content;?>
                 <?if(isset($demos) && count($demos) > 0){?>
                 <div class="demoWrapper">
@@ -66,7 +67,9 @@
                     </div>
                 </div>
                 <?}?>
+<? if($iframe != 'true') { ?>
             </div>
         </div>
+<? } ?>
 	</body>
 </html>
