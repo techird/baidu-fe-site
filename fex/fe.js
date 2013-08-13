@@ -259,18 +259,11 @@ function Splash( stage ) {
         hide();
     });
 
-    var cheatCode = [38,38,40,40,37,39,37,39,65,66,65,66];
-    var waiting = cheatCode.slice(0);
-    baidu('body').keydown(function(e){
-        if(waiting.shift()!=e.keyCode) waiting = cheatCode.slice(0);
-        if(waiting.length == 0) {
-            show();
-            waiting = cheatCode.slice(0);
-        }
-    });
 }
 
 function Control( stage, splash ) {
+    Event.apply(this);
+
     function getNavPosition( screenIndex ) {
         var y = 0;
         if ( screenIndex == 0 ) {
@@ -312,6 +305,22 @@ function Control( stage, splash ) {
 
     splash.on('show', stage.disable);
     splash.on('hide', stage.enable);
+
+    var cheatCode = "BESTORNOTHING".split('');
+    var waiting = cheatCode.slice(0);
+    var that = this;
+    baidu('body').keydown(function(e){
+        if(waiting.shift() != String.fromCharCode(e.keyCode).toUpperCase()) waiting = cheatCode.slice(0);
+        if(waiting.length == 0) {
+            that.fire('coloregg');
+            waiting = cheatCode.slice(0);
+        }
+    });
+    console.log('Say this: ');
+    console.log('%cBESTORNOTHING', 'color: green;');
+    this.on('coloregg', function(){
+        alert('FE\nBest or nothing\nYou are right!');
+    });
 }
 
 baidu(function(){       
