@@ -33,6 +33,7 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<script src="script/scroller.js"></script>
+		<script src="script/case.js"></script>
 	</head>
 <? if($iframe == 'true') { ?>
 	<body class="iframe">
