@@ -25,7 +25,7 @@ p {
   margin: 0;
 }
 .title {
-  padding: 100px 20px 0 120px;
+  padding: 40px 20px 0 70px;
   margin-bottom: 30px;
   display: -webkit-box;
   display: -moz-box;
@@ -102,19 +102,21 @@ ul li{
 }
 
 .footer {
-  padding: 50px 0 80px 0;
+  overflow:hidden;
+  padding: 40px 5%;
+  margin: 0 21px 22px 21px;
+  border-radius: 4px;
+  background: #fff;
 }
 .footer h2 {
   text-align: center;
 }
 .footer .footer-main {
-  padding-top: 45px;
   text-align: center;
 }
 .footer .footer-main p {
   text-align: center;
-  font-size: 31px;
-  margin: 30px 0 80px 0;
+  font-size: 22px;
 }
 .footer .footer-main .footer-item {
 	display: inline-block;
@@ -135,7 +137,6 @@ ul li{
 @media screen and (max-device-width: 1024px) and (orientation: landscape) {
   .item { padding: 0 50px 75px 50px;}
 }
-
 .title .subTitle {
   margin: 8px 0 0 20px;
 	font-weight: normal;
@@ -149,7 +150,7 @@ ul li{
   font-size: 17px;
 }
 .title .subTitle p{
-  font-size: 10px;
+  font-size: 14px;
 }
 .look-more {
   width: 84px;
@@ -164,17 +165,16 @@ ul li{
   color: #f5f9fe;
   text-decoration: none;
 }
+.look-right {float: right;}
+.look-left {float: left;}
 .title h1 {
 	position: relative;
 }
-.title h1 .anotation {
+.anotation {
 	background-color: rgb(218, 221, 221);
 	border-radius: 5px;
 	font-size: 15px;
 	color: rgb(211, 131, 131);
-	position: absolute;
-	top: 35px;
-	left: 145px;
 	padding: 0 4px;
 }
 
@@ -201,4 +201,8 @@ ul li{
 .pic-sm img{
     max-width: 70px;
     margin: 9% 0 0 9%;
+}
+.scrollContent{
+  max-width: 1100px;
+  margin:0 auto;
 }
