@@ -161,7 +161,7 @@
                 <script src="js/photo_layout.js"></script>
                 <script>
                 var data = <?= json_encode($listData) ?>,
-                    userName = "<?= explode(" ", $user_name)[0];  ?>",
+                    userName = "<? $name = explode(" ", $user_name); echo $name[0]; ?>",
                     userId = "<?= $user_id ?>";
 
                 // case begin
