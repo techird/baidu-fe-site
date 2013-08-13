@@ -397,12 +397,13 @@ ul.loading {
         position: absolute;
         height: auto;
         width: 100%;
-        padding-top: 50px;
-        background-color: white;
+        padding: 50px 0;
+        background: url(case-bg.png) repeat;
         .transform(translateY(600px));
         overflow: visible;
         opacity: 0;
         @base-color: rgb(34, 137, 177);
+        font-family: 'Myriad Pro', Arial, 'Microsoft Yahei', '微软雅黑';
         .case-control {
             position: absolute;
             top: 0;
@@ -426,6 +427,15 @@ ul.loading {
                 border-width: 22px 22px;
                 border-color: transparent;
                 border-bottom-color: @base-color;
+            }
+            &.point-tool:before {
+                left: 25%;
+            }
+            &.point-data:before {
+                left: 50%;
+            }
+            &.point-end:before{
+                left: 75%;
             }
             h1 {
                 font-size: 18px;
@@ -466,58 +476,59 @@ ul.loading {
             }
         }
         .case-content {
-            padding: 30px;
             min-height: 1000px;
-            background: url(case-bg.png) repeat;
             .case-list {
-                section {
-                    clear: left;
-                    margin-bottom: 15px;
+                padding: 30px;
+                &>section {
+                    margin-bottom: 72px;
                     overflow: hidden;
                     position: relative;
                     z-index: 230;
-                    padding-bottom: 15px;
-                    border-bottom: 1px solid @base-color;
-                }
-                .preview {
-                    float: left;
-                    margin-right: 20px;
-                }
-                .title {
-                    margin: 0;
-                    font-size: 48px;
-                    font-weight: normal;
-                }
-                .open-case {
-                    position: absolute;
-                    display: block;
-                    bottom: 15px;
-                    right: 33px;
-                    background: @base-color;
-                    width: 60px;
-                    height: 30px;
-                    line-height: 30px;
-                    text-align: center;
-                    color: rgb(255, 255, 255);
-                    text-decoration: none;
-                    &:active {
-                        background: lighten(@base-color, 10%);
-                        &:after {
-                            border-left-color: lighten(@base-color, 10%);
-                        }
+                    &>.title {
+                        margin: 0;
+                        font-size: 48px;
+                        font-weight: normal;
+                        height: 64px;
+                        line-height: 64px;
+                        text-indent: .8em;
+                        color: #2a2a2a;
                     }
-                    &:after {
-                        content: ' ';
-                        display: block;
+                    &>.desc {
+                        padding: 85px 50px 160px 250px;
+                        height: auto;
+                        background-color: white;
+                        border-radius: 6px;
+                        margin: 0;
+                        font-size: 13px;
+                    }
+                    &>.preview {
                         position: absolute;
-                        width: 0;
-                        height: 0;
-                        border: solid;
-                        border-color: transparent;
-                        border-width: 15px;
-                        border-left-color: @base-color;
-                        top: 0;
-                        right: -30px;
+                        left: 50px;
+                        top: 120px;
+                    }
+                    &>.tags {
+                        display: none;
+                    }
+                    &>.show-case {
+                        position: absolute;
+                        display: block;
+                        bottom: 64px;
+                        left: 256px;
+                        background: #0099f2;
+                        width: 60px;
+                        height: 35px;
+                        font-size: 13px;
+                        line-height: 35px;
+                        text-align: center;
+                        border-radius: 3px;
+                        color: rgb(255, 255, 255);
+                        text-decoration: none;
+                        &:active {
+                            background: lighten(@base-color, 10%);
+                            &:after {
+                                border-left-color: lighten(@base-color, 10%);
+                            }
+                        }
                     }
                 }
             }
