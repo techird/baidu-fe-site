@@ -31,6 +31,7 @@
                 logon = document.querySelector(".logon"),
                 u = document.querySelector("#u"),
                 logout = document.querySelector("#logout"),
+                event = "ontouchend" in window ? "touchend" : "mouseup",
                 isLogon = false;
             switchStatus = function(){
                 if(isLogon){
@@ -52,11 +53,11 @@
                 e.preventDefault();
             }, false);
             
-            login.addEventListener("touchend", function(){
+            login.addEventListener(event, function(){
                 app.Dispatcher.trigger("show-login-box");
             });
             
-            logout.addEventListener("touchend", function(){
+            logout.addEventListener(event, function(){
                 app.Dispatcher.trigger("request-logout");
                 switchStatus();
             });
