@@ -32,37 +32,41 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<script src="script/scroller.js"></script>
 	</head>
 <? if($iframe == 'true') { ?>
 	<body class="iframe">
 <? } else { ?>
     <body>
 <? } ?>
-		<?=$content;?>
-		
-        <?if(isset($demos) && count($demos) > 0){?>
-        <div class="demoWrapper">
-            <?foreach($demos as $demo){?>
-            <a href="../demo/<?= $demo?>">Demo 演示</a>
-            <?}?>
-        </div>
-        <?}?>
-        
-        <?if(isset($qrImages) && count($qrImages) > 0){?>
-        <div class="footer">
-            <h2>不如亲眼见证</h2>
-            <div class="footer-main">
-                <?foreach($qrImages as $qrImage){?>
-                <div class="footer-item">
-                    <a href="<?=$qrImage["link"]?>">
-                        <img src="http://chart.apis.google.com/chart?cht=qr&chs=200x200&chl=<?=$qrImage["link"]?>" width="200" height="200" />
-                    </a>
-                    <p><?=$qrImage["text"]?></p>   
+
+        <div class="scroller">
+            <div class="scrollContent">
+        		<?=$content;?>
+                <?if(isset($demos) && count($demos) > 0){?>
+                <div class="demoWrapper">
+                    <?foreach($demos as $demo){?>
+                    <a href="../demo/<?= $demo?>">Demo 演示</a>
+                    <?}?>
+                </div>
+                <?}?>
+                
+                <?if(isset($qrImages) && count($qrImages) > 0){?>
+                <div class="footer">
+                    <h2>不如亲眼见证</h2>
+                    <div class="footer-main">
+                        <?foreach($qrImages as $qrImage){?>
+                        <div class="footer-item">
+                            <a href="<?=$qrImage["link"]?>">
+                                <img src="http://chart.apis.google.com/chart?cht=qr&chs=200x200&chl=<?=$qrImage["link"]?>" width="200" height="200" />
+                            </a>
+                            <p><?=$qrImage["text"]?></p>   
+                        </div>
+                        <?}?>
+                    </div>
                 </div>
                 <?}?>
             </div>
         </div>
-        <?}?>
-        
 	</body>
 </html>
