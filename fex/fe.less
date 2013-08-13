@@ -480,6 +480,20 @@ ul.loading {
             }
         }
         .case-content {
+            &::-webkit-scrollbar {
+                width: 5px;
+            }
+            &::-webkit-scrollbar-button {
+                display: none;
+            }
+            &::-webkit-scrollbar-track {
+                display: none;
+            }
+            &::-webkit-scrollbar-thumb {
+                background-color: rgba(0,0,0,.3);
+                padding: 3px;
+                border-radius: 10px;
+            }
             -webkit-overflow-scrolling: touch;
             overflow-y: scroll;
             overflow-x: hidden;
