@@ -12,6 +12,11 @@ function Event() {
         callbacks.add(callback);
         return this;
     };
+    this.off = function( name, callback ) {                 
+        var callbacks = this._event[name] = this._event[name] || baidu.Callbacks();
+        callbacks.remove(callback);
+        return this;
+    }
     this.fire = function( name, args ) {
         if(!this._event[name]) return;
         //console.log(this, name, args);
@@ -112,11 +117,10 @@ function Stage() {
         });
 
         function navigateBy( dir, source ) {
-            if( disabled ) return;
             var stoped = false;
             var e = { direction: dir, stopPropagation: function(){ stoped = true; }, source: source };
             that.getCurrentScreen().fire( 'navigate', [e] );
-            if( stoped ) return;
+            if( stoped || disabled ) return;
             switch(dir) {
                 case "Up":
                     slider.prev();
@@ -337,7 +341,6 @@ baidu(function(){
             var tcontainer = this.$.find('.topic-container');
             var ccontainer = this.$.find('.case-container');
             var screen = this.$;
-            var scroll = 0;
             var topicName;
             var that = this;
 
@@ -355,7 +358,7 @@ baidu(function(){
                             translateX: '100%',
                             opacity: 0
                         }, 500, function() {                            
-                            doScroll(scroll = -210);
+                            doScroll( -scroll-210 );
                             showTopic(topicName);
                         });
                         break;
@@ -364,7 +367,8 @@ baidu(function(){
 
             baidu('.case-content').delegate('a.show-case', 'click', function(e){
                 return; // 先在新窗口打开，细节交互再调节
-                var path = baidu(e.target).attr('case-path');
+                e.preventDefault();
+                var path = baidu(e.target).attr('href');
                 var title = baidu(e.target).attr('case-title');
                 var name = baidu(e.target).attr('case-name');
                 window.location.hash = ['topic', topicName, name].join('-');
@@ -384,37 +388,90 @@ baidu(function(){
                         if(!iframe[0].contentWindow) {                            
                             return clearInterval(checkLoad);
                         }
-                        var height = getComputedStyle(iframe[0].contentWindow.document.documentElement).height;
-                        iframe.css('height', height);
-                        if( loading && parseFloat(height) > 200 ) {
-                            loading = false;
-                            baidu('.loading').css('display', 'none');
-                            baidu('.case-content').cssAnimate({
-                                translateX: '0',
-                                opacity: 1
-                            }, 500);
+                        var height = iframe[0].contentWindow.document.documentElement.scrollHeight;
+                        if( parseFloat(height) > 200 ) {
+                            iframe.css('height', height);
+                            if(loading) {
+                                loading = false;
+                                baidu('.loading').css('display', 'none');
+                                baidu('.case-content').cssAnimate({
+                                    translateX: '0',
+                                    opacity: 1
+                                }, 500);
+                            }
                         }
                     }, 100);
                 });
             });
+            
+            function enableScroll() {                
+                baidu('body').on('mousewheel', handleScroll);
+                that.on('navigate', handleNavigate);
+                baidu('body')
+                    .on('touchstart', handleTouchStart);
 
+            }
+            function disableScroll() {                
+                baidu('body').off('mousewheel', handleScroll);
+                that.off('navigate', handleNavigate);
+                baidu('body').off('touchstart', handleTouchStart);
+            }
+            function handleTouchStart(e) {
+                if(e.touches.length !== 1) return;
+                baidu('body')
+                    .on('touchmove', handleTouchMove)
+                    .on('touchend', handleTouchEnd);
+                handleTouchStart.SY = e.touches[0].clientY;
+            }
+            function handleTouchMove(e) {
+                var touch = e.touches[0];
+                var dy = touch.clientY - handleTouchStart.SY;
+                doScroll(dy, true);
+                handleTouchStart.SY = touch.clientY;
+            }
+            function handleTouchEnd() {                
+                baidu('body')
+                    .off('touchmove', handleTouchMove)
+                    .off('touchend', handleTouchEnd);
+            }
+            function handleNavigate( e ) {
+                if(e.source == 'keyboard') {
+                    switch(e.direction) {
+                        case 'Up':
+                            doScroll( stage.height() * 0.8);
+                            break;
+                        case 'Down':
+                            doScroll( -stage.height() * 0.8);
+                    }
+                }
+            }
             function handleScroll( e ) {
-                scroll += e.wheelDelta;
                 //clearTimeout(handleScroll.lastCall);
                 //handleScroll.lastCall = setTimeout(function() {
-                    doScroll(e.wheelDelta);
+                doScroll(e.wheelDelta);
                 //}, 100);
             }
+            var scroll = 0, meunTop = -210;
             function doScroll(delta) {
-                if ( scroll > 0 ) scroll = 0;
-                if ( scroll > -210 && delta > 0) scroll = 0;
-                scroll = Math.max( scroll, -300 - baidu('.case-content').height() + stage.height());
-                if ( scroll > -210 && delta < 0) scroll = -210;         
-                if ( scroll < -210 ) {
-                    baidu('.case-control').cssAnimate({translateY: -210 - scroll }, 800);
-                } else {
-                    baidu('.case-control').cssAnimate({translateY: 0 }, 800);
+
+                if ( scroll == 0 && delta < 0 ) {
+                    scroll = meunTop;
                 }
+                else if ( scroll == meunTop && delta > 0 ) {
+                    scroll = 0;
+                }
+                else if( scroll + delta > meunTop) {
+                    scroll = scroll == 0 ? 0 : meunTop;
+                }
+                else {
+                    scroll += delta;
+                }
+
+                if ( scroll > 0 ) scroll = 0;  
+                scroll = Math.max( scroll, -300 - baidu('.case-content').height() + stage.height());
+                var ctrlScroll = Math.max( meunTop - scroll, 0 );
+
+                baidu('.case-control').cssAnimate({translateY: ctrlScroll }, 800);
                 screen.cssAnimate({translateY: scroll}, 800);
             }
             function showCases(caseMap) {
@@ -462,7 +519,7 @@ baidu(function(){
                 ccontainer.cssAnimate( { opacity: 1, translateY: 200 }, duration );
                 screen.cssAnimate({translateY: scroll = -210}, duration );
                 screen.css('overflow', 'visible');
-                baidu('body').on('mousewheel', handleScroll);
+                enableScroll();
                 inCaseMode = true;
             }
             function leaveCaseMode() {
@@ -474,7 +531,7 @@ baidu(function(){
                     screen.css('overflow', 'hidden');
                 });
                 baidu('#top-nav, #logo').cssAnimate({opacity: 1, translateY: 0}, duration);
-                baidu('body').off('mousewheel', handleScroll);
+                disableScroll();
                 inCaseMode = false;
                 window.location.hash = 'topic';
             }
