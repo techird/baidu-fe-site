@@ -192,6 +192,8 @@ function Stage() {
     }
     this.disable = function() { disabled = true; };
     this.enable = function() { disabled = false; };
+    this.enabled = function() { return !disabled; };
+    this.disabled = function() { return disabled; };
     this.width = function() { return document.documentElement.clientWidth; };
     this.height = function() { return document.documentElement.clientHeight; };
     this.getIndex = function() { return slider.index(); };
@@ -283,7 +285,7 @@ function Control( stage, splash ) {
 
     // 导航条位置适应
     baidu(window).on( 'resize', function( ) {            
-        fitNavPosition();
+        stage.enabled() && fitNavPosition();
         stage.getCurrentScreen().fire('resize');
     });
 
@@ -345,14 +347,14 @@ baidu(function(){
             var that = this;
 
             this.enterDutaion = 1000,
-            this.leaveDuration = 1200;
+            this.leaveDuration = 1000;
             baidu('.case-control .return-button').click(function(){
                 var hash = window.location.hash.substr(1);
                 var part = hash.split('-');
                 switch(part.length) {
                     case 2:
-                        if(inCaseMode == 1) leaveCaseMode();
-                        if(inCaseMode == 2) showTopicMenu();
+                        /*if(inCaseMode == 1)*/ leaveCaseMode();
+                        //if(inCaseMode == 2) showTopicMenu();
                         break;
                     case 3:
                         baidu('.case-content').cssAnimate({
@@ -484,6 +486,7 @@ baidu(function(){
                 }
             }
             screen.find('p').click(function(e) {
+                if(!that.actived) return;
                 showTopic(e.target.className);
                 e.stopPropagation();
             });
@@ -492,9 +495,13 @@ baidu(function(){
             });
         })
         .on( 'aftershow', function(hashPart) {
+            this.actived = true;
             if(hashPart[0]) plan(function() {
                 this.showTopic(hashPart[0]);
             }.bind(this), 10);
+        })
+        .on( 'beforehide', function() {
+            this.actived = false;
         });
 
     stage.getScreen('archive')
