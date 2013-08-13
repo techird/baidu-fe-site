@@ -1,12 +1,12 @@
 <?php
   error_reporting(E_ERROR);
   $path = getcwd();
-  $case_path = $path.'\\cases';
+  $case_path = $path.'/cases';
   $dir = dir($case_path);
   $list = array();
   while($child = $dir -> read()) {
     if($child != '.' && $child != '..')
-      $list[$child] = getCase( $case_path.'\\'.$child );
+      $list[$child] = getCase( $case_path.'/'.$child );
   }
 
   if($_REQUEST['topic']) {
@@ -21,7 +21,7 @@
   }
 
   function getCase($path) {
-    $file = $path.'\\index.html';
+    $file = $path.'/index.html';
     $content = file_get_contents($file);
     $result = array();
 
