@@ -395,8 +395,10 @@ ul.loading {
         }
     }
     .case-container {        
+        -webkit-backface-visibility: hidden;
         position: absolute;
         height: auto;
+        min-height: 1200px;
         width: 100%;
         padding: 50px 0;
         background: url(case-bg.png) repeat;
@@ -478,10 +480,11 @@ ul.loading {
             }
         }
         .case-content {
-            min-height: 1000px;
+            -webkit-backface-visibility: hidden;
             .case-list {
                 padding: 30px;
                 &>section {
+                    -webkit-backface-visibility: hidden;
                     margin-bottom: 72px;
                     overflow: hidden;
                     position: relative;

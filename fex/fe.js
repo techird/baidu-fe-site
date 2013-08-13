@@ -426,7 +426,7 @@ baidu(function(){
             function handleTouchMove(e) {
                 var touch = e.touches[0];
                 var dy = touch.clientY - handleTouchStart.SY;
-                doScroll(dy, true);
+                doScroll(dy * 1.5);
                 handleTouchStart.SY = touch.clientY;
             }
             function handleTouchEnd() {                
@@ -468,7 +468,7 @@ baidu(function(){
                 }
 
                 if ( scroll > 0 ) scroll = 0;  
-                scroll = Math.max( scroll, -300 - baidu('.case-content').height() + stage.height());
+                scroll = Math.max( scroll, Math.min(meunTop, meunTop - baidu('.case-content').height() + stage.height()));
                 var ctrlScroll = Math.max( meunTop - scroll, 0 );
 
                 baidu('.case-control').cssAnimate({translateY: ctrlScroll }, 800);
