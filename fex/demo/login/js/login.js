@@ -43,7 +43,7 @@ void function( exports ){
     animating = false;
     isOSlt6 = /OS (\d)/.test( navigator.userAgent ) ? RegExp.$1 - 0 < 6 : false;
     jumpPage = location.protocol + "//" + location.hostname + 
-        ( location.port ? ":" + location.port : "" ) + "/Fex-Sample/login/html/v3Jump.html";
+        ( location.port ? ":" + location.port : "" ) + "/fex/demo/login/html/v3Jump.html";
     nowMode = "normal";
 
     qs = function( selector ){
