@@ -41,8 +41,8 @@
     // $demos = array();
     if(is_dir("cases/".$caseName) && is_file("cases/".$caseName."/index.html")){
         $casesBasePath = "cases/";
-        $domDocument = new DOMDocumentCharset();
-        @$domDocument->loadHTMLFile("./cases/$caseName/index.html");
+        $domDocument = new DOMDocumentCharset('1.0', 'utf-8');
+        @$domDocument->loadHTMLFileCharset("./cases/$caseName/index.html","utf-8");
         $xml = simplexml_import_dom($domDocument);
         if (file_exists("./cases/$caseName/conf.php")) {
             include "./cases/$caseName/conf.php";
