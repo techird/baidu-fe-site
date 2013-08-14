@@ -1,4 +1,5 @@
-<?  
+<? 
+    header('Content-Type: text/html; charset=utf-8');
     $caseName = $_GET['name'];
     $iframe = $_GET['iframe'];
     // $demos = array();
