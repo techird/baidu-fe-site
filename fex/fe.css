@@ -38,58 +38,12 @@ ul.loading li:nth-child(5){-webkit-animation-delay:.75s;-moz-animation-delay:.75
 #topic .case-container .case-content::-webkit-scrollbar-button{display:none}
 #topic .case-container .case-content::-webkit-scrollbar-track{display:none}
 #topic .case-container .case-content::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,0.3);padding:3px;border-radius:10px}
-#topic .case-container .case-content .case-list{padding:30px}#topic .case-container .case-content .case-list>section{-webkit-backface-visibility:hidden;margin-bottom:72px;overflow:hidden;position:relative;z-index:230}#topic .case-container .case-content .case-list>section>.title{margin:0;font-size:48px;font-weight:normal;height:64px;line-height:64px;text-indent:.8em;color:#2a2a2a}
+#topic .case-container .case-content .case-list{padding:30px}#topic .case-container .case-content .case-list>section{-webkit-backface-visibility:hidden;margin-bottom:72px;overflow:hidden;position:relative;z-index:230}#topic .case-container .case-content .case-list>section>.title{margin:0;font-size:30px;font-weight:normal;height:64px;line-height:64px;text-indent:.8em;color:#2a2a2a}
 #topic .case-container .case-content .case-list>section>.desc{padding:85px 50px 160px 250px;height:auto;background-color:#fff;border-radius:6px;margin:0;font-size:13px}
 #topic .case-container .case-content .case-list>section>.preview{position:absolute;left:50px;top:120px}
 #topic .case-container .case-content .case-list>section>.tags{display:none}
 #topic .case-container .case-content .case-list>section>.show-case{position:absolute;display:block;bottom:64px;left:256px;background:#0099f2;width:60px;height:35px;font-size:13px;line-height:35px;text-align:center;border-radius:3px;color:#fff;text-decoration:none}#topic .case-container .case-content .case-list>section>.show-case:active{background:#2fa8d7}#topic .case-container .case-content .case-list>section>.show-case:active:after{border-left-color:#2fa8d7}
-#product{z-index:100;-webkit-perspective:1000}#product #product-container{position:absolute;width:1600px;height:800px;top:50%;margin-top:-400px;left:50%;margin-left:-800px;-webkit-backface-visibility:hidden}#product #product-container *{-webkit-backface-visibility:hidden}
-#product .product{position:absolute;width:1600px;height:800px;box-shadow:0 0 50px rgba(0,0,0,0.5)}
-#product .nav{width:100px;height:100px;position:absolute;top:50%;margin-top:-50px;background:url(button.png) no-repeat;opacity:.3;cursor:pointer;z-index:150;-webkit-tap-highlight-color:rgba(0,0,0,0);-moz-tap-highlight-color:rgba(0,0,0,0);-ms-tap-highlight-color:rgba(0,0,0,0);-o-tap-highlight-color:rgba(0,0,0,0);-webkit-transition:all .25s ease;-moz-transition:all .25s ease;-ms-transition:all .25s ease;-o-transition:all .25s ease;transition:all .25s ease}#product .nav:hover{opacity:1}
-#product .nav:active{margin-top:-45px}
-#product .nav.prev{left:0;-webkit-transform:translateX(-150px);-moz-transform:translateX(-150px);-ms-transform:translateX(-150px);-o-transform:translateX(-150px);transform:translateX(-150px)}#product .nav.prev.show{-webkit-transform:translateX(50px) rotate(180deg);-moz-transform:translateX(50px) rotate(180deg);-ms-transform:translateX(50px) rotate(180deg);-o-transform:translateX(50px) rotate(180deg);transform:translateX(50px) rotate(180deg)}
-#product .nav.next{right:0;-webkit-transform:translateX(150px) rotate(180deg);-moz-transform:translateX(150px) rotate(180deg);-ms-transform:translateX(150px) rotate(180deg);-o-transform:translateX(150px) rotate(180deg);transform:translateX(150px) rotate(180deg)}#product .nav.next.show{-webkit-transform:translateX(-50px);-moz-transform:translateX(-50px);-ms-transform:translateX(-50px);-o-transform:translateX(-50px);transform:translateX(-50px)}
-#product .hunter{width:1600px;height:800px;background:url("topic/hunter/hunterbg.jpg") no-repeat;position:absolute;z-index:101}#product .hunter .title{width:700px;height:150px;position:absolute;left:480px;top:220px;background:url("topic/hunter/title.png") no-repeat}#product .hunter .title a{display:block;width:100%;height:100%;text-indent:-9999px}
-#product .hunter .dataMonitoring{height:55px;position:absolute;left:445px;top:499px;background:url("topic/hunter/dataMonitoring.png") no-repeat;padding:21px 0 0 111px;color:#fff;font:30.29px "Microsoft YaHei"}
-#product .hunter .dataVisualization{height:58px;position:absolute;left:900px;top:491px;background:url("topic/hunter/dataVisualization.png") no-repeat;padding:30px 0 0 96px;color:#fff;font:30.29px "Microsoft YaHei"}
-#product .hunter .combination{height:52px;position:absolute;left:447px;top:624px;background:url("topic/hunter/combination.png") no-repeat;padding:30px 0 0 108px;color:#fff;font:30.29px "Microsoft YaHei"}
-#product .hunter .test{height:52px;position:absolute;left:900px;top:622px;background:url("topic/hunter/test.png") no-repeat;padding:30px 0 0 101px;color:#fff;font:30.29px "Microsoft YaHei"}
-#product .fis{z-index:102;width:1600px;height:800px;position:absolute;background:url(topic/fis/bg.png);font-family:'Microsoft Yahei';font-weight:normal}#product .fis h1.eng{margin:170px 0 0 250px;font-size:100px;line-height:115px;color:#fff;font-family:'Microsoft Yahei';font-weight:normal}#product .fis h1.eng a{color:#fff;text-decoration:none}
-#product .fis h1.chs{margin:0 0 0 250px;font-size:72px;line-height:115px;color:#fff;font-family:'Microsoft Yahei';font-weight:normal}
-#product .fis h2{font-size:30px;line-height:30px;color:#fff;margin:40px 0 0 250px;font-family:'Microsoft Yahei';font-weight:normal}
-#product .fis .formula{margin:115px 0 0 250px}
-#product .fis .circle{display:inline-block;width:115px;height:59px;border:1px solid #fff;border-radius:100%;text-align:center;vertical-align:middle;color:#fff;font-size:18px;line-height:30px;padding:28px 0;font-family:'Microsoft Yahei';font-weight:normal}
-#product .fis .op{display:inline-block;height:115px;width:60px;line-height:115px;font-family:'Microsoft Yahei';font-weight:normal;text-align:center;font-size:36px;color:#fff}
-#product .webspeed{z-index:103;width:1600px;height:800px;background:url("topic/webspeed/webspeedbg.png") no-repeat;position:absolute}#product .webspeed .title{width:728px;height:316px;position:absolute;left:469px;top:124px;background:url("topic/webspeed/title.png") no-repeat}#product .webspeed .title a{display:block;width:100%;height:100%;text-indent:-9999px}
-#product .webspeed .title-header{width:728px;height:316px;background:url("topic/webspeed/title-header.png") no-repeat}
-#product .webspeed .title-central{margin:-130px 0 0 18px;color:#fff;font:60px "Microsoft YaHei";text-align:center}
-#product .webspeed .title-footer{margin-top:24px;color:#fff;font:23.4px "Microsoft YaHei";text-align:center}
-#product .webspeed .PC{width:323px;height:208px;position:absolute;left:221px;top:521px;background:url("topic/webspeed/PC.png") no-repeat}
-#product .webspeed .PC-header{margin:118px 0 0 -20px;color:#fff;font:30px "Microsoft YaHei";text-align:center}
-#product .webspeed .PC-footer{margin:29px 0 0 -1px;color:#fff;font:18px "Microsoft YaHei";text-align:center}
-#product .webspeed .mobile{width:324px;height:208px;position:absolute;left:653px;top:521px;background:url("topic/webspeed/mobile.png") no-repeat}
-#product .webspeed .mobile-header{margin:118px 0 0 -20px;color:#fff;font:30px "Microsoft YaHei";text-align:center}
-#product .webspeed .mobile-footer{margin:29px 0 0 -1px;color:#fff;font:18px "Microsoft YaHei";text-align:center}
-#product .webspeed .contrast{width:359px;height:208px;position:absolute;left:1064px;top:521px;background:url("topic/webspeed/contrast.png") no-repeat}
-#product .webspeed .contrast-header{margin:118px 0 0 -20px;color:#fff;font:30px "Microsoft YaHei";text-align:center}
-#product .webspeed .contrast-footer{margin:29px 0 0 -1px;color:#fff;font:18px "Microsoft YaHei";text-align:center}
-#product .GMU{z-index:104;height:800px;width:1600px;background:url("topic/gmu/GMUbg.png") no-repeat;position:absolute}#product .GMU .title{width:537px;height:282px;position:absolute;left:540px;top:122px;background:url("topic/gmu/gmu.png") no-repeat}
-#product .GMU .title-main{width:537px;height:282px}
-#product .GMU .title-main a{display:block;margin-top:230px;height:58px;width:100%;text-indent:-9999px}
-#product .GMU .content{color:#fff;font:36px "Microsoft YaHei"}
-#product .GMU .use{position:absolute;left:484px;top:531px}
-#product .GMU .lightweight{position:absolute;left:761px;top:531px}
-#product .GMU .download{position:absolute;left:982px;top:531px}
-#product .GMU .stable{position:absolute;left:484px;top:593px}
-#product .GMU .plugin{position:absolute;left:761px;top:593px}
-#product .GMU .free{position:absolute;left:982px;top:593px}
-#product .ueditor{z-index:10;width:1600px;height:800px;background:url("topic/ueditor/ueditorbg.png") no-repeat;position:absolute}#product .ueditor .title{width:613px;height:130px;position:absolute;left:503px;top:175px;background:url("topic/ueditor/title.png") no-repeat}#product .ueditor .title a{display:block;height:100%;width:100%;text-indent:-9999px}
-#product .ueditor .function{width:120px;height:35px;position:absolute;left:354px;top:466px;background:url("topic/ueditor/function.png") no-repeat;padding-top:94px;color:#fff;font:30.29px "Microsoft YaHei"}
-#product .ueditor .experience{width:120px;height:35px;position:absolute;left:549px;top:466px;background:url("topic/ueditor/experience.png") no-repeat;padding-top:94px;color:#fff;font:30.29px "Microsoft YaHei"}
-#product .ueditor .openSource{width:120px;height:35px;position:absolute;left:739px;top:466px;background:url("topic/ueditor/openSource.png") no-repeat;padding-top:94px;color:#fff;font:30.29px "Microsoft YaHei"}
-#product .ueditor .download{width:120px;height:35px;position:absolute;left:939px;top:466px;background:url("topic/ueditor/download.png") no-repeat;padding-top:94px;color:#fff;font:30.29px "Microsoft YaHei"}
-#product .ueditor .specialty{width:120px;height:35px;position:absolute;left:1122px;top:466px;background:url("topic/ueditor/specialty.png") no-repeat;padding-top:94px;color:#fff;font:30.29px "Microsoft YaHei"}
-#archive{background-color:#f9f9f9;z-index:200}#archive h1{text-align:center;font-size:50px;font-weight:normal;margin:0 auto;padding-top:250px;color:#888;z-index:201}
+@media only screen and (min-width:1360px){.case-list>section{float:left;width:32%;margin-right:20px}.case-list>section:nth-child(3n){margin-right:0}}#archive{background-color:#f9f9f9;z-index:200}#archive h1{text-align:center;font-size:50px;font-weight:normal;margin:0 auto;padding-top:250px;color:#888;z-index:201}
 #archive #head-container{text-align:center;overflow:visible;position:absolute;bottom:30px;left:0;right:0;height:100px;z-index:210}#archive #head-container .archive-head{width:100px;height:100px;background:url(archive/heads.png);border:solid 3px #fff;border-radius:100px;display:inline-block;position:absolute;opacity:0;z-index:201;left:0;-webkit-tap-highlight-color:rgba(0,0,0,0);-moz-tap-highlight-color:rgba(0,0,0,0);-ms-tap-highlight-color:rgba(0,0,0,0);-o-tap-highlight-color:rgba(0,0,0,0);overflow:visible;-webkit-transition:all .25s ease;-moz-transition:all .25s ease;-ms-transition:all .25s ease;-o-transition:all .25s ease;transition:all .25s ease;-webkit-transform:scale(.5);-moz-transform:scale(.5);-ms-transform:scale(.5);-o-transform:scale(.5);transform:scale(.5)}#archive #head-container .archive-head:after{content:' ';display:block;width:106px;height:106px;border-radius:106px;border:6px solid rgba(0,0,0,0.4);position:absolute;left:-9px;top:-9px}
 #archive #head-container .archive-head.current{-webkit-transform:scale(1);-moz-transform:scale(1);-ms-transform:scale(1);-o-transform:scale(1);transform:scale(1)}
 #archive #head-container .archive-head.m1{background-position:0 0}
