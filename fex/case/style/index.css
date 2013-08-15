@@ -1,0 +1,231 @@
+*{
+	margin:0;
+	padding:0;
+}
+body {
+  font-family: 'Myriad Pro', Arial, 'Microsoft Yahei';
+  background: url("../images/bg_03.png");
+}
+body.iframe {
+  overflow: hidden !important;
+}
+h2 {
+  margin: 0;
+  padding-bottom: 30px;
+  font-size: 33px;
+  font-weight: normal;
+}
+.item h3{
+	padding-top: 30px;
+	padding-bottom:10px;
+}
+p {
+  line-height: 30px;
+  font-size: 16px;
+  margin: 0;
+}
+.title {
+  padding: 40px 20px 0 70px;
+  margin-bottom: 30px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-box;
+  display: -o-box;
+  display: box;
+}
+body.iframe .title {
+  padding-top: 60px;
+}
+.title h1 {
+  font-size: 54px;
+  font-weight: normal;
+}
+.item {
+  overflow:hidden;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-box;
+  display: -o-box;
+  display: box;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -ms-box-align: center;
+  -o-box-align: center;
+  box-align: center;
+  padding: 0 5% 5%;
+  margin: 0 21px 22px 21px;
+  border-radius: 4px;
+  background: #fff;
+}
+.item_vertical_layout{
+	display: block;
+}
+.item p{
+	margin-top:10px;
+}
+.item .text {
+  width: 45%;
+  padding: 30px 0 0 0;
+}
+.item .pic {
+  width: 50%;
+  padding: 50px 0 0 0;
+}
+.pic img{
+  max-width: 100%;
+  -webkit-transition: -webkit-transform .2s linear;
+  -webkit-transform: scale3d(1, 1, 1);
+  -webkit-user-drag: none;
+}
+
+.pic img.active{
+	-webkit-transform: scale3d(1.05, 1.05, 1);
+}
+
+.item:nth-child(even) .text, .item:nth-child(odd) .pic{
+  v
+}
+
+.item:nth-child(odd) .text, .item:nth-child(even) .pic{
+  margin-left: 5%;
+}
+
+.item:nth-child(even) .pic{
+	text-align: right;
+}
+
+ul {
+  padding-left: 2em;
+  line-height: 20px;
+}
+
+ul li{
+	padding-bottom:10px;
+	line-height: 1.7em;
+}
+
+.textPic {
+  padding: 25px 75px 25px 0;
+  background: url("../img/bgbottom.jpg") no-repeat bottom;
+}
+
+.footer {
+  overflow:hidden;
+  padding: 40px 5%;
+  margin: 0 21px 22px 21px;
+  border-radius: 4px;
+  background: #fff;
+}
+.footer h2 {
+  text-align: center;
+}
+.footer .footer-main {
+  text-align: center;
+}
+.footer .footer-main p {
+  text-align: center;
+  font-size: 22px;
+}
+.footer .footer-main .footer-item {
+	display: inline-block;
+	margin: 0 20px;
+}
+@media screen and (max-device-width: 768px) and (orientation: portrait) {
+  .item { padding: 0 30px 75px 30px;}
+  .title { padding: 30px 20px 0 20px;}
+  .footer .footer-main img {
+    width: 180px;
+    height: 180px;
+  }
+  p {font-size: 14px;}
+  h2 {font-size: 25px;}
+  .title h1 { font-size: 35px;}
+  .footer .footer-main p{ font-size: 22px;}
+}
+@media screen and (max-device-width: 1024px) and (orientation: landscape) {
+  .item { padding: 0 50px 75px 50px;}
+}
+.title .subTitle {
+  margin: 8px 0 0 20px;
+	font-weight: normal;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-box-flex: 1;
+  -o-box-flex: 1;
+  box-flex: 1;
+}
+.title .subTitle h4{
+  font-size: 17px;
+}
+.title .subTitle p{
+  font-size: 14px;
+}
+.look-more {
+  width: 84px;
+  height: 36px;
+  margin-top: 4px;
+  display: block;
+  background-color: #0099f2;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 36px;
+  text-align: center;
+  color: #f5f9fe;
+  text-decoration: none;
+}
+.look-right {float: right;}
+.look-left {float: left;}
+.title h1 {
+	position: relative;
+}
+.anotation {
+	background-color: rgb(218, 221, 221);
+	border-radius: 5px;
+	font-size: 15px;
+	color: rgb(211, 131, 131);
+	padding: 0 4px;
+}
+
+.demoWrapper{
+	text-align: center;
+	padding: 50px;
+}
+.demoWrapper a{
+	display: inline-block;
+	text-decoration: none;
+	background:#369;
+	padding:30px;
+	color:#fff;
+	margin:0 20px;
+}
+.highlight{
+	background: yellow;
+	color: red;
+	font-weight: bold;
+}
+
+.pic-sm {max-width: 300px;}
+
+.pic-sm img{
+    max-width: 70px;
+    margin: 9% 0 0 9%;
+}
+.scrollContent{
+  max-width: 1100px;
+  margin:0 auto;
+}
+
+.scroller::-webkit-scrollbar {
+	width: 5px;
+}
+.scroller::-webkit-scrollbar-button {
+	display: none
+}
+.scroller::-webkit-scrollbar-track {
+	display: none
+}
+.scroller::-webkit-scrollbar-thumb {
+	background-color: rgba(0,0,0,0.3);
+	padding: 3px;
+	border-radius: 10px
+}

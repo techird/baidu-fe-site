@@ -9,11 +9,11 @@ var CSS3Animate = (function (window) {
 
     function decodeTransform( str ) {
         var transform = {
-            translate: [0,0,0],
-            rotate: [0,0,0],
-            scale: [1,1,1],
-            skew: [0,0],
-            perspective: 0
+            translate: [],
+            rotate: [],
+            scale: [],
+            skew: [],
+            perspective: undefined
         };
         if(!str) return transform;
         var match, patten, i;
@@ -48,8 +48,9 @@ var CSS3Animate = (function (window) {
     }
 
     function addUnit( arr, unit ) {
+        if(!arr)return;
         for( var i = 0; i < arr.length; i++ )
-            if( arr[i] ) arr[i] += unit;
+            if( arr[i] && !/px|pt|em|%/.exec(arr[i]) ) arr[i] += unit;
         return arr;
     }
 
@@ -67,10 +68,10 @@ var CSS3Animate = (function (window) {
         addUnit(k, 'px');
         addUnit(p, 'px');
         for(i = 0; i < alixs.length; i++) {
-            t[i] && parts.push('translate' + alixs[i] + '(' + t[i] + ')');
+            t[i] !== undefined && parts.push('translate' + alixs[i] + '(' + t[i] + ')');
             // i == 2 && !t[i] && parts.push('translateZ(0)'); // gpu speed up
-            r[i] && parts.push('rotate' + alixs[i] + '(' + r[i] + ')');
-            k[i] && parts.push('skew' + alixs[i] + '(' + k[i] + ')');
+            r[i] !== undefined && parts.push('rotate' + alixs[i] + '(' + r[i] + ')');
+            k[i] !== undefined && parts.push('skew' + alixs[i] + '(' + k[i] + ')');
             s[i] !== undefined && s[i] !== 1 && parts.push('scale' + alixs[i] + '(' + s[i] + ')');
         }
         if( s instanceof Array == false ) {
@@ -157,9 +158,9 @@ var CSS3Animate = (function (window) {
     function doAnimate( dom, styles, duration, callback ) {
         styles = clone(styles);
 
-        dom.queue = dom.queue || [];
-        dom.queue.push( [doAnimate, [dom, styles, duration, callback ]] );
-        if(dom.queue.length > 1) return;
+        // dom.queue = dom.queue || [];
+        // dom.queue.push( [doAnimate, [dom, styles, duration, callback ]] );
+        // if(dom.queue.length > 1) return;
 
         if(typeof(duration) == 'function') {
             callback = duration;
@@ -175,16 +176,12 @@ var CSS3Animate = (function (window) {
             setStyles( dom, styles );
         }
 
-        dom.next_id = setTimeout( function() {
+        setTimeout( function(){            
             typeof(callback) == 'function' && callback.apply(dom);
-            dom.queue.shift();
-            if(!dom.queue.length)
-                removeTransition( dom );
-            else {
-                var next = dom.queue.shift();
-                next[0].apply(next[0][0], next[1]);
-            }
         }, duration);
+
+        clearTimeout(dom.transition_timer);
+        dom.transition_timer = setTimeout( function() { removeTransition( dom ); }, duration);
     }
 
     HTMLElement.prototype.animate = function(styles, duration, callback) {
@@ -192,16 +189,16 @@ var CSS3Animate = (function (window) {
         return this;
     }
     HTMLElement.prototype.stop = function() {
-        if(!this.queue) return this;
-        clearTimeout(this.next_id);
-        if(!this.queue || !this.queue.length) return this;
-        var last = this.queue.pop();
-        var styles = last[0];
-        removeTransition( this );
-        mapStyles( this, styles );
-        setStyles( this, styles );
-        this.queue = [];
-        return this;
+        // if(!this.queue) return this;
+        // clearTimeout(this.next_id);
+        // if(!this.queue || !this.queue.length) return this;
+        // var last = this.queue.pop();
+        // var styles = last[0];
+        // removeTransition( this );
+        // mapStyles( this, styles );
+        // setStyles( this, styles );
+        // this.queue = [];
+        // return this;
     }
     HTMLElement.prototype.delay = function( time ) {
         this.queue = this.queue || [];

@@ -12,12 +12,28 @@ function Event() {
         callbacks.add(callback);
         return this;
     };
+    this.off = function( name, callback ) {                 
+        var callbacks = this._event[name] = this._event[name] || baidu.Callbacks();
+        callbacks.remove(callback);
+        return this;
+    }
     this.fire = function( name, args ) {
         if(!this._event[name]) return;
         //console.log(this, name, args);
         this._event[name].fireWith( this, args );
         return this;
     };
+}
+
+function plan( fn, delay, args, context ) {
+    var timer = setTimeout(function(){
+        fn.apply(context, args);
+    }, delay);
+    return {
+        cancel: function() { 
+            clearTimeout(timer);
+        }
+    }
 }
 
 function Screen( index, stage, dom ) {
@@ -58,7 +74,8 @@ function Stage() {
         , disabled
         , slider
         , that
-        , duration;
+        , duration
+        , hashPart;
 
     screens = baidu('.screen').map( function ( index, dom ) {
                 return new Screen( index, this, dom );
@@ -73,6 +90,12 @@ function Stage() {
     });
     that = this;
 
+    function updateHash() {
+        if( disabled ) return;
+        var hash = window.location.hash.substr(1);
+        hashPart = hash.split('-');
+    }
+
     function takeControl() {
         var last_wheel_event = 0; // Mac 下一次滚动触发多个滚动事件
         // change event by wheel
@@ -85,23 +108,19 @@ function Stage() {
             last_wheel_event = e.timeStamp;
             e.wheelDelta < 0 ? slider.next() : slider.prev();
         });
-
-        function hashChange() {
-            if( disabled ) return;
-            var hash = window.location.hash.substr(1);
-            var screen = that.getScreen(hash);
+        window.addEventListener('hashchange', function(){
+            updateHash();
+            var screen = that.getScreen(hashPart[0]);
             if ( screen ) {
                 slider.slide( screen.index );
             }
-        }
-        window.addEventListener('hashchange', hashChange);
+        });
 
         function navigateBy( dir, source ) {
-            if( disabled ) return;
             var stoped = false;
             var e = { direction: dir, stopPropagation: function(){ stoped = true; }, source: source };
             that.getCurrentScreen().fire( 'navigate', [e] );
-            if( stoped ) return;
+            if( stoped || disabled ) return;
             switch(dir) {
                 case "Up":
                     slider.prev();
@@ -126,7 +145,7 @@ function Stage() {
         var tsx, tsy;
 
         document.body.addEventListener( 'touchmove', function(e) {
-            e.preventDefault();
+            if(!disabled) e.preventDefault();
         });
         document.body.addEventListener( 'touchstart', function(e) {
             if (e.touches.length !== 1 ) return;
@@ -159,7 +178,7 @@ function Stage() {
             from = that.getScreen(from);
             to = that.getScreen(to);
             if(from) from.fire('afterhide');
-            if(to) to.fire('aftershow');
+            if(to) to.fire('aftershow', [hashPart.slice(1)]);
         });
     }
 
@@ -167,12 +186,14 @@ function Stage() {
         screens.each(function(index, screen) {
             screen.fire('init');
         });
-        var hash = window.location.hash.substr(1);
-        var screen = that.getScreen(hash);
+        updateHash();
+        var screen = that.getScreen( hashPart[0] );
         screen ? slider.showFirst( screen.index ) : slider.showFirst();
     }
     this.disable = function() { disabled = true; };
     this.enable = function() { disabled = false; };
+    this.enabled = function() { return !disabled; };
+    this.disabled = function() { return disabled; };
     this.width = function() { return document.documentElement.clientWidth; };
     this.height = function() { return document.documentElement.clientHeight; };
     this.getIndex = function() { return slider.index(); };
@@ -238,18 +259,11 @@ function Splash( stage ) {
         hide();
     });
 
-    var cheatCode = [38,38,40,40,37,39,37,39,65,66,65,66];
-    var waiting = cheatCode.slice(0);
-    baidu('body').keydown(function(e){
-        if(waiting.shift()!=e.keyCode) waiting = cheatCode.slice(0);
-        if(waiting.length == 0) {
-            show();
-            waiting = cheatCode.slice(0);
-        }
-    });
 }
 
 function Control( stage, splash ) {
+    Event.apply(this);
+
     function getNavPosition( screenIndex ) {
         var y = 0;
         if ( screenIndex == 0 ) {
@@ -264,7 +278,7 @@ function Control( stage, splash ) {
 
     // 导航条位置适应
     baidu(window).on( 'resize', function( ) {            
-        fitNavPosition();
+        stage.enabled() && fitNavPosition();
         stage.getCurrentScreen().fire('resize');
     });
 
@@ -284,11 +298,29 @@ function Control( stage, splash ) {
                 return ~this.getAttribute('screens').indexOf( name );
             })
             .addClass('current');
-        window.location.hash = name;
+        var origin = window.location.hash.substr(1);
+        if(origin.split('-')[0] != name)
+            window.location.hash = name;
     });
 
     splash.on('show', stage.disable);
     splash.on('hide', stage.enable);
+
+    var cheatCode = "BESTORNOTHING".split('');
+    var waiting = cheatCode.slice(0);
+    var that = this;
+    baidu('body').keydown(function(e){
+        if(waiting.shift() != String.fromCharCode(e.keyCode).toUpperCase()) waiting = cheatCode.slice(0);
+        if(waiting.length == 0) {
+            that.fire('coloregg');
+            waiting = cheatCode.slice(0);
+        }
+    });
+    console.log('Say this: ');
+    console.log('%cBESTORNOTHING', 'color: green;');
+    this.on('coloregg', function(){
+        alert('FE\nBest or nothing\nYou are right!');
+    });
 }
 
 baidu(function(){       
@@ -316,52 +348,169 @@ baidu(function(){
 
     stage.getScreen('topic')
         .on( 'init', function(){
-            this.$.find('p').click(function(e){
-                var index = +baidu(e.target).attr('product-index');
-                stage.getScreen('product').slideShow.slide(index);
-                stage.slideToScreen('product');
-            });
-        })
+            var inCaseMode = 0;
+            var tcontainer = this.$.find('.topic-container');
+            var ccontainer = this.$.find('.case-container');
+            var screen = this.$;
+            var topicName;
+            var that = this;
 
-    stage.getScreen('product')
-
-        .on( 'init', function(){
-            var prev = this.prev = this.$.find('.nav.prev'),
-                next = this.next = this.$.find('.nav.next');
-
-            var slideShow = this.slideShow = new SlideShow({
-                container: '#product-container',
-                duration: 1000,
-                effect: 'fold'
-            });
-            slideShow.on('afterslide', function() {
-                prev.css('visibility', this.hasPrev() ? 'visible' : 'hidden');
-                next.css('visibility', this.hasNext() ? 'visible' : 'hidden');
-            });
-            slideShow.showFirst();
-            function goNext(){ slideShow.next(); }
-            function goPrev(){ slideShow.prev(); }
-            next.click(goNext);
-            prev.click(goPrev);
-            this.on('navigate', function(e){
-                switch(e.direction) {
-                    case 'Left': return goPrev();
-                    case 'Right': return goNext();
+            this.enterDutaion = 1000,
+            this.leaveDuration = 1000;
+            baidu('.case-control .return-button').click(function(){
+                var hash = window.location.hash.substr(1);
+                var part = hash.split('-');
+                switch(part.length) {
+                    case 2:
+                        /*if(inCaseMode == 1)*/ leaveCaseMode();
+                        //if(inCaseMode == 2) showTopicMenu();
+                        break;
+                    case 3:
+                        baidu('.case-content').cssAnimate({
+                            translateX: '100%',
+                            opacity: 0
+                        }, 500, function() {
+                            showTopic(topicName);
+                        });
+                        break;
                 }
             });
-            this.fit('#product-container');
-        })
 
-        .on('aftershow', function() {
-            setTimeout(function(){
-                this.prev.cssAnimate( '+show' , 200 );
-                this.next.cssAnimate( '+show' , 200 );
-            }.bind(this), 100);
-        })
+            baidu('.case-content').delegate('a.show-case', 'click', function(e){
+                return; // 先在新窗口打开，细节交互再调节
+                e.preventDefault();
+                var path = baidu(e.target).attr('href');
+                var title = baidu(e.target).attr('case-title');
+                var name = baidu(e.target).attr('case-name');
+                window.location.hash = ['topic', topicName, name].join('-');
+                baidu('.case-control h1').html(title);
+                baidu('.case-content').cssAnimate({
+                    translateX: '-100%',
+                    opacity: 0
+                }, 500, function loadCase() {
+                    var iframe = baidu('<iframe style="border:none; width: 100%;" src="' + path + '&iframe=true"></iframe>');
+                    baidu('.case-content').empty().append(iframe);
+                    baidu('.case-content').css3({
+                        translateX: '100%'
+                    });
+                    baidu('.loading').css('display', 'block');
+                    var loading = true;
+                    var checkLoad = setInterval( function(){
+                        if(!iframe[0].contentWindow) {                            
+                            return clearInterval(checkLoad);
+                        }
+                        var height = iframe[0].contentWindow.document.documentElement.scrollHeight;
+                        if( parseFloat(height) > 200 ) {
+                            iframe.css('height', height);
+                            if(loading) {
+                                loading = false;
+                                baidu('.loading').css('display', 'none');
+                                baidu('.case-content').cssAnimate({
+                                    translateX: '0',
+                                    opacity: 1
+                                }, 500);
+                            }
+                        }
+                    }, 100);
+                });
+            });
+            
+            function showTopicMenu() {
+                tcontainer.cssAnimate( { translateY: 0 } );
+                ccontainer.cssAnimate( { translateY: 200 } );
+                inCaseMode = 1;
+            }
 
-        .on('beforehide', function(){                 
-            this.prev.cssAnimate( '-show' , 200 );
-            this.next.cssAnimate( '-show' , 200 );
+            function showCases(caseMap) {
+                baidu('.loading').css('display', 'none');
+                var article = baidu('<article class="case-list"></article>').appendTo(baidu('.case-content').empty());
+                var delay = 0;
+
+                baidu('.case-content').css3({ opacity: 1, translateX: 0 });
+                for(var name in caseMap) {
+                    if(caseMap.hasOwnProperty(name)) {
+                        var thecase = caseMap[name];
+                        var section = baidu(
+                            '<section>' 
+                          + '  <img class="preview" src="fex/case/cases/' + name + '/preview.png" />'
+                          + '  <h1 class="title">' + thecase.title + '</h1>'
+                          + '  <p class="desc">' + thecase.desc + '</p>'
+                          + '  <div class="tags">' + thecase.tags + '</div>'
+                          + '  <a class="show-case" case-name="' + name + '" case-title="' +thecase.title + '" href="fex/case/show.php?name=' + name + '" target="_blank">显示</a>'
+                          + '</section>');
+                        plan(function(section) {
+                            section.css3({ opacity: 0, translateY: 30 }).appendTo(article);
+                            plan( function() {
+                                section.cssAnimate({ opacity:1, translateY: 0 });
+                            }, 10);
+                        }, delay += 150, [section]);
+                    }
+                }
+            }
+            function loadCases() {                
+                baidu('.loading').css('display', 'block');
+                baidu.ajax({
+                    type: 'get',
+                    url: 'fex/case/list.php?topic=' + topicName,
+                    success: showCases
+                })
+            }
+            function removeCases() {
+                baidu('.case-content').empty();
+            }
+            function enterCaseMode() {
+                var duration = that.enterDutaion;
+                stage.disable();
+                baidu('#top-nav, #logo').cssAnimate({opacity: 0, translateY: -100, translateX: 0}, duration / 5);
+                tcontainer.cssAnimate( { translateY: -200 }, duration );
+                ccontainer.cssAnimate( { opacity: 1, translateY: 0 }, duration );
+                inCaseMode = 2;
+            }
+            function leaveCaseMode() {
+                var duration = that.leaveDuration;
+                stage.enable();
+                tcontainer.cssAnimate( { translateY: '40%' }, duration, removeCases );
+                ccontainer.cssAnimate( { opacity: 0, translateY: 800 }, duration );
+                baidu('#top-nav, #logo').cssAnimate({opacity: 1, translateY: 0}, duration);
+                inCaseMode = 0;
+                window.location.hash = 'topic';
+            }
+
+            var showTopic = this.showTopic = function( name ) {
+                var p = screen.find('p.' + name);
+                if( p.length ) {
+                    tcontainer.cssAnimate( { translateY: -200 }, 800 );
+                    ccontainer.cssAnimate( { opacity: 1, translateY: 0 }, 800 );
+                    topicName = name;
+                    baidu('.case-control h1').html(p.html());
+                    baidu('.case-control').removeClass('point-tool point-data point-end').addClass('point-' + name);
+                    if(!inCaseMode) {
+                        enterCaseMode();
+                        plan(loadCases, that.enterDutaion);
+                    } else {
+                        plan(loadCases);
+                    }
+                    inCaseMode = 2;
+                    window.location.hash = 'topic-' + name;
+                }
+            }
+            screen.find('p').click(function(e) {
+                if(!that.actived) return;
+                showTopic(e.target.className);
+                e.stopPropagation();
+            });
+            screen.click(function(e){
+                ~e.target.className.indexOf('topic-container') && inCaseMode && leaveCaseMode();
+            });
+        })
+        .on( 'aftershow', function(hashPart) {
+            this.actived = true;
+            if(hashPart[0]) plan(function() {
+                this.showTopic(hashPart[0]);
+            }.bind(this), 10);
+        })
+        .on( 'beforehide', function() {
+            this.actived = false;
         });
 
     stage.getScreen('archive')
@@ -464,6 +613,7 @@ baidu(function(){
             var _this = this;
             var prev = _this.prev = _this.$.find('.nav.prev').hide();
             var next = _this.next = _this.$.find('.nav.next');
+            var farRatio = this.farRatio = 0.2;
 
             baidu.ajax({
                 url: 'fex/member/data.json',
@@ -478,7 +628,12 @@ baidu(function(){
 
                 for(var i = 0; i < mcount; i++) {
                     baidu('<div class="team-member" style="background-image: url(fex/member/' + seq[i] + '.png)" index="' + seq[i] + '"></div>').appendTo(container);
-                }
+                }                    
+                plan(function(){
+                    var sw = stage.width(),
+                        cw = baidu('#team-container').outerWidth();
+                    baidu('#drawing-layer').css('width', sw + cw * farRatio);
+                }, 10);
                 var members = _this.$.find('.team-member');
                 var stand_timeout = 400, stand_timer;
 
@@ -495,7 +650,7 @@ baidu(function(){
 
 
                     dialog.html('<h1>' + data[index][0] + '</h1><p>' + data[index][1] + '</p>');
-                    dialog[0].stop().animate( { 
+                    dialog.cssAnimate( { 
                         translateX: left,
                         opacity: 1,
                         translateY: 0 
@@ -518,7 +673,6 @@ baidu(function(){
 
 
                 var translateX = 0, bodyWidth = members.width();
-                var farRatio = 0.2;
 
                 function hasNext(sw, cw) {
                     sw = sw || stage.width();
@@ -630,10 +784,7 @@ baidu(function(){
             setTimeout(function(){
                 this.prev.cssAnimate( '+show' , 200 );
                 this.next.cssAnimate( '+show' , 200 );
-            }.bind(this), 100);                    
-            var sw = stage.width(),
-                cw = baidu('#team-container').outerWidth();
-            baidu('#drawing-layer').css('width', sw + cw);
+            }.bind(this), 100);
         })
 
         .on('beforehide', function(){                 
