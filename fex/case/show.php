@@ -71,6 +71,10 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 		<script src="script/scroller.js"></script>
 		<script src="script/case.js"></script>
+        <script>
+            var pageId = 'fexhomepage';
+        </script>
+        <script type="text/javascript" src="http://img.baidu.com/hunter/femonk.js"></script>
 	</head>
 <? if($iframe == 'true') { ?>
 	<body class="iframe">
