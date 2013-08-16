@@ -5,7 +5,7 @@ var CSS3Animate = (function (window) {
         'Safari' : '-webkit-',
         'Firefox' : '-moz-',
         'IE' : '-ms-',
-        'Opera' : '-o-' }[ua] || '';
+        'Opera' : '-o-' }[ua && ua[0]] || '';
 
     function decodeTransform( str ) {
         var transform = {
