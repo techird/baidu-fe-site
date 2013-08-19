@@ -376,7 +376,7 @@ baidu(function(){
                 }
             });
 
-            baidu('.case-content').delegate('a.show-case', 'click', function(e){
+            that.find('.case-content').delegate('a.show-case', 'click', function(e){
                 return; // 先在新窗口打开，细节交互再调节
                 e.preventDefault();
                 var path = baidu(e.target).attr('href');
@@ -426,7 +426,7 @@ baidu(function(){
                 var article = baidu('<article class="case-list"></article>').appendTo(baidu('.case-content').empty());
                 var delay = 0;
 
-                baidu('.case-content').css3({ opacity: 1, translateX: 0 });
+                that.find('.case-content').css3({ opacity: 1, translateX: 0 });
                 for(var name in caseMap) {
                     if(caseMap.hasOwnProperty(name)) {
                         var thecase = caseMap[name];
@@ -456,7 +456,7 @@ baidu(function(){
                 })
             }
             function removeCases() {
-                baidu('.case-content').empty();
+                that.find('.case-content').empty();
             }
             function enterCaseMode() {
                 var duration = that.enterDutaion;
@@ -482,8 +482,8 @@ baidu(function(){
                     tcontainer.cssAnimate( { translateY: -200 }, 800 );
                     ccontainer.cssAnimate( { opacity: 1, translateY: 0 }, 800 );
                     topicName = name;
-                    baidu('.case-control h1').html(p.html());
-                    baidu('.case-control').removeClass('point-tool point-data point-end').addClass('point-' + name);
+                    that.find('.case-control h1').html(p.html());
+                    that.find('.case-control').removeClass('point-tool point-data point-end').addClass('point-' + name);
                     if(!inCaseMode) {
                         enterCaseMode();
                         plan(loadCases, that.enterDutaion);
@@ -801,6 +801,19 @@ baidu(function(){
         })
         .on('beforehide', function(){
             this.github.addClass('hide');
+        })
+
+    stage.getScreen('case')
+        .on('beforeshow', function() {
+            baidu('.loading').css('display', 'block');
+        })
+        .on('aftershow', function() {            
+            baidu.ajax({
+                type: 'get',
+                url: 'fex/case/list.php?topic=' + topicName,
+                success: showCases
+            });
+
         })
     stage.start();
     control.fitNavPosition();

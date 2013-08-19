@@ -34,6 +34,7 @@
                 <li screens="archive" class="s2"><a href="#archive">大牛</a></li>
                 <li screens="team" class="s3"><a href="#team">团队</a></li>
                 <li screens="contact" class="s4"><a href="#contact">关注</a></li>
+                <li screens="case" class="s5"><a href="#case">案例</a></li>
             </ul>
         </div>
     </div>
@@ -145,6 +146,17 @@
                 <h1>关注我们</h1>
                 <img src="fex/weixin.png" class="code" title="扫描二维码，关注BaiduFE"></img>
                 <p>微信号：BaiduFE</p>
+            </div>
+        </div>
+        <div class="screen" id="case">            
+            <div class="case-container">         
+                <div class="case-control">
+                    <a class="return-button">返回</a>
+                    <h1></h1>
+                </div>
+                <div class="case-content">
+                    
+                </div>
             </div>
         </div>
     </div>
