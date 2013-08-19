@@ -1,11 +1,11 @@
 var CSS3Animate = (function (window) {
     var ua = /Chrome|Firefox|IE|Safari|Opera/.exec(window.navigator.userAgent);
     var perfix = {
-        'Chrome' : '-webkit-',
-        'Safari' : '-webkit-',
-        'Firefox' : '-moz-',
-        'IE' : '-ms-',
-        'Opera' : '-o-' }[ua && ua[0]] || '';
+        'Chrome' : 'webkit',
+        'Safari' : 'webkit',
+        'Firefox' : 'Moz',
+        'IE' : 'ms',
+        'Opera' : 'o' }[ua && ua[0]] || '';
 
     function decodeTransform( str ) {
         var transform = {
@@ -84,7 +84,7 @@ var CSS3Animate = (function (window) {
     }
 
     function mapStyles( dom, styles ) {
-        var transform = decodeTransform( dom.style.getPropertyValue( perfix + 'transform' ) );
+        var transform = decodeTransform( dom.style.getPropertyValue( perfix + 'Transform' ) );
         var names = ['translate', 'rotate', 'scale', 'skew', 'perspective'],
             alixs  = ['X', 'Y', 'Z'];
         var i, j, name;
@@ -105,7 +105,7 @@ var CSS3Animate = (function (window) {
                 }
             }
         }
-        styles[perfix + 'transform'] = encodeTransform(transform);
+        styles[perfix + 'Transform'] = encodeTransform(transform);
     }
 
     function setStyles( dom, styles ) {
@@ -119,11 +119,11 @@ var CSS3Animate = (function (window) {
         styles = styles || 'all';
         ease = ease || 'ease';
         delay = delay || 0;
-        dom.style[perfix + 'transition'] = [styles, duration, delay, ease].join(' ');
+        dom.style[perfix + 'Transition'] = [styles, duration, delay, ease].join(' ');
     }
 
     function removeTransition( dom ) {
-        dom.style.removeProperty( perfix + 'transition' );
+        dom.style[ perfix + 'Transition' ] = "";
     }
 
     function classMotify( dom, rules ) {
@@ -168,13 +168,16 @@ var CSS3Animate = (function (window) {
         }
         duration = duration || 300;
         setTransition( dom, 'all', duration + 'ms');
-        if ( typeof(styles) == 'string' ) {
-            classMotify( dom, styles );
-        }
-        else {
-            mapStyles( dom, styles );
-            setStyles( dom, styles );
-        }
+
+        setTimeout(function () {            
+            if ( typeof(styles) == 'string' ) {
+                classMotify( dom, styles );
+            }
+            else {
+                mapStyles( dom, styles );
+                setStyles( dom, styles );
+            }
+        }, 0);
 
         setTimeout( function(){            
             typeof(callback) == 'function' && callback.apply(dom);
