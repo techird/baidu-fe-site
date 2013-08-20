@@ -6,6 +6,12 @@
     <title>Baidu FE</title>
     <link rel="stylesheet" href="fex/fe.css" />
     <script type="text/javascript" src="http://fe.bdimg.com/tangram/latest.js"></script>
+    <script src="fex/tools.js"></script>
+    <script src="fex/Event.js"></script>
+    <script src="fex/Screen.js"></script>
+    <script src="fex/Stage.js"></script>
+    <script src="fex/Splash.js"></script>    
+    <script src="fex/Control.js"></script>
     <script src="fex/CSS3Animate.js"></script>
     <script src="fex/SlideShow.js"></script>
     <script src="fex/fe.js"></script>
