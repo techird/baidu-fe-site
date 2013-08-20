@@ -495,6 +495,7 @@ baidu(function(){
                 screen.find('.case-control h1').html(title);
             }
             function mergeTags( thecase ) {
+                if(!thecase.tags) return;
                 var caseTags = thecase.tags.split(' ');
                 caseTags.forEach(function(tag) {
                     var updated = false;
