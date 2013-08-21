@@ -66,7 +66,7 @@
     
     <div id="stage">
         <div class="screen" id="home" >        
-            <h1>F.E.X<span>Best or nothing</span></h1>
+            <h1><span></span></h1>
             <div class="meeting-info"></div>
             <div class="nav down"></div>
         </div>

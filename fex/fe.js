@@ -538,12 +538,10 @@ baidu(function(){
                           + '  <a class="show-case" case-name="' + name + '" case-title="' +thecase.title + '" href="fex/case/show.php?name=' + name + '" target="_blank">查看</a>'
                           + '</section>');
                         sections.push(section);
+                        section.css3({ opacity: 0, translateY: 30 }).appendTo(article);
                         plan(function(section) {
-                            section.css3({ opacity: 0, translateY: 30 }).appendTo(article);
-                            plan( function() {
-                                section.cssAnimate({ opacity:1, translateY: 0 });
-                            }, 10);
-                        }, delay += 50, [section]);
+                            section.cssAnimate({ opacity:1, translateY: 0 });
+                        }, delay += 100, [section]);
                         mergeTags(thecase);
                     }
                 }
@@ -572,18 +570,15 @@ baidu(function(){
                     var delay = 0;
                     setTitle('精彩案例' + ( name ? (' - ' + name) : ''));
                     sections.forEach(function(section){
+                        section.detach();
                         if(!name || ~section.attr('data-tags').indexOf(name)) {
+                            section.css3({ opacity: 0, translateY: 30 }).appendTo(article);
                             plan(function(section) {
-                                section.css3({ opacity: 0, translateY: 30 }).appendTo(article);
-                                plan( function() {
-                                    section.cssAnimate({ opacity:1, translateY: 0 });
-                                }, 10);
-                            }, delay += 50, [section]);
-                        } else {
-                            section.detach();
+                                section.cssAnimate({ opacity:1, translateY: 0 });
+                            }, delay += 100, [section]);
                         }
                     });
-                    plan( article.css3, delay, [{ translateY: 0, opacity: 1 }], article);
+                    article.css3({ translateY: 0, opacity: 1 });
                     baidu('.loading').css('display', 'none');
                 }
             }
