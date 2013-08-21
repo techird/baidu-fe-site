@@ -480,9 +480,11 @@ baidu(function(){
     stage.getScreen('case')
         .on('init', function() {
             this.$.find('.return-button').click(function(){
-                control.enableNavigation( 800 );
                 window.history.go(-1);
             });
+        })
+        .on('hashchange', function(hash){
+            hash == 'case' || control.enableNavigation( 800 );
         })
         .on('beforeshow', function() {
             plan( control.disableNavigation, 10, [500], control );

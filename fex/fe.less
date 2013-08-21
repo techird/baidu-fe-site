@@ -916,6 +916,9 @@ ul.loading {
         top: 90px;
         width: 100%;
         padding-top: 30px;
+        &.hide .cat {
+
+        }
         .cat, .url {
             position: static;
             display: block;
@@ -925,7 +928,7 @@ ul.loading {
         .line, .icons {
             display: none;
         }
-        .cat {
+        .cat, &.hide .cat {
             .animation(none);
             .transform(scale(.5) translateX(-130px) translateY(-160px));
             margin-right: -100px;

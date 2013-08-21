@@ -64,6 +64,7 @@ function Control( stage, splash ) {
         baidu('#top-nav, #logo').cssAnimate({opacity: 0, translateY: -100, translateX: 0}, duration || 300);
     }
     this.enableNavigation = function( duration ) {        
+        if(stage.enabled()) return;
         stage.enable();
         baidu('#top-nav, #logo').cssAnimate({opacity: 1, translateY: 0}, duration || 300);
     }

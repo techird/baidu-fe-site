@@ -39,8 +39,13 @@ function Stage() {
             last_wheel_event = e.timeStamp;
             e.wheelDelta < 0 ? slider.next() : slider.prev();
         });
-        window.addEventListener('hashchange', function(){
+        window.addEventListener('hashchange', function(e){
+            that.fire('hashchange');
             updateHash();
+            var current = that.getCurrentScreen();
+            if ( current ) {                
+                current.fire('hashchange', [hashPart[0]]);
+            }
             var screen = that.getScreen(hashPart[0]);
             if ( screen ) {
                 slider.slide( screen.index );
