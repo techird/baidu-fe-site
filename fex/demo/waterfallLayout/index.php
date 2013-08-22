@@ -101,16 +101,17 @@
         exit;       
     }
 
-    $user_name = isset($_GET['u']) && !empty($_GET['u']) ? $_GET['u'] : 'Colourful Life (Teresa) travelling';
+    $user_name = isset($_GET['u']) && !empty($_GET['u']) ? $_GET['u'] : 'Colourful Life (Teresa)';
     $user_id = callFlickrAPI(array(
         method => 'flickr.people.findByUsername',
         username => $user_name
     ));
     if(!$user_id){
-        echo "INVALID USERNAME";
-        exit;
+        // echo "INVALID USERNAME";
+        $user_id = "61402846@N00";
+    }else{
+        $user_id = $user_id['user']['id'];
     }
-    $user_id = $user_id['user']['id'];
 ?>
 <!DOCTYPE HTML>
 <html lang="en-US">
