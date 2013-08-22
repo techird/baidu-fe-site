@@ -518,6 +518,18 @@ baidu(function(){
                     success: showCases
                 }); 
             }
+            function sortCases( caseMap ) {
+                var caseArray = [];
+                for(var name in caseMap) {
+                    if(caseMap.hasOwnProperty(name)) {
+                        var thecase = caseMap[name];
+                        thecase.name = name;
+                        thecase.level = thecase.level || 0;
+                        caseArray.push(thecase);
+                    }
+                }
+                return caseArray.sort(function(a, b){ return b.level - a.level; });
+            }
             function showCases(caseMap) {
                 baidu('.loading').css('display', 'none');
                 that.caseLoaded = true;
@@ -528,25 +540,23 @@ baidu(function(){
 
                 screen.find('.case-content').css3({ opacity: 1, translateX: 0 });
 
-                for(var name in caseMap) {
-                    if(caseMap.hasOwnProperty(name)) {
-                        var thecase = caseMap[name];
-                        var section = baidu(
-                            '<section data-tags="' + thecase.tags + '">' 
-                          + '  <img class="preview" src="fex/case/cases/' + name + '/preview.png" />'
-                          + '  <h1 class="title">' + thecase.title + '</h1>'
-                          + '  <p class="desc">' + thecase.desc + '</p>'
-                          + '  <div class="tags">' + thecase.tags + '</div>'
-                          + '  <a class="show-case" case-name="' + name + '" case-title="' +thecase.title + '" href="fex/case/show.php?name=' + name + '" target="_blank">查看</a>'
-                          + '</section>');
-                        sections.push(section);
-                        section.css3({ opacity: 0, translateY: 30 }).appendTo(article);
-                        plan(function(section) {
-                            section.cssAnimate({ opacity:1, translateY: 0 });
-                        }, delay += 100, [section]);
-                        mergeTags(thecase);
-                    }
-                }
+                var cases = sortCases( caseMap );
+                cases.forEach(function(thecase){
+                    var section = baidu(
+                        '<section data-tags="' + thecase.tags + '">' 
+                      + '  <img class="preview" src="fex/case/cases/' + thecase.name + '/preview.png" />'
+                      + '  <h1 class="title">' + thecase.title + '</h1>'
+                      + '  <p class="desc">' + thecase.desc + '</p>'
+                      + '  <div class="tags">' + thecase.tags + '</div>'
+                      + '  <a class="show-case" case-name="' + thecase.name + '" case-title="' +thecase.title + '" href="fex/case/show.php?name=' + thecase.name + '" target="_blank">查看</a>'
+                      + '</section>');
+                    sections.push(section);
+                    section.css3({ opacity: 0, translateY: 30 }).appendTo(article);
+                    plan(function(section) {
+                        section.cssAnimate({ opacity:1, translateY: 0 });
+                    }, delay += 100, [section]);
+                    mergeTags(thecase);
+                });
 
                 var tagContainer = baidu('<div class="case-tags"><label>标签: </label></div>').prependTo(screen.find('.case-content'));
                 tags.sort(function(a, b) { return b.count - a.count; });
