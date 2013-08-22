@@ -2,6 +2,9 @@
 	margin:0;
 	padding:0;
 }
+html, body {
+overflow: hidden;
+}
 body {
   font-family: 'Myriad Pro', Arial, 'Microsoft Yahei';
   background: url("../images/bg_03.png");
