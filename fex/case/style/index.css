@@ -141,9 +141,11 @@ ul li{
   h2 {font-size: 25px;}
   .title h1 { font-size: 35px;}
   .footer .footer-main p{ font-size: 22px;}
+  .nav{ display: none;}
 }
 @media screen and (max-device-width: 1024px) and (orientation: landscape) {
   .item { padding: 0 50px 75px 50px;}
+  .nav{ display: none;}
 }
 .title .subTitle {
   margin: 8px 0 0 20px;
@@ -229,3 +231,28 @@ ul li{
 	padding: 3px;
 	border-radius: 10px
 }
+.nav {
+  width: 100px;
+  background: rgba(255,255,255,0.4);
+  position: fixed;
+  top: 100px;
+  right: 5px;
+  z-index: 1000;
+}
+.nav li {
+  width: 100%;
+  line-height: 40px;
+  text-align: center;
+  list-style:none;
+  border-bottom: 1px solid #c8c8c8;
+}
+.nav li a {
+  width: 100px;
+  height: 40px;
+  display: block;
+  overflow: hidden;
+  color: #000;
+  text-decoration: none;
+  font-size: 16px;
+}
+.nav li a:hover{ background-color: #0099f2;}

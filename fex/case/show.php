@@ -55,6 +55,11 @@
         $body = $xml->body;
         $content = $body->asXML();
         $content = preg_replace("/(\<img\s*src=\s*\")(img)(\/(.*)\.(png|jpg|jpeg)\")/", "$1$casesBasePath$caseName/$2$3", $content);
+        preg_match_all('/<h2>(.*?)<\/h2>/',$content,$nav);
+        $content = preg_replace('/<h2>(.*?)<\/h2>/', '<h2 id="$1">$1</h2>', $content);
+        $content = preg_replace('/<h1>(.*?)<\/h1>/', '<h1 id="nav-title">$1</h1>', $content);
+        
+
     }else{
         echo "Case Not Found";
         exit;
@@ -82,6 +87,18 @@
     <body>
 <? } ?>
 <? if($iframe != 'true') { ?>
+        <div class="nav">
+            <ol>
+                <li><a href="#nav-title">回到顶部</a></li>
+                <?foreach ($nav[1] as &$value) {
+                    echo '<li><a href="#'.$value.'">'.$value.'</a></li>';
+                }?>
+                <?if(isset($qrImages) && count($qrImages) > 0){?>
+                    <li><a href="#demo">二维码</a></li>
+                <?}?>
+            </ol><!-- / -->
+        </div><!-- / -->
+        
         <div class="scroller">
             <div class="scrollContent">
 <? } ?>
@@ -100,7 +117,7 @@
                 
                 <?if(isset($qrImages) && count($qrImages) > 0){?>
                 <div class="footer">
-                    <h2>不如亲眼见证</h2>
+                    <h2 id = "demo">不如亲眼见证</h2>
                     <div class="footer-main">
                         <?foreach($qrImages as $qrImage){?>
                         <div class="footer-item">
