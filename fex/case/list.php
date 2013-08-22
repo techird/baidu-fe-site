@@ -40,7 +40,6 @@
 
     preg_match('/<title>(.+?)<\\/title>/', $content, $match);
     $result['title'] = $match[1];
-
     $result['tags'] = getMeta($content, 'tags');
     $result['desc'] = getMeta($content, 'desc');
     $result['topic'] = getMeta($content, 'topic');
@@ -55,4 +54,7 @@
     preg_match('/<meta name="case-'.$name.'" content="(.+?)">/', $content, $match);
     return $match[1];
   }
+
+  preg_match_all('/\<h2\>(.*)\<\/h2\>/',$content,$nav);
+
 ?>
