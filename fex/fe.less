@@ -449,7 +449,7 @@ ul.loading {
         }
     }
 }
-@media only screen and (max-height: 720px) {
+@media only screen and (max-height: 599px) {
     #topic .topic-content ul li{
         padding: 20px 80px 20px 20px;
         margin-bottom: 20px;
@@ -464,6 +464,23 @@ ul.loading {
             right: 10px;
             top: 50%;
             margin-top: -17px;
+        }
+    }
+}
+@media only screen and (max-height: 720px) and (min-height: 600px) {
+    #topic .topic-content ul li{
+        padding: 15px 15px 70px 15px;
+        margin-bottom: 20px;
+        h1 {
+            font-size: 20px;
+        }
+        p {
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+        a {
+            right: 15px;
+            bottom: 15px;
         }
     }
 }
