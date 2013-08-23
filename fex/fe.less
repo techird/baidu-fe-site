@@ -350,7 +350,7 @@ ul.loading {
             margin-left: -50px;
             margin-top: 20px;
             padding-top: 40px;
-            top: 180px;
+            top: 150px;
             font-size: 24px;
             position: absolute;
             text-align: center;
@@ -398,7 +398,7 @@ ul.loading {
     }
     .topic-content {
         position: absolute;
-        top: 280px;
+        top: 250px;
         bottom: 0;
         width: 100%;
         overflow: visible;
@@ -449,6 +449,25 @@ ul.loading {
         }
     }
 }
+@media only screen and (max-height: 720px) {
+    #topic .topic-content ul li{
+        padding: 20px 80px 20px 20px;
+        margin-bottom: 20px;
+        h1 {
+            font-size: 18px;
+        }
+        p {
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+        a {
+            right: 10px;
+            top: 50%;
+            margin-top: -17px;
+        }
+    }
+}
+
 @base-color: rgb(34, 137, 177);
 .case-container {        
     -webkit-backface-visibility: hidden;
