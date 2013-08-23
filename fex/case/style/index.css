@@ -262,6 +262,7 @@ ul li{
   color: #000;
   text-decoration: none;
   font-size: 14px;
+  padding: 0 10px;
 }
 .nav li:first-child a{
   border-radius: 6px 6px 0 0;

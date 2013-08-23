@@ -76,14 +76,43 @@
                 <p class="data">数据监控</p>
                 <p class="end">端技术</p>
             </div>
-            <div class="case-container">         
-                <div class="case-control">
-                    <a class="return-button">返回</a>
-                    <h1></h1>
-                </div>
-                <div class="case-content">
-                    
-                </div>
+            <div class="topic-content case-list">
+                <ul class="tool">
+                    <li class="fis">
+                        <h1>FIS</h1>
+                        <p>前端集成解决方案</p>
+                        <a class="show-case" href="fex/case/show.php?name=fis" target="_blank">查看</a>
+                    </li>
+                    <li class="ueditor">
+                        <h1>UEditor</h1>
+                        <p>一套开源的在线HTML所见即所得的编辑器</p>
+                        <a class="show-case" href="fex/case/show.php?name=ueditor" target="_blank">查看</a>
+                    </li>
+                </ul>
+                <ul class="data">
+                    <li class="speed">
+                        <h1>Speed</h1>
+                        <p>集监控、分析、优化于一体的性能监控</p>
+                        <a class="show-case" href="fex/case/show.php?name=speed" target="_blank">查看</a>
+                    </li>
+                    <li class="uxrp">
+                        <h1>UXRP</h1>
+                        <p>让用户数据来更好的帮助你的产品</p>
+                        <a class="show-case" href="fex/case/show.php?name=uxrp" target="_blank">查看</a>
+                    </li>
+                </ul>
+                <ul class="end">
+                    <li class="chassis">
+                        <h1>Chassis</h1>
+                        <p>以提高Webapp开发效率为目的的开发框架</p>
+                        <a class="show-case" href="fex/case/show.php?name=chassis" target="_blank">查看</a>
+                    </li>
+                    <li class="gmu">
+                        <h1>GMU</h1>
+                        <p>基于Zepto并且面向移动端的UI组件库，价值在于为移动端快速开发提供稳定、丰富的UI组件。</p>
+                        <a class="show-case" href="fex/case/show.php?name=gmu" target="_blank">查看</a>
+                    </li>
+                </ul>
             </div>
         </div>
         <div class="screen" id="archive" >
