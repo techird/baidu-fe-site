@@ -337,24 +337,10 @@ baidu(function(){
         .on('aftershow', function() {    
             var screen = this.$;
             var that = this;
-            var tags = [];
             function setTitle( title ) {
                 screen.find('.case-control h1').html(title);
             }
-            function mergeTags( thecase ) {
-                if(!thecase.tags) return;
-                var caseTags = thecase.tags.split(' ');
-                caseTags.forEach(function(tag) {
-                    var updated = false;
-                    tags.forEach( function(exist) {
-                        if(exist.name == tag) {
-                            exist.count++;
-                            updated = true;
-                        }
-                    });
-                    updated || tags.push( { name: tag, count: 1 });
-                });
-            }
+            
             function loadCases() {
                 baidu('.loading').css('display', 'block');
                 baidu.ajax({
@@ -375,17 +361,13 @@ baidu(function(){
                 }
                 return caseArray.sort(function(a, b){ return b.level - a.level; });
             }
-            function showCases(caseMap) {
-                baidu('.loading').css('display', 'none');
-                that.caseLoaded = true;
-                setTitle('精彩案例');
-                var article = baidu('<article class="case-list"></article>').appendTo(screen.find('.case-content').empty());
+            
+            function appendCase(caseMap, container){
+            	var article = baidu('<article class="case-list"></article>').appendTo(container);
                 var delay = 0;
                 var sections = [];
-
-                screen.find('.case-content').css3({ opacity: 1, translateX: 0 });
-
                 var cases = sortCases( caseMap );
+                var tags = [];
                 cases.forEach(function(thecase){
                     var section = baidu(
                         '<section data-tags="' + thecase.tags + '">' 
@@ -403,7 +385,7 @@ baidu(function(){
                     mergeTags(thecase);
                 });
 
-                var tagContainer = baidu('<div class="case-tags"><label>标签: </label></div>').prependTo(screen.find('.case-content'));
+                var tagContainer = baidu('<div class="case-tags"><label>标签: </label></div>').prependTo(container);
                 tags.sort(function(a, b) { return b.count - a.count; });
                 tags.forEach(function(tag) {
                     tagContainer.append('<a data-tag="' + tag.name + '" class="case-tag">' + tag.name + ' (' + tag.count + ')</a>');
@@ -437,6 +419,42 @@ baidu(function(){
                     });
                     article.css3({ translateY: 0, opacity: 1 });
                     baidu('.loading').css('display', 'none');
+                }
+                
+	            function mergeTags( thecase ) {
+	                if(!thecase.tags) return;
+	                var caseTags = thecase.tags.split(' ');
+	                caseTags.forEach(function(tag) {
+	                    var updated = false;
+	                    tags.forEach( function(exist) {
+	                        if(exist.name == tag) {
+	                            exist.count++;
+	                            updated = true;
+	                        }
+	                    });
+	                    updated || tags.push( { name: tag, count: 1 });
+	                });
+	            }
+            }
+            
+            function showCases(caseMap) {
+                baidu('.loading').css('display', 'none');
+                that.caseLoaded = true;
+                setTitle('精彩案例');
+				var classifiedCaseMap = {a: {}, b:{}};
+				for(var caseName in caseMap){
+					if(caseMap[caseName].level > 5){
+						classifiedCaseMap["a"][caseName] = caseMap[caseName];
+					}else{
+						classifiedCaseMap["b"][caseName] = caseMap[caseName];
+					}
+				}
+
+                // appendCase(caseMap);
+                for(var caseGroup in classifiedCaseMap){
+                	var container = baidu("<div class=\"case-group case-group-"+caseGroup+"\"/>");
+                	screen.find(".case-content").append(container);
+	                appendCase(classifiedCaseMap[caseGroup], container);
                 }
             }
             this.caseLoaded || loadCases();
