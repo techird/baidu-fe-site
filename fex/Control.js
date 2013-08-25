@@ -68,4 +68,8 @@ function Control( stage, splash ) {
         stage.enable();
         baidu('#top-nav, #logo').cssAnimate({opacity: 1, translateY: 0}, duration || 300);
     }
+
+    this.displayLoading = function( display ) {
+        baidu('.loading').css('display', display === false ? 'none' : 'block');
+    }
 }

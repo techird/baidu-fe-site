@@ -337,13 +337,77 @@ baidu(function(){
         .on('aftershow', function() {    
             var screen = this.$;
             var that = this;
-            var tags = [];
-            function setTitle( title ) {
-                screen.find('.case-control h1').html(title);
+            var productionData = {}, otherData = {};
+            var PRODUCTION_LEVEL = 5;
+            var screenContainer = screen.find('.case-content');
+
+            this.caseLoaded || loadCases();
+
+            function loadCases() {
+                control.displayLoading();
+                baidu.ajax({
+                    type: 'get',
+                    url: 'fex/case/list.php?topic=cases',
+                    success: caseLoaded
+                }); 
             }
-            function mergeTags( thecase ) {
+
+            function caseLoaded( cases ) {
+
+                initData( productionData, "产品线案例" );
+                initData( otherData, "其他案例" );
+
+                dispatchCases( cases );
+
+                [ productionData, otherData ].forEach( function(data) {
+                    sortCases( data );
+                    sortTags( data );
+                    renderTags( data );
+                    renderCases( data );
+                    listenTagsFilter( data );
+                });
+            }
+
+            function initData( data, title ) {
+                var fieldset;
+
+                fieldset = baidu('<fieldset></fieldset>').append('<legend>' + title + '</legend>');
+                fieldset.appendTo(screenContainer);
+
+                data.tagContainer = baidu('<div class="case-tags"><label>标签: </label></div>').appendTo(fieldset);
+                data.caseContainer = baidu('<article class="case-list"></article>').appendTo(fieldset);
+
+                data.cases = [];
+                data.tags = [];
+            }
+
+            function dispatchCases( cases ) {
+                var currentData, thecase;
+                for( var name in cases ) {         
+                    thecase = cases[name];
+
+                    thecase.name = name;
+                    thecase.level = thecase.level || 0;
+                    thecase.visible = true;
+                    thecase.tags = thecase.tags || "";
+
+                    if ( thecase.level > PRODUCTION_LEVEL ) {
+                        currentData = productionData;
+                    } else {
+                        currentData = otherData;
+                    }
+
+                    currentData.cases.push( thecase );
+                    mergeTags( currentData, thecase );
+                }
+            }
+
+            function mergeTags( data, thecase ) {
                 if(!thecase.tags) return;
+
+                var tags = data.tags;
                 var caseTags = thecase.tags.split(' ');
+
                 caseTags.forEach(function(tag) {
                     var updated = false;
                     tags.forEach( function(exist) {
@@ -355,91 +419,71 @@ baidu(function(){
                     updated || tags.push( { name: tag, count: 1 });
                 });
             }
-            function loadCases() {
-                baidu('.loading').css('display', 'block');
-                baidu.ajax({
-                    type: 'get',
-                    url: 'fex/case/list.php?topic=cases',
-                    success: showCases
-                }); 
-            }
-            function sortCases( caseMap ) {
-                var caseArray = [];
-                for(var name in caseMap) {
-                    if(caseMap.hasOwnProperty(name)) {
-                        var thecase = caseMap[name];
-                        thecase.name = name;
-                        thecase.level = thecase.level || 0;
-                        caseArray.push(thecase);
-                    }
-                }
-                return caseArray.sort(function(a, b){ return b.level - a.level; });
-            }
-            function showCases(caseMap) {
-                baidu('.loading').css('display', 'none');
-                that.caseLoaded = true;
-                setTitle('精彩案例');
-                var article = baidu('<article class="case-list"></article>').appendTo(screen.find('.case-content').empty());
-                var delay = 0;
-                var sections = [];
 
-                screen.find('.case-content').css3({ opacity: 1, translateX: 0 });
+            function sortCases( data ) {
+                data.cases.sort( function(a, b) { return b.level - a.level; });
+            }
 
-                var cases = sortCases( caseMap );
+            function sortTags( data ) {
+                data.tags.sort( function(a, b) { return b.count - a.count; } );
+            }
+
+            function filterCases( data, tag ) {
+                data.cases.forEach( function(thecase) {
+                    thecase.visible = !tag || ~thecase.tags.indexOf(tag)
+                } );
+            }
+
+            function renderCases( data ) {
+                var container = data.caseContainer,
+                    cases = data.cases,
+                    delay = 0;
+                control.displayLoading( false );
+                container.empty();
+                container.css( { translateY: 0, opacity: 1 } ); // reset position
                 cases.forEach(function(thecase){
+                    if(!thecase.visible) return;
                     var section = baidu(
-                        '<section data-tags="' + thecase.tags + '">' 
+                        '<section>' 
                       + '  <img class="preview" src="fex/case/cases/' + thecase.name + '/preview.png" />'
                       + '  <h1 class="title">' + thecase.title + '</h1>'
                       + '  <p class="desc">' + thecase.desc + '</p>'
                       + '  <div class="tags">' + thecase.tags + '</div>'
                       + '  <a class="show-case" case-name="' + thecase.name + '" case-title="' +thecase.title + '" href="fex/case/show.php?name=' + thecase.name + '" target="_blank">查看</a>'
                       + '</section>');
-                    sections.push(section);
-                    section.css3({ opacity: 0, translateY: 30 }).appendTo(article);
+                    section.css3({ opacity: 0, translateY: 30 }).appendTo(container);
                     plan(function(section) {
                         section.cssAnimate({ opacity:1, translateY: 0 });
                     }, delay += 100, [section]);
-                    mergeTags(thecase);
                 });
+            }
 
-                var tagContainer = baidu('<div class="case-tags"><label>标签: </label></div>').prependTo(screen.find('.case-content'));
-                tags.sort(function(a, b) { return b.count - a.count; });
+            function renderTags( data ) {
+                var tags = data.tags,
+                    container = data.tagContainer;
                 tags.forEach(function(tag) {
-                    tagContainer.append('<a data-tag="' + tag.name + '" class="case-tag">' + tag.name + ' (' + tag.count + ')</a>');
+                    container.append('<a data-tag="' + tag.name + '" class="case-tag">' + tag.name + ' (' + tag.count + ')</a>');
                 });
-                tagContainer.delegate('.case-tag', 'click', function(e) {
-                    baidu('.loading').css('display', 'block');
+            }
+
+            function listenTagsFilter( data ) {
+                var container = data.tagContainer.delegate('.case-tag', 'click', function(e) {
+                    control.displayLoading();
                     var tag = undefined;
-                        a = baidu(e.target);
-                    if(!a.hasClass('active')) {
-                        tagContainer.find('.case-tag.active').removeClass('active');    
-                        a.addClass('active');
+                        clicked = baidu(e.target);
+                    if(!clicked.hasClass('active')) {
+                        container.find('.case-tag.active').removeClass('active');    
+                        clicked.addClass('active');
                         tag = baidu(e.target).attr('data-tag');
                     } else {
-                        a.removeClass('active');
+                        clicked.removeClass('active');
                     }
-                    plan( article.cssAnimate, 10, [{ translateY: 30, opacity: 0 }, 200, function(){
-                        filterByTag( tag );
-                    }], article );
-                });
-                function filterByTag( name ) {
-                    var delay = 0;
-                    setTitle('精彩案例' + ( name ? (' - ' + name) : ''));
-                    sections.forEach(function(section){
-                        section.detach();
-                        if(!name || ~section.attr('data-tags').indexOf(name)) {
-                            section.css3({ opacity: 0, translateY: 30 }).appendTo(article);
-                            plan(function(section) {
-                                section.cssAnimate({ opacity:1, translateY: 0 });
-                            }, delay += 100, [section]);
-                        }
+                    data.caseContainer.cssAnimate({ translateY: 30, opacity: 0 }, 200, function(){
+                        filterCases( data, tag );
+                        renderCases( data );
                     });
-                    article.css3({ translateY: 0, opacity: 1 });
-                    baidu('.loading').css('display', 'none');
-                }
+                });
             }
-            this.caseLoaded || loadCases();
         })
     stage.start();
     control.fitNavPosition();
