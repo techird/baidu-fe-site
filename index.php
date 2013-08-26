@@ -196,7 +196,7 @@
             <div class="case-container">         
                 <div class="case-control">
                     <a class="return-button">返回</a>
-                    <h1></h1>
+                    <h1>精彩案例</h1>
                 </div>
                 <div class="case-content">
                     
