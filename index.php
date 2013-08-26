@@ -1,10 +1,19 @@
+<?
+    if(preg_match('/Mobile/', $_SERVER['HTTP_USER_AGENT'])) {
+        header('Location: mobile.php');
+        die();
+    }
+?>
+
 <!DOCTYPE HTML>
 <html>
 <head>
     <link rel="shortcut icon" href="fex/favicon.ico" type="image/x-icon" />
     <meta charset="utf-8" />
     <title>Baidu FE</title>
-    <link rel="stylesheet" href="fex/fe.css" />
+
+    <link rel="stylesheet" href="fex/fe.css" media="screen" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
     <script type="text/javascript" src="http://fe.bdimg.com/tangram/latest.js"></script>
     <script src="fex/tools.js"></script>
     <script src="fex/Event.js"></script>
@@ -16,7 +25,7 @@
     <script src="fex/SlideShow.js"></script>
     <script src="fex/fe.js"></script>
     <script>
-    var pageId = 'fexhomepage';
+        var pageId = 'fexhomepage';
     </script>
     <script type="text/javascript" src="http://img.baidu.com/hunter/femonk.js"></script>
 </head> 
