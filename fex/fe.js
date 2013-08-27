@@ -380,6 +380,8 @@ baidu(function(){
                     renderCases( data );
                     listenTagsFilter( data );
                 });
+
+                that.caseLoaded = true;
             }
 
             function initData( data, title ) {
