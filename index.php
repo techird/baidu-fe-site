@@ -89,7 +89,7 @@
                 <ul class="tool">
                     <li class="fis">
                         <h1>FIS</h1>
-                        <p>前端集成解决方案</p>
+                        <p>使用FIS，让前端团队可以快速进入角色，高效解决开发过程中模板、框架、自动化、性能优化等问题i</p>
                         <a class="show-case" href="fex/case/show.php?name=fis" target="_blank">查看</a>
                     </li>
                     <li class="ueditor">
@@ -101,7 +101,7 @@
                 <ul class="data">
                     <li class="speed">
                         <h1>Speed</h1>
-                        <p>集监控、分析、优化于一体的性能监控</p>
+                        <p>WebSpeed为您提供了整套的用户性能监控及优化方案，是您提升用户访问速度、改善用户体验的有力助手！ </p>
                         <a class="show-case" href="fex/case/show.php?name=speed" target="_blank">查看</a>
                     </li>
                     <li class="uxrp">
@@ -113,7 +113,7 @@
                 <ul class="end">
                     <li class="chassis">
                         <h1>Chassis</h1>
-                        <p>以提高Webapp开发效率为目的的开发框架</p>
+                        <p>Chassis提供了一套类Backbone的MVC代码架构，在此基础上延伸了视图层管理，优化了路由控制以及更加轻量级的实现。</p>
                         <a class="show-case" href="fex/case/show.php?name=chassis" target="_blank">查看</a>
                     </li>
                     <li class="gmu">
