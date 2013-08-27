@@ -49,7 +49,7 @@
                 <li screens="archive" class="s2"><a href="#archive">大牛</a></li>
                 <li screens="team" class="s3"><a href="#team">团队</a></li>
                 <li screens="contact" class="s4"><a href="#contact">关注</a></li>
-                <li screens="case" class="s5"><a href="#case">案例</a></li>
+                <li screens="case" class="s5"><a href="#case">案例</a><span>HOT</span></li>
             </ul>
         </div>
     </div>
