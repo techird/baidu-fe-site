@@ -335,7 +335,11 @@ baidu(function(){
     stage.getScreen('case')
         .on('init', function() {
             this.$.find('.return-button').click(function(){
-                window.history.go(-1);
+                if (window.history.length === 2){
+                    window.location = "http://fex.baidu.com/";
+                }else {
+                    window.history.go(-1);
+                }
             });
         })
         .on('hashchange', function(hash){
