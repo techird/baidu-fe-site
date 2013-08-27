@@ -4,7 +4,7 @@ baidu(function(){
     var stage = new Stage();
     var splash = new Splash( stage );
     var control = new Control( stage, splash );
-    
+
     stage.getScreen('home')
 
         .on( 'init', function(){
@@ -13,14 +13,6 @@ baidu(function(){
                 stage.slideToScreen(1);
             });
             this.shown = false;
-        })
-
-        .on('beforehide', function(){            
-            this.down.cssAnimate( { 'translateY': 100 } );
-        })
-
-        .on('aftershow', function(){            
-            this.down.cssAnimate( { 'translateY': -100 } );
             if(!this.shown) {
                 var style = getComputedStyle(this.$[0]);
                 var src = style['background-image'];
@@ -31,22 +23,24 @@ baidu(function(){
                     var scr = this.$;
                     img.onload = function() {
                         scr.addClass('fadein');
+                        control.displayLoading(false);
+                        screen.shown = true;
                     }
                     img.src = src;
                 }
-                this.shown = true;
             }
+        })
+
+        .on('beforehide', function(){            
+            this.down.cssAnimate( { 'translateY': 100 } );
+        })
+
+        .on('aftershow', function(){            
+            this.down.cssAnimate( { 'translateY': -100 } );
+            if(!this.shown) control.displayLoading();
         });
 
-    stage.getScreen('topic')
-        .on( 'init', function(){
-            baidu.ajax({
-                url: 'fex/case/list.php',
-                success: function( caseMap ) { 
-                    
-                }
-            })
-        });
+    stage.getScreen('topic');
 
     stage.getScreen('archive')
         .on( 'init', function(){
