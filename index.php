@@ -89,7 +89,7 @@
                 <ul class="tool">
                     <li class="fis">
                         <h1>FIS</h1>
-                        <p>使用FIS，让前端团队可以快速进入角色，高效解决开发过程中模板、框架、自动化、性能优化等问题i</p>
+                        <p>使用FIS，让前端团队可以快速进入角色，高效解决开发过程中模板、框架、自动化、性能优化等问题</p>
                         <a class="show-case" href="fex/case/show.php?name=fis" target="_blank">查看</a>
                     </li>
                     <li class="ueditor">
