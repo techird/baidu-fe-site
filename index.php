@@ -94,7 +94,7 @@
                     </li>
                     <li class="ueditor">
                         <h1>UEditor</h1>
-                        <p>一套开源的在线HTML所见即所得的编辑器</p>
+                        <p>UEditor是一套开源的在线HTML所见即所得富文本web编辑器，具有轻量，可定制，注重用户体验等特点，开源基于BSD协议，允许自由使用和修改代码</p>
                         <a class="show-case" href="fex/case/show.php?name=ueditor" target="_blank">查看</a>
                     </li>
                 </ul>
@@ -106,7 +106,7 @@
                     </li>
                     <li class="uxrp">
                         <h1>UXRP</h1>
-                        <p>让用户数据来更好的帮助你的产品</p>
+                        <p>UXRP通过捕获用户的"蛛丝马迹"为您提供精准的用户页面行为数据，并将这些数据进行可视化展现。让用户数据来更好的帮助你的产品</p>
                         <a class="show-case" href="fex/case/show.php?name=uxrp" target="_blank">查看</a>
                     </li>
                 </ul>
