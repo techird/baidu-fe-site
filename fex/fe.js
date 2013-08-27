@@ -162,7 +162,7 @@ baidu(function(){
                     var sw = stage.width(),
                         cw = baidu('#team-container').outerWidth();
                     baidu('#drawing-layer').css('width', sw + cw * farRatio);
-                }, 10);
+                }, 1000);
                 var members = _this.$.find('.team-member');
                 var stand_timeout = 400, stand_timer;
 
