@@ -11,7 +11,7 @@ function Control( stage, splash ) {
 
     function fitNavPosition( screen ) {
         screen = screen || stage.getCurrentScreen();
-        baidu('#top-nav, #logo').css3( { translateY: getNavPosition( screen.index ) } )
+        baidu('#top-nav, #logo').css3( { translateY: getNavPosition( screen ? screen.index : 0 ) } )
     }
 
     stage.on('start', fitNavPosition);
