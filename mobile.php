@@ -169,7 +169,7 @@
 
     <script type="text/javascript">
     	var navElem = document.getElementById('top-nav');
-    	var navTop = navElem.offsetTop;
+    	var navTop = navElem.offsetTop + navElem.clientHeight;
     	window.onscroll = function (e) {
     		var top = document.body.scrollTop;
     		if(top >= navTop) navElem.classList.add('fixed');

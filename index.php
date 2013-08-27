@@ -11,7 +11,6 @@
     <link rel="shortcut icon" href="fex/favicon.ico" type="image/x-icon" />
     <meta charset="utf-8" />
     <title>Baidu FE</title>
-
     <link rel="stylesheet" href="fex/fe.css" media="screen" />
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
     <script type="text/javascript" src="http://fe.bdimg.com/tangram/latest.js"></script>
@@ -30,6 +29,7 @@
     <script type="text/javascript" src="http://img.baidu.com/hunter/femonk.js"></script>
 </head> 
 <body>
+    <img src="fex/home.jpg" style="display:none;" />
 
     <ul class="loading">
         <li></li>

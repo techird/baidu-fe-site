@@ -4,7 +4,7 @@ baidu(function(){
     var stage = new Stage();
     var splash = new Splash( stage );
     var control = new Control( stage, splash );
-
+    
     stage.getScreen('home')
 
         .on( 'init', function(){
@@ -12,6 +12,7 @@ baidu(function(){
             this.down = this.$.find('.nav.down').click(function(){
                 stage.slideToScreen(1);
             });
+            this.shown = false;
         })
 
         .on('beforehide', function(){            
@@ -20,6 +21,21 @@ baidu(function(){
 
         .on('aftershow', function(){            
             this.down.cssAnimate( { 'translateY': -100 } );
+            if(!this.shown) {
+                var style = getComputedStyle(this.$[0]);
+                var src = style['background-image'];
+                var match = /url\((.*?)\)/.exec(src);
+                if(match) {
+                    src = match[1];
+                    var img = new Image();
+                    var scr = this.$;
+                    img.onload = function() {
+                        scr.addClass('fadein');
+                    }
+                    img.src = src;
+                }
+                this.shown = true;
+            }
         });
 
     stage.getScreen('topic')

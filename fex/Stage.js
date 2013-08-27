@@ -124,6 +124,7 @@ function Stage() {
         });
         updateHash();
         var screen = that.getScreen( hashPart[0] );
+        this.fire('start', [screen] );
         screen ? slider.showFirst( screen.index ) : slider.showFirst();
     }
     this.disable = function() { disabled = true; };

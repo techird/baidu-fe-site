@@ -9,9 +9,12 @@ function Control( stage, splash ) {
         return y;
     }
 
-    function fitNavPosition() {
-        baidu('#top-nav, #logo').css3( { translateY: getNavPosition( stage.getCurrentScreen().index ) } )
+    function fitNavPosition( screen ) {
+        screen = screen || stage.getCurrentScreen();
+        baidu('#top-nav, #logo').css3( { translateY: getNavPosition( screen.index ) } )
     }
+
+    stage.on('start', fitNavPosition);
 
     // 导航条位置适应
     baidu(window).on( 'resize', function( ) {            
