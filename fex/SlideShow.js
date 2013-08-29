@@ -157,7 +157,7 @@ function SlideShow( config ) {
     function getState( name, dir ) {
         var offset = direction == 'X' ? container.width() : container.height();
         var translate = 'translate' + direction;
-        var state = {};
+        var state = { translateZ: 1 };
         var ratioNext = effect.fold && effect.fold.ratio || 1;
         var ratioPrev = effect.fold && effect.fold.both ? ratioNext : 1;
         dir = revert ? -dir : dir;
@@ -216,7 +216,7 @@ function SlideShow( config ) {
                     fire('afterslide', e);
                     sliding = false;
                 });
-            }, showDelay || 10);
+            }, showDelay || 50);
         }     
         index = index_to;
     }

@@ -126,187 +126,192 @@ baidu(function(){
         .on('beforeshow', function(){
             this.heads.css( { 'left': this.middle() } );
             this.layout();
-        })
-        .on('beforehide', function(){
-            this.heads.cssAnimate({opacity: 0});
-        })
+        });
     
     stage.getScreen('team')
-        .on( 'init', function(){       
-            var container = this.$.find('#team-container');
-            var drawing = this.$.find('#drawing-layer');
-            var dialog = this.$.find('#dialog');
-            var ly = 0, lx = 0;
-            var last_index;
-            var mcount = 34;     
-            var _this = this;
+        .on( 'init', function() {
+            this.inited = false;        
+            var _this = this;   
             var prev = _this.prev = _this.$.find('.nav.prev').hide();
             var next = _this.next = _this.$.find('.nav.next');
-            var farRatio = this.farRatio = 0.2;
+            this.init = function() {                
 
-            baidu.ajax({
-                url: 'fex/member/data.json',
-                dataType: 'json',
-                success: init
-            });
+                var container = _this.$.find('#team-container');
+                var drawing = _this.$.find('#drawing-layer');
+                var dialog = _this.$.find('#dialog');
+                var ly = 0, lx = 0;
+                var last_index;
+                var mcount = 34;     
+                var farRatio = this.farRatio = 0.2;
 
-            function init( data ) {
-                var seq = [], mcount = data.length;
-                for(var i = 0; i < mcount; i++) seq.push(i);
-                seq.sort(function(){return Math.random() > 0.5 ? 1 : -1;});
-
-                for(var i = 0; i < mcount; i++) {
-                    baidu('<div class="team-member" style="background-image: url(fex/member/' + seq[i] + '.png)" index="' + seq[i] + '"></div>').appendTo(container);
-                }                    
-                plan(function(){
-                    var sw = stage.width(),
-                        cw = baidu('#team-container').outerWidth();
-                    baidu('#drawing-layer').css('width', sw + cw * farRatio);
-                }, 1000);
-                var members = _this.$.find('.team-member');
-                var stand_timeout = 400, stand_timer;
-
-                container.delegate('.team-member', 'mouseenter', function(e){
-                    var target = baidu(e.target);
-                    var index = +target.attr('index');
-
-                    members.removeClass('stand see-left see-right');
-                    target.prevAll().addClass('see-right');
-                    target.nextAll().addClass('see-left');
-
-
-                    var left = target.position().left - target.width() / 2 + target.parent().position().left - 10;
-
-
-                    dialog.html('<h1>' + data[index][0] + '</h1><p>' + data[index][1] + '</p>');
-                    dialog.cssAnimate( { 
-                        translateX: left,
-                        opacity: 1,
-                        translateY: 0 
-                    }, 600);
-
-                    clearTimeout(stand_timer);
-                    stand_timer = setTimeout(function(){
-                        target.addClass('stand');
-                    }, stand_timeout);
+                baidu.ajax({
+                    url: 'fex/member/data.json',
+                    dataType: 'json',
+                    success: init
                 });
 
-                container.on('mouseleave', function(e){             
-                    members.removeClass('stand see-left see-right');
-                    dialog.cssAnimate({
-                        opacity: 0,
-                        translateY: -100
+                function init( data ) {
+                    var seq = [], mcount = data.length;
+                    for(var i = 0; i < mcount; i++) seq.push(i);
+                    seq.sort(function(){return Math.random() > 0.5 ? 1 : -1;});
+
+                    var delay = 100;
+                    for(var i = 0; i < mcount; i++) {
+                        var div = baidu('<div class="team-member" style="background-image: url(fex/member/' + seq[i] + '.png)" index="' + seq[i] + '"></div>');
+                        div.css3({ opacity: 0, translateY: -100 }).appendTo(container);
+                        plan(function(div) {
+                            div.cssAnimate({ opacity:1, translateY: 0 });
+                        }, delay += 50, [div]);
+                    }                    
+                    plan(function(){
+                        var sw = stage.width(),
+                            cw = baidu('#team-container').outerWidth();
+                        baidu('#drawing-layer').css('width', sw + cw * farRatio);
+                    }, 1000);
+                    var members = _this.$.find('.team-member');
+                    var stand_timeout = 400, stand_timer;
+
+                    container.delegate('.team-member', 'mouseenter', function(e){
+                        var target = baidu(e.target);
+                        var index = +target.attr('index');
+
+                        members.removeClass('stand see-left see-right');
+                        target.prevAll().addClass('see-right');
+                        target.nextAll().addClass('see-left');
+
+
+                        var left = target.position().left - target.width() / 2 + target.parent().position().left - 10;
+
+
+                        dialog.html('<h1>' + data[index][0] + '</h1><p>' + data[index][1] + '</p>');
+                        dialog.cssAnimate( { 
+                            translateX: left,
+                            opacity: 1,
+                            translateY: 0 
+                        }, 600);
+
+                        clearTimeout(stand_timer);
+                        stand_timer = setTimeout(function(){
+                            target.addClass('stand');
+                        }, stand_timeout);
                     });
-                    clearTimeout(stand_timer);                
-                });
 
-
-                var translateX = 0, bodyWidth = members.width();
-
-                function hasNext(sw, cw) {
-                    sw = sw || stage.width();
-                    cw = cw || container.outerWidth();
-                    return translateX + sw < cw;
-                }
-                function hasPrev() {
-                    return translateX > 0;
-                }
-                function go ( sw, cw ) {
-                    sw = sw || stage.width();
-                    cw = cw || container.outerWidth();
-                    container.stop().cssAnimate({ translateX: -translateX }, 1600 );
-                    dialog.cssAnimate({opacity: 0, translateY: -100});
-                    drawing.cssAnimate({
-                        translateX: -translateX * farRatio
-                    }, 1600);
-                    hasNext(sw, cw) ? next.show() : next.hide();
-                    hasPrev() ? prev.show() : prev.hide();
-                }
-                function goNext(){ 
-                    var sw = stage.width(),
-                        cw = container.outerWidth();
-                    if ( !hasNext(sw, cw) ) return;
-                    var increase = Math.min( sw - bodyWidth, cw - sw - translateX );
-                    translateX += increase;                    
-                    go( sw, cw );
-                }
-                function goPrev(){ 
-                    var sw = stage.width(),
-                        cw = container.outerWidth();
-                    if ( !hasPrev() ) return;
-                    var decrease = Math.min( sw - bodyWidth, translateX );
-                    translateX -= decrease;
-                    go( sw, cw );
-                }
-
-                next.click(goNext);
-                prev.click(goPrev);
-                _this.on('navigate', function(e){
-                    if ( e.source != 'keyboard' ) return;
-                    switch(e.direction) {
-                         case 'Left': return goPrev();
-                         case 'Right': return goNext();
-                    }
-                });
-
-                var dscx = 0, dstx;
-                function drag(e) {
-                    e.preventDefault();
-                    if(e.touches) {
-                        if(e.touches.length !== 1) return;
-                        e = e.touches[0];
-                    }
-                    var dx = e.clientX - dscx;
-                    if ( hasNext() ) {
-                        next.show();
-                    } else {
-                        next.hide();
-                        if ( dx < -1 ) return;
-                    }
-                    if ( hasPrev() ) {
-                        prev.show();
-                    } else {
-                        prev.hide();
-                        if ( dx > 1 ) return;
-                    }
-                    translateX = dstx - dx;
-                    container.css3( { translateX: -translateX } );
-                    drawing.css3( { translateX: -translateX * farRatio } );
-                }
-                container.on('dragstart', function(e) { e.preventDefault(); } );
-                _this.$.on( 'dragstart', function(e) { e.preventDefault(); } );
-
-                if(window.ontouchstart === undefined) {
-                    _this.$.on( 'mousedown', function(e) {
-                        dstx = translateX;
-                        dscx = e.clientX;
-                        _this.$.on('mousemove', drag);
-                    } );
-
-                    _this.$.on( 'mouseup', function(e) {
-                        _this.$.off('mousemove', drag);
-                    } );
-                } else { 
-                    var ts;
-                    _this.$[0].addEventListener('touchstart', function(e) {
-                        if ( e.touches.length !== 1 ) return;
-                        ts = +new Date();
-                        dstx = translateX;
-                        dscx = e.touches[0].clientX;
-                        _this.$[0].addEventListener('touchmove', drag);
+                    container.on('mouseleave', function(e){             
+                        members.removeClass('stand see-left see-right');
+                        dialog.cssAnimate({
+                            opacity: 0,
+                            translateY: -100
+                        });
+                        clearTimeout(stand_timer);                
                     });
-                    _this.$[0].addEventListener('touchend', function(e) {
-                        _this.$[0].removeEventListener('touchmove', drag);
-                        if((+new Date()) - ts < 500) {
-                            var dx = e.changedTouches[0].clientX - dscx;
-                            if(dx < -20 && hasNext()) goNext();
-                            if(dx > 20 && hasPrev()) goPrev();
+
+
+                    var translateX = 0, bodyWidth = members.width();
+
+                    function hasNext(sw, cw) {
+                        sw = sw || stage.width();
+                        cw = cw || container.outerWidth();
+                        return translateX + sw < cw;
+                    }
+                    function hasPrev() {
+                        return translateX > 0;
+                    }
+                    function go ( sw, cw ) {
+                        sw = sw || stage.width();
+                        cw = cw || container.outerWidth();
+                        container.cssAnimate({ translateX: -translateX }, 1600 );
+                        dialog.cssAnimate({opacity: 0, translateY: -100});
+                        drawing.cssAnimate({
+                            translateX: -translateX * farRatio
+                        }, 1600);
+                        hasNext(sw, cw) ? next.show() : next.hide();
+                        hasPrev() ? prev.show() : prev.hide();
+                    }
+                    function goNext(){ 
+                        var sw = stage.width(),
+                            cw = container.outerWidth();
+                        if ( !hasNext(sw, cw) ) return;
+                        var increase = Math.min( sw - bodyWidth, cw - sw - translateX );
+                        translateX += increase;                    
+                        go( sw, cw );
+                    }
+                    function goPrev(){ 
+                        var sw = stage.width(),
+                            cw = container.outerWidth();
+                        if ( !hasPrev() ) return;
+                        var decrease = Math.min( sw - bodyWidth, translateX );
+                        translateX -= decrease;
+                        go( sw, cw );
+                    }
+
+                    next.click(goNext);
+                    prev.click(goPrev);
+                    _this.on('navigate', function(e){
+                        if ( e.source != 'keyboard' ) return;
+                        switch(e.direction) {
+                             case 'Left': return goPrev();
+                             case 'Right': return goNext();
                         }
                     });
-                }
-                
-            }                      
-            
+
+                    var dscx = 0, dstx;
+                    function drag(e) {
+                        e.preventDefault();
+                        if(e.touches) {
+                            if(e.touches.length !== 1) return;
+                            e = e.touches[0];
+                        }
+                        var dx = e.clientX - dscx;
+                        if ( hasNext() ) {
+                            next.show();
+                        } else {
+                            next.hide();
+                            if ( dx < -1 ) return;
+                        }
+                        if ( hasPrev() ) {
+                            prev.show();
+                        } else {
+                            prev.hide();
+                            if ( dx > 1 ) return;
+                        }
+                        translateX = dstx - dx;
+                        container.css3( { translateX: -translateX } );
+                        drawing.css3( { translateX: -translateX * farRatio } );
+                    }
+                    container.on('dragstart', function(e) { e.preventDefault(); } );
+                    _this.$.on( 'dragstart', function(e) { e.preventDefault(); } );
+
+                    if(window.ontouchstart === undefined) {
+                        _this.$.on( 'mousedown', function(e) {
+                            dstx = translateX;
+                            dscx = e.clientX;
+                            _this.$.on('mousemove', drag);
+                        } );
+
+                        _this.$.on( 'mouseup', function(e) {
+                            _this.$.off('mousemove', drag);
+                        } );
+                    } else { 
+                        var ts;
+                        _this.$[0].addEventListener('touchstart', function(e) {
+                            if ( e.touches.length !== 1 ) return;
+                            ts = +new Date();
+                            dstx = translateX;
+                            dscx = e.touches[0].clientX;
+                            _this.$[0].addEventListener('touchmove', drag);
+                        });
+                        _this.$[0].addEventListener('touchend', function(e) {
+                            _this.$[0].removeEventListener('touchmove', drag);
+                            if((+new Date()) - ts < 500) {
+                                var dx = e.changedTouches[0].clientX - dscx;
+                                if(dx < -20 && hasNext()) goNext();
+                                if(dx > 20 && hasPrev()) goPrev();
+                            }
+                        });
+                    }                
+                    _this.inited = true;
+                } 
+            }
         })
         
         .on('aftershow', function() {
@@ -314,6 +319,7 @@ baidu(function(){
                 this.prev.cssAnimate( '+show' , 200 );
                 this.next.cssAnimate( '+show' , 200 );
             }.bind(this), 100);
+            if(!this.inited) this.init();
         })
 
         .on('beforehide', function(){                 
@@ -355,7 +361,7 @@ baidu(function(){
             var PRODUCTION_LEVEL = 5;
             var screenContainer = screen.find('.case-content');
 
-            this.caseLoaded || loadCases();
+            loadCases();
 
             function loadCases() {
                 control.displayLoading();
@@ -501,6 +507,9 @@ baidu(function(){
                 });
             }
         })
+        .on('afterhide', function() {
+            this.$.find('.case-content').empty();
+        });
     stage.start();
     control.fitNavPosition();
 });
