@@ -64,12 +64,12 @@ function Control( stage, splash ) {
 
     this.disableNavigation = function( duration ) {
         stage.disable();
-        baidu('#top-nav, #logo').cssAnimate({opacity: 0, translateY: -100, translateX: 0}, duration || 300);
+        baidu('#top-nav, #logo').css('display', 'none');//.cssAnimate({opacity: 0, 'z-index': -100}, duration || 300);
     }
     this.enableNavigation = function( duration ) {        
         if(stage.enabled()) return;
         stage.enable();
-        baidu('#top-nav, #logo').cssAnimate({opacity: 1, translateY: 0}, duration || 300);
+        baidu('#top-nav, #logo').css('display', 'block');//.cssAnimate({opacity: 1, 'z-index': 1000}, duration || 300);
     }
 
     this.displayLoading = function( display ) {

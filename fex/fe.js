@@ -354,7 +354,7 @@ baidu(function(){
         .on('beforeshow', function() {
             plan( control.disableNavigation, 10, [500], control );
         })
-        .on('aftershow', function() {    
+        .on('aftershow', function() {
             var screen = this.$;
             var that = this;
             var productionData = {}, otherData = {};

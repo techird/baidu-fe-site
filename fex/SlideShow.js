@@ -157,7 +157,7 @@ function SlideShow( config ) {
     function getState( name, dir ) {
         var offset = direction == 'X' ? container.width() : container.height();
         var translate = 'translate' + direction;
-        var state = { translateZ: 1 };
+        var state = { translateZ: '0px' };
         var ratioNext = effect.fold && effect.fold.ratio || 1;
         var ratioPrev = effect.fold && effect.fold.both ? ratioNext : 1;
         dir = revert ? -dir : dir;
