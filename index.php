@@ -188,7 +188,7 @@
             </div>
             <div id="weixin">
                 <h1>关注我们</h1>
-                <img src="fex/weixin.png" class="code" title="扫描二维码，关注BaiduFE"></img>
+                <img src="fex/weixin.png" class="code" title="扫描二维码，关注BaiduFE" />
                 <p>微信号：BaiduFE</p>
             </div>
         </div>

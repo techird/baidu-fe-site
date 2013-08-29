@@ -18,14 +18,14 @@ baidu(function(){
                 var src = style['background-image'];
                 var match = /url\((.*?)\)/.exec(src);
                 if(match) {
-                    src = match[1];
+                    src = match[1].replace(/"/g, '');
                     var img = new Image();
                     var scr = this.$;
-                    img.onload = function() {
+                    img.addEventListener('load', function() {
                         scr.addClass('fadein');
                         control.displayLoading(false);
                         screen.shown = true;
-                    }
+                    });
                     img.src = src;
                 }
             }
