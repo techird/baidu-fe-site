@@ -1,28 +1,20 @@
 <?php
   error_reporting(E_ERROR);
-  $path = getcwd();
-  $case_path = $path.'/cases';
-  $dir = dir($case_path);
-  $list = array();
-  $maxLevel = 0;
 
-  while($child = $dir -> read()) {
-    if($child != '.' && $child != '..')
-      $list[$child] = getCase( $case_path.'/'.$child );
+  function listCases( $path = null ) {
+
+    if($path == null) $path = getcwd();
+    $case_path = $path.'/cases';
+    $dir = dir($case_path);
+    $list = array();
+    $maxLevel = 0;
+
+    while($child = $dir -> read()) {
+      if($child != '.' && $child != '..')
+        $list[$child] = getCase( $case_path.'/'.$child );
+    } 
+    return $list;
   }
-
-  if($_REQUEST['topic']) {
-    $list = array_filter($list, filterByTopic);
-  }
-
-  if($_REQUEST['a'] == 'maxlevel') {
-    echo "Max Level: <span style='color: red;'>$maxLevel</span>";
-  } else {    
-    header('Content-Type:application/json');
-    echo json_encode($list);
-  }
-
-
 
   function findMaxLevel($level) {
     global $maxLevel;
@@ -55,6 +47,15 @@
     return $match[1];
   }
 
-  preg_match_all('/\<h2\>(.*)\<\/h2\>/',$content,$nav);
+  if( $_REQUEST['a'] == 'maxlevel' ) {
+    echo "Max Level: <span style='color: red;'>$maxLevel</span>";
+  } 
+
+  elseif ( $_REQUEST['topic'] ) {
+    $list = listCases();
+    $list = array_filter($list, filterByTopic);   
+    header('Content-Type:application/json');
+    echo json_encode($list);
+  } 
 
 ?>
