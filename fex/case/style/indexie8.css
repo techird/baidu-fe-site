@@ -1,0 +1,21 @@
+html, body {
+overflow: scroll;
+}
+.look-more{
+	margin-top: -50px;
+	margin-right: 1px;
+}
+.subTitle .look-more{
+	display: inline;
+	padding: 15px 20px;
+}
+.nav li {
+	background: #eee;
+}
+.item .pic {
+	margin-left: 5%;
+	float:right;
+}
+.item .text {
+	float:left;
+}

@@ -2,6 +2,9 @@
     if(preg_match('/Mobile/', $_SERVER['HTTP_USER_AGENT'])) {
         header('Location: fex/mobile.php');
         die();
+    }else if(preg_match('/MSIE 8.0/', $_SERVER['HTTP_USER_AGENT'])){
+       header('Location: ie8.php');
+       die();
     }
 ?>
 
@@ -50,6 +53,10 @@
                 <li screens="team" class="s3"><a href="#team">团队</a></li>
                 <li screens="contact" class="s4"><a href="#contact">关注</a></li>
                 <li screens="case" class="s5"><a href="#case">案例</a><span>HOT</span></li>
+                <!-- 目前还没有这个功能
+                    <li screens="boke" class="s6"><a href="javascript:;">博客</a></li>
+                -->
+                aaaaa
             </ul>
         </div>
     </div>
