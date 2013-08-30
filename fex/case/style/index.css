@@ -218,7 +218,6 @@ ul li{
 .scrollContent{
   max-width: 1100px;
   margin:0 auto;
-  padding-right: 120px;
 }
 
 .scroller::-webkit-scrollbar {

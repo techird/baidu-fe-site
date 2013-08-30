@@ -1,6 +1,6 @@
 <?
     if(preg_match('/Mobile/', $_SERVER['HTTP_USER_AGENT'])) {
-        header('Location: mobile.php');
+        header('Location: fex/mobile.php');
         die();
     }
 ?>
