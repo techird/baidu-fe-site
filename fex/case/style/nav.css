@@ -1,6 +1,71 @@
-#top-nav{position:fixed;top:0;height:60px;background-color:rgba(255,255,255,0.8);width:100%;z-index:1000;font-family:'Microsoft Yahei','微软雅黑'}#top-nav #menu{height:60px;width:400px;margin:0 auto}#top-nav #menu ul{height:60px;margin:0;padding:0}#top-nav #menu ul li{margin:0;padding:0;width:100px;height:55px;border-bottom:5px solid;line-height:50px;cursor:pointer;font-size:20px;display:block;text-align:center;float:left}#top-nav #menu ul li a{text-decoration:none;display:block;width:100px;height:55px;color:#818181}
-#top-nav #menu ul li.current a{color:#1d1d1d;font-weight:bold}
-#top-nav #menu ul li.s1{border-bottom-color:#e89387;-webkit-tap-highlight-color:rgba(232,147,135,0.5);-moz-tap-highlight-color:rgba(232,147,135,0.5);-ms-tap-highlight-color:rgba(232,147,135,0.5);-o-tap-highlight-color:rgba(232,147,135,0.5)}
-#top-nav #menu ul li.s2{border-bottom-color:#ffe08b;-webkit-tap-highlight-color:rgba(255,224,139,0.5);-moz-tap-highlight-color:rgba(255,224,139,0.5);-ms-tap-highlight-color:rgba(255,224,139,0.5);-o-tap-highlight-color:rgba(255,224,139,0.5)}
-#top-nav #menu ul li.s3{border-bottom-color:#beedc8;-webkit-tap-highlight-color:rgba(190,237,200,0.5);-moz-tap-highlight-color:rgba(190,237,200,0.5);-ms-tap-highlight-color:rgba(190,237,200,0.5);-o-tap-highlight-color:rgba(190,237,200,0.5)}
-#top-nav #menu ul li.s4{border-bottom-color:#79c6da;-webkit-tap-highlight-color:rgba(121,198,218,0.5);-moz-tap-highlight-color:rgba(121,198,218,0.5);-ms-tap-highlight-color:rgba(121,198,218,0.5);-o-tap-highlight-color:rgba(121,198,218,0.5)}
+#top-nav {
+  position: fixed;
+  top: 0;
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 100%;
+  z-index: 1000;
+  font-family: 'Microsoft Yahei', '微软雅黑';
+}
+#top-nav #menu {
+  height: 60px;
+  width: 400px;
+  margin: 0 auto;
+}
+#top-nav #menu ul {
+  height: 60px;
+  margin: 0;
+  padding: 0;
+}
+#top-nav #menu ul li {
+  margin: 0;
+  padding: 0;
+  width: 100px;
+  height: 55px;
+  border-bottom: 5px solid;
+  line-height: 50px;
+  cursor: pointer;
+  font-size: 20px;
+  display: block;
+  text-align: center;
+  float: left;
+}
+#top-nav #menu ul li a {
+  text-decoration: none;
+  display: block;
+  width: 100px;
+  height: 55px;
+  color: #818181;
+}
+#top-nav #menu ul li.current a {
+  color: #1d1d1d;
+  font-weight: bold;
+}
+#top-nav #menu ul li.s1 {
+  border-bottom-color: #e89387;
+  -webkit-tap-highlight-color: rgba(232, 147, 135, 0.5);
+  -moz-tap-highlight-color: rgba(232, 147, 135, 0.5);
+  -ms-tap-highlight-color: rgba(232, 147, 135, 0.5);
+  -o-tap-highlight-color: rgba(232, 147, 135, 0.5);
+}
+#top-nav #menu ul li.s2 {
+  border-bottom-color: #ffe08b;
+  -webkit-tap-highlight-color: rgba(255, 224, 139, 0.5);
+  -moz-tap-highlight-color: rgba(255, 224, 139, 0.5);
+  -ms-tap-highlight-color: rgba(255, 224, 139, 0.5);
+  -o-tap-highlight-color: rgba(255, 224, 139, 0.5);
+}
+#top-nav #menu ul li.s3 {
+  border-bottom-color: #beedc8;
+  -webkit-tap-highlight-color: rgba(190, 237, 200, 0.5);
+  -moz-tap-highlight-color: rgba(190, 237, 200, 0.5);
+  -ms-tap-highlight-color: rgba(190, 237, 200, 0.5);
+  -o-tap-highlight-color: rgba(190, 237, 200, 0.5);
+}
+#top-nav #menu ul li.s4 {
+  border-bottom-color: #79c6da;
+  -webkit-tap-highlight-color: rgba(121, 198, 218, 0.5);
+  -moz-tap-highlight-color: rgba(121, 198, 218, 0.5);
+  -ms-tap-highlight-color: rgba(121, 198, 218, 0.5);
+  -o-tap-highlight-color: rgba(121, 198, 218, 0.5);
+}

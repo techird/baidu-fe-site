@@ -85,10 +85,6 @@ body.iframe .title {
 	-webkit-transform: scale3d(1.05, 1.05, 1);
 }
 
-.item:nth-child(even) .text, .item:nth-child(odd) .pic{
-  v
-}
-
 .item:nth-child(odd) .text, .item:nth-child(even) .pic{
   margin-left: 5%;
 }
@@ -257,6 +253,7 @@ ul li{
 .nav li a {
   height: 40px;
   display: block;
+  width: 120px;
   overflow: hidden;
   color: #000;
   text-decoration: none;
