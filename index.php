@@ -3,7 +3,7 @@
         header('Location: mobile.php');
         die();
     }else if(preg_match('/MSIE 8.0/', $_SERVER['HTTP_USER_AGENT'])){
-       header('Location: ie8.php');
+       header('Location: fex/ie8.php');
        die();
     }
 ?>
