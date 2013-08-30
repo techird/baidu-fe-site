@@ -45,7 +45,7 @@ baidu("#head-container").on("mouseenter",".archive-head",function(){
 // 团队的图片
 var container = baidu('#team-container');
 baidu.ajax({
-    url: 'fex/member/data.json',
+    url: 'member/data.json',
     dataType: 'json',
     success: init
 });
@@ -55,7 +55,7 @@ function init( data ) {
 	for(var i = 0; i < mcount; i++) seq.push(i);
         seq.sort(function(){return Math.random() > 0.5 ? 1 : -1;});
 	for(var i=0;i<mcount;i++)
-		baidu('<div class="team-member" style="background-image: url(fex/member/' + seq[i] + '.png)" index="' + seq[i] + '"></div>').appendTo(container);
+		baidu('<div class="team-member" style="background-image: url(member/' + seq[i] + '.png)" index="' + seq[i] + '"></div>').appendTo(container);
 
 	baidu("body").on("mouseenter",".team-member",function(){
 		var left = baidu(this).position().left + baidu(this).parent().position().left - 72;
@@ -152,7 +152,7 @@ var caseshow = function(){
 	function loadCases() {
         baidu.ajax({
             type: 'get',
-            url: 'fex/case/list.php?topic=cases',
+            url: 'case/list.php?topic=cases',
             success: caseLoaded
         }); 
     }
@@ -246,16 +246,23 @@ var caseshow = function(){
         cases.forEach(function(thecase){
             var section = baidu(
                 '<li>' 
-              + '  <img class="preview" src="fex/case/cases/' + thecase.name + '/preview.png" />'
+              + '  <img class="preview" src="case/cases/' + thecase.name + '/preview.png" />'
               + '  <h1 class="title">' + thecase.title + '</h1>'
               + '  <p class="desc">' + thecase.desc + '</p>'
               + '  <div class="tags">' + thecase.tags + '</div>'
-              + '  <a class="show-case" case-name="' + thecase.name + '" case-title="' +thecase.title + '" href="fex/case/show.php?name=' + thecase.name + '" target="_blank">查看</a>'
+              + '  <a class="show-case" case-name="' + thecase.name + '" case-title="' +thecase.title + '" href="case/show.php?name=' + thecase.name + '" target="_blank">查看</a>'
               + '</li>');
             section.appendTo(container);
             
         });
     }
+    function filterCases( data, tag ) {
+        data.cases.forEach( function(thecase) {
+            thecase.visible = !tag || ~thecase.tags.indexOf(tag)
+        } );
+
+    }
+
 }
 
 // END 精彩案例
