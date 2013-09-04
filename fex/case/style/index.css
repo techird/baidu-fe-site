@@ -174,8 +174,8 @@ ul li{
   color: #f5f9fe;
   text-decoration: none;
 }
-.look-right {float: right;}
-.look-left {float: left;}
+.look-right {float: right; margin-left: 10px;}
+.look-left {float: left; margin-right: 10px;}
 .title h1 {
 	position: relative;
 }
