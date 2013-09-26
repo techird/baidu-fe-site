@@ -55,8 +55,10 @@
         </div>
     </div>
     <div id="stage">
-        <div class="screen" id="home" >        
+        <div class="screen" id="home" > 
+            <!--       
             <h1>F.E.X<span>Best or nothing</span></h1>
+            -->
             <div class="meeting-info"></div>
             <div class="nav down"></div>
         </div>
