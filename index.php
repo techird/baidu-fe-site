@@ -32,7 +32,7 @@
     <script type="text/javascript" src="http://img.baidu.com/hunter/femonk.js"></script>
 </head> 
 <body>
-    <img src="fex/home.jpg" style="display:none;" />
+    <img src="fex/fedays2.png" style="display:none;" />
 
     <ul class="loading">
         <li></li>
@@ -81,8 +81,10 @@
     </div>
     
     <div id="stage">
-        <div class="screen" id="home" >        
+        <div class="screen" id="home" > 
+            <!--第二季FEday     
             <h1>F.E.X<span>Best or nothing</span></h1>
+            -->
             <div class="meeting-info"></div>
             <div class="nav down"></div>
         </div>
