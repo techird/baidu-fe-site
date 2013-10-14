@@ -19,7 +19,7 @@
         <li></li>
     </ul>
 
-    <h1 id="logo">FEX</h1>
+    <h1 id="logo">FEX <span>最专业的前端团队</span></h1>
 
     <div id="top-nav">
         <div id="menu">
